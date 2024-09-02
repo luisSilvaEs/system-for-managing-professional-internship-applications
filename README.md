@@ -78,7 +78,7 @@ This application should have:
 ├── /app
 │   ├── /students
 │   │   ├── page.js               // Public page with the form for student applications
-│   │   └── success               // Folder for the success page route
+│   │   └── /success
 │   │       └── page.js           // Public page for successful submission redirect
 │   ├── /private
 │   │   ├── /login
@@ -115,5 +115,4 @@ This application should have:
 ├── .gitignore                    // Git ignore file
 ├── package.json                  // Project dependencies and scripts
 └── README.md                     // Project documentation
-
 ```

@@ -70,3 +70,47 @@ This application should have:
 - **AWS S3**: To host the system
 - No domain is needed at this time, as the link will be sent directly to the **students**
 - **JWT**: To secure private pages
+
+## Folder structure
+
+/internship-applications
+├── /app
+│ ├── /students
+│ │ ├── page.js // Public page with the form for student applications
+│ │ └── success // Folder for the success page route
+│ │ └── page.js // Public page for successful submission redirect
+│ ├── /private
+│ │ ├── /login
+│ │ │ └── page.js // Login page for private user type
+│ │ ├── /dashboard
+│ │ │ └── page.js // Dashboard page after login with buttons to other private pages
+│ │ ├── /page1
+│ │ │ └── page.js // First private page
+│ │ └── /page2
+│ │ └── page.js // Second private page
+│ ├── /api
+│ │ ├── /students
+│ │ │ └── submit.js // API route to handle form submission and store data in DynamoDB
+│ │ └── /auth
+│ │ └── login.js // API route for handling user login
+│ └── layout.js // Custom layout component for all pages
+├── /components
+│ ├── StudentForm.js // Component for the student application form
+│ ├── LoginForm.js // Component for the login form
+│ ├── DashboardButtons.js // Component to display buttons on the dashboard
+│ └── PrivatePageLayout.js // Layout component for private pages
+├── /lib
+│ ├── dynamodb.js // Utility to interact with DynamoDB
+│ └── email.js // Utility to send emails
+├── /utils
+│ ├── auth.js // Utility functions for authentication
+│ └── validate.js // Utility for form validation
+├── /styles
+│ ├── globals.css // Global styles
+│ └── StudentForm.module.css // Styles specific to StudentForm component
+├── /public
+│ └── favicon.ico // Favicon and other static assets
+├── .env // Environment variables for sensitive data
+├── .gitignore // Git ignore file
+├── package.json // Project dependencies and scripts
+└── README.md // Project documentation

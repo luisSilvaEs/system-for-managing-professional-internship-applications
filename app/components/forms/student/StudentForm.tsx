@@ -1,13 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { Children, ReactElement } from "react";
 import {
   AutoField,
   AutoForm,
   SubmitField,
   ErrorsField,
+  TextField,
+  RadioField,
 } from "uniforms-semantic";
+import { Context, UnknownObject, useForm } from "uniforms";
 import { bridge as schema } from "./studentSchema";
+
+type DisplayIfProps<Model extends UnknownObject> = {
+  children: ReactElement;
+  condition: (context: Context<Model>) => boolean;
+};
+
+// Custom DisplayIf component
+function DisplayIf<Model extends UnknownObject>({
+  children,
+  condition,
+}: DisplayIfProps<Model>) {
+  const uniforms = useForm<Model>();
+  return condition(uniforms) ? Children.only(children) : null;
+}
+
+type FormData = {
+  giroRamoSector: "Industrial" | "Servicios" | "Público" | "Privado" | "Otro";
+  otroRamoSector?: string;
+};
 
 const StudentForm = () => {
   return (
@@ -53,7 +75,21 @@ const StudentForm = () => {
           <h3>Datos de la empresa</h3>
           <AutoField name="nombreEmpresa" />
           <div className="b-form-group b-form-group--borderless b-form__radio-buttons--horizontal">
-            <AutoField name="giroRamoSector" />
+            <RadioField
+              name="giroRamoSector"
+              options={[
+                { label: "Industrial", value: "Industrial" },
+                { label: "Servicios", value: "Servicios" },
+                { label: "Público", value: "Público" },
+                { label: "Privado", value: "Privado" },
+                { label: "Otro", value: "Otro" },
+              ]}
+            />
+            <DisplayIf<FormData>
+              condition={(context) => context.model.giroRamoSector === "Otro"}
+            >
+              <TextField name="otroRamoSector" placeholder="Especifique" />
+            </DisplayIf>
           </div>
         </div>
         <ErrorsField />

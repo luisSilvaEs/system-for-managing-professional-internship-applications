@@ -1,4 +1,4 @@
-import Ajv, { type ErrorObject, KeywordDefinition, JSONSchemaType } from 'ajv';
+import Ajv, { type KeywordDefinition, JSONSchemaType } from 'ajv';
 import addFormats from 'ajv-formats'; // Import ajv-formats
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
 import { RadioField } from 'uniforms-unstyled';
@@ -8,6 +8,15 @@ const ajv = new Ajv({ allErrors: true, useDefaults: true, $data: true });
 
 // Add formats to Ajv instance
 addFormats(ajv); // Add ajv-formats to handle formats like "email"
+
+// Extend JSONSchemaType to allow additional properties
+type JSONSchemaTypeWithUniforms<T> = JSONSchemaType<T> & {
+  properties: {
+    [key in keyof T]: JSONSchemaType<T[key]> & {
+      uniforms?: any; // Allow any for uniforms customization
+    };
+  };
+};
 
 // Add 'uniforms' keyword with correct definition
 const noopKeywordDefinition: KeywordDefinition = {
@@ -39,10 +48,11 @@ type FormData = {
   email: string;
   nombreEmpresa: string;
   giroRamoSector: 'Industrial'|'Servicios'|'Público'|'Privado'|'Otro';
+  otroRamoSector?: string;
 };
 
 // Define JSON schema
-const schema: JSONSchemaType<FormData> = {
+const schema: JSONSchemaTypeWithUniforms<FormData> = {
   title: 'Student Schema',
   type: 'object',
   properties: {
@@ -107,20 +117,13 @@ const schema: JSONSchemaType<FormData> = {
     },
     giroRamoSector: {
       type: 'string',
-      enum: ['Industrial', 'Servicios', 'Público','Privado', 'Otro'],
-      uniforms: {
-        component: RadioField,
-        options: [
-          { label: 'Industrial', value: 'Industrial' },
-          { label: 'Servicios', value: 'Servicios' },
-          { label: 'Público', value: 'Público' },
-          { label: 'Privado', value: 'Privado' },
-          { label: 'Otro', value: 'Otro' },
-        ],
-      },
+    },
+    otroRamoSector: {
+      type: 'string',
+      uniforms: { placeholder: 'Especifique' }
     } 
   },
-  required: ['nombre', 'email', 'opcionElegida'],
+  required: ['nombre', 'email', 'opcionElegida', 'giroRamoSector'],
 };
 
 // Corrected validator function with proper type signature

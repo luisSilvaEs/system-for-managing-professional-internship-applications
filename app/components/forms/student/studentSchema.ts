@@ -37,6 +37,7 @@ type FormData = {
   nombre: string;
   apellidoPaterno: string;
   apellidoMaterno: string;
+  carrera: string;
   numeroControl: string;
   domicilioCalle: string;
   domicilioNumeroExterior: string;

@@ -1,6 +1,7 @@
 import Ajv, { type ErrorObject, KeywordDefinition, JSONSchemaType } from 'ajv';
 import addFormats from 'ajv-formats'; // Import ajv-formats
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
+import { RadioField } from 'uniforms-unstyled';
 
 // Initialize Ajv with options
 const ajv = new Ajv({ allErrors: true, useDefaults: true, $data: true });
@@ -107,6 +108,7 @@ const schema: JSONSchemaType<FormData> = {
       type: 'string',
       enum: ['Industrial', 'Servicios', 'Público','Privado', 'Otro'],
       uniforms: {
+        component: RadioField,
         options: [
           { label: 'Industrial', value: 'Industrial' },
           { label: 'Servicios', value: 'Servicios' },

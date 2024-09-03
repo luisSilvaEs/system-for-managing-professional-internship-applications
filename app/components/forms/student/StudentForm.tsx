@@ -23,7 +23,30 @@ const StudentForm = () => {
         </div>
         <div className="b-form-group b-form-group--vertical">
           <h3>Datos del(a) residente</h3>
-          <AutoField name="nombre" />
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <h4>Nombre completo:</h4>
+            <AutoField name="nombre" />
+            <AutoField name="apellidoPaterno" />
+            <AutoField name="apellidoMaterno" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField name="carrera" />
+            <AutoField name="numeroControl" />
+          </div>
+
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <h4>Domicilio:</h4>
+            <AutoField name="domicilioCalle" />
+            <AutoField name="domicilioNumeroExterior" />
+            <AutoField name="domicilioNumeroInterior" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField name="domicilioColonia" />
+            <AutoField name="domicilioCP" />
+            <AutoField name="ciudad" />
+            <AutoField name="telefonoOcelular" />
+          </div>
+
           <AutoField name="email" />
         </div>
         <ErrorsField />

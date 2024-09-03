@@ -21,11 +21,21 @@ const noopKeywordDefinition: KeywordDefinition = {
 ajv.addKeyword(noopKeywordDefinition);
 
 type FormData = {
-  nombre: string;
-  email: string;
   opcionElegida: 'Banco de Proyectos' | 'Propuesta propia' | 'Trabajador';
   periodoProyectado: string;
   numeroResidentes: number;
+  nombre: string;
+  apellidoPaterno: string;
+  apellidoMaterno: string;
+  numeroControl: string;
+  domicilioCalle: string;
+  domicilioNumeroExterior: string;
+  domicilioNumeroInterior: string;
+  domicilioColonia: string;
+  domicilioCP: string;
+  ciudad: string;
+  telefonoOcelular: string;
+  email: string;
 };
 
 // Define JSON schema
@@ -33,8 +43,6 @@ const schema: JSONSchemaType<FormData> = {
   title: 'Student Schema',
   type: 'object',
   properties: {
-    nombre: { type: 'string' },
-    email: { type: 'string', format: 'email' },
     opcionElegida: {
       type: 'string',
       enum: ['Banco de Proyectos', 'Propuesta propia', 'Trabajador'],
@@ -51,7 +59,45 @@ const schema: JSONSchemaType<FormData> = {
     },
     numeroResidentes: {
       type: 'integer'
-    }
+    },
+    nombre: { type: 'string' },
+    apellidoPaterno: { type: 'string' },
+    apellidoMaterno: { type: 'string' },
+    carrera: {
+      type: 'string',
+      enum: ['Ingeniería en Administración', 'Ingeniería Eléctrica', 'Ingeniería Informática', 'Ingeniería Industrial', 'Ingeniería Mecatrónica', 'Ingeniería en Sistemas Computacionales', 'Maestría en Tecnologías de la Información'],
+      uniforms: {
+        options: [
+          { label: 'Ingeniería en Administración', value: 'Ingeniería en Administración' },
+          { label: 'Ingeniería Eléctrica', value: 'Ingeniería Eléctrica' },
+          { label: 'Ingeniería Informática', value: 'Ingeniería Informática' },
+          { label: 'Ingeniería Industrial', value: 'Ingeniería Industrial' },
+          { label: 'Ingeniería Mecatrónica', value: 'Ingeniería Mecatrónica' },
+          { label: 'Ingeniería en Sistemas Computacionales', value: 'Ingeniería en Sistemas Computacionales' },
+          { label: 'Maestría en Tecnologías de la Información', value: 'Maestría en Tecnologías de la Información' },
+        ],
+      },
+    },
+    numeroControl: { 
+      type: 'string',
+      uniforms: { placeholder: 'G1234567' }
+    },
+    domicilioCalle: { type: 'string' },
+    domicilioNumeroExterior: { type: 'string' },
+    domicilioNumeroInterior: { type: 'string' },
+    domicilioColonia: {
+      type: 'string'
+    },
+    domicilioCP: {
+      type: 'string'
+    },
+    ciudad: {
+      type: 'string'
+    },
+    telefonoOcelular: {
+      type: 'string'
+    },
+    email: { type: 'string', format: 'email' }, 
   },
   required: ['nombre', 'email', 'opcionElegida'],
 };

@@ -47,3 +47,13 @@
   @apply border-none;
 }
 
+.b-form__radio-buttons--horizontal {
+  div {
+    @apply flex flex-row;
+    label {
+      @apply pr-5 pl-2;
+    }
+
+  }
+}
+

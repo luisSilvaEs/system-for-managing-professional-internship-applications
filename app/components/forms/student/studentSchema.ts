@@ -50,6 +50,7 @@ const schema: JSONSchemaType<FormData> = {
       type: 'string',
       enum: ['Banco de Proyectos', 'Propuesta propia', 'Trabajador'],
       uniforms: {
+        component: RadioField,
         options: [
           { label: 'Banco de Proyectos', value: 'Banco de Proyectos' },
           { label: 'Propuesta propia', value: 'Propuesta propia' },

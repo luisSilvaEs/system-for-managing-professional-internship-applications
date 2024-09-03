@@ -36,6 +36,8 @@ type FormData = {
   ciudad: string;
   telefonoOcelular: string;
   email: string;
+  nombreEmpresa: string;
+  giroRamoSector: 'Industrial'|'Servicios'|'Público'|'Privado'|'Otro';
 };
 
 // Define JSON schema
@@ -97,7 +99,23 @@ const schema: JSONSchemaType<FormData> = {
     telefonoOcelular: {
       type: 'string'
     },
-    email: { type: 'string', format: 'email' }, 
+    email: { type: 'string', format: 'email' },
+    nombreEmpresa: {
+      type: 'string'
+    },
+    giroRamoSector: {
+      type: 'string',
+      enum: ['Industrial', 'Servicios', 'Público','Privado', 'Otro'],
+      uniforms: {
+        options: [
+          { label: 'Industrial', value: 'Industrial' },
+          { label: 'Servicios', value: 'Servicios' },
+          { label: 'Público', value: 'Público' },
+          { label: 'Privado', value: 'Privado' },
+          { label: 'Otro', value: 'Otro' },
+        ],
+      },
+    } 
   },
   required: ['nombre', 'email', 'opcionElegida'],
 };

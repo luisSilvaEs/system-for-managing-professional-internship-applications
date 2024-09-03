@@ -18,7 +18,6 @@ const StudentForm = () => {
         </div>
         <div className="b-form-group b-form-group--horizontal">
           <AutoField name="periodoProyectado" />
-
           <AutoField name="numeroResidentes" />
         </div>
         <div className="b-form-group b-form-group--vertical">
@@ -44,10 +43,16 @@ const StudentForm = () => {
             <AutoField name="domicilioColonia" />
             <AutoField name="domicilioCP" />
             <AutoField name="ciudad" />
-            <AutoField name="telefonoOcelular" />
           </div>
-
-          <AutoField name="email" />
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField name="telefonoOcelular" />
+            <AutoField name="email" />
+          </div>
+        </div>
+        <div className="b-form-group">
+          <h3>Datos de la empresa</h3>
+          <AutoField name="nombreEmpresa" />
+          <AutoField name="giroRamoSector" />
         </div>
         <ErrorsField />
         <SubmitField />

@@ -33,7 +33,11 @@ type FormData = {
 
 const StudentForm = () => {
   return (
-    <AutoForm schema={schema} onSubmit={console.log}>
+    <AutoForm
+      id="student-form"
+      schema={schema}
+      onSubmit={(data) => console.log(JSON.stringify(data, null, 2))}
+    >
       <div className="b-form-wrapper">
         <div className="b-form-group b-form-group--borderless b-form__radio-buttons--horizontal">
           <AutoField name="opcionElegida" />

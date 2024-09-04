@@ -2,6 +2,10 @@
 @tailwind components;
 @tailwind utilities;
 
+label {
+  @apply font-medium text-sm;
+}
+
 .b-form-wrapper {
   @apply border-slate-400 border-2 rounded px-4 py-4;
 
@@ -59,8 +63,34 @@
 
 .b-form__error-wrapper {
   @apply flex flex-col;
-
-  
-
+  position: relative;
 }
+
+.error.required.field,
+.error.field {
+  label,
+  .ui.input {
+    color: #9F3A38;
+    input {
+      background: #FFF6F6;
+      border-color: #E0B4B4;
+      border-width: 1px;
+      color: #9F3A38;
+      box-shadow: none;
+    }
+  }
+}
+
+.error.message {
+  @apply py-2 px-2 text-xs;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px #E0B4B4 inset, 0 0 0 0 transparent;
+  background-color: #FFF6F6;
+  color: #9F3A38;
+  position: absolute;
+  top: 40px;
+  right: 0;
+}
+
+
 

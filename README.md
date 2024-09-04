@@ -76,45 +76,45 @@ This application should have:
 ```bash
 /internship-applications
 ├── /app
+│   ├── /components
+│   │   ├── StudentForm.tsx            // Component for the student application form
+│   │   ├── LoginForm.tsx              // Component for the login form
+│   │   ├── DashboardButtons.tsx       // Component to display buttons on the dashboard
+│   │   └── PrivatePageLayout.tsx      // Layout component for private pages
 │   ├── /students
-│   │   ├── page.js               // Public page with the form for student applications
+│   │   ├── page.tsx                   // Public page with the form for student applications
 │   │   └── /success
-│   │       └── page.js           // Public page for successful submission redirect
+│   │       └── page.tsx               // Public page for successful submission redirect
 │   ├── /private
 │   │   ├── /login
-│   │   │   └── page.js           // Login page for private user type
+│   │   │   └── page.tsx               // Login page for private user type
 │   │   ├── /dashboard
-│   │   │   └── page.js           // Dashboard page after login with buttons to other private pages
+│   │   │   └── page.tsx               // Dashboard page after login with buttons to other private pages
 │   │   ├── /page1
-│   │   │   └── page.js           // First private page
+│   │   │   └── page.tsx               // First private page
 │   │   └── /page2
-│   │       └── page.js           // Second private page
+│   │       └── page.tsx               // Second private page
 │   ├── /api
-│   │   ├── /students
-│   │   │   └── submit.js         // API route to handle form submission and store data in DynamoDB
+│   │   ├── /email
+│   │   │   └── route.ts             // API route to handle form submission and store data in DynamoDB
 │   │   └── /auth
-│   │       └── login.js          // API route for handling user login
-│   └── layout.js                 // Custom layout component for all pages
-├── /components
-│   ├── StudentForm.js            // Component for the student application form
-│   ├── LoginForm.js              // Component for the login form
-│   ├── DashboardButtons.js       // Component to display buttons on the dashboard
-│   └── PrivatePageLayout.js      // Layout component for private pages
+│   │       └── login.ts              // API route for handling user login
+│   └── layout.ts                     // Custom layout component for all pages
 ├── /lib
-│   ├── dynamodb.js               // Utility to interact with DynamoDB
-│   └── email.js                  // Utility to send emails
+│   ├── dynamodb.ts                   // Utility to interact with DynamoDB
+│   └── email.ts                      // Utility to send emails
 ├── /utils
-│   ├── auth.js                   // Utility functions for authentication
-│   └── validate.js               // Utility for form validation
+│   ├── auth.ts                       // Utility functions for authentication
+│   └── validate.ts                   // Utility for form validation
 ├── /styles
-│   ├── globals.css               // Global styles
-│   └── StudentForm.module.css    // Styles specific to StudentForm component
+│   ├── globals.css                   // Global styles
+│   └── StudentForm.module.css        // Styles specific to StudentForm component
 ├── /public
-│   └── favicon.ico               // Favicon and other static assets
-├── .env                          // Environment variables for sensitive data
-├── .gitignore                    // Git ignore file
-├── package.json                  // Project dependencies and scripts
-└── README.md                     // Project documentation
+│   └── favicon.ico                   // Favicon and other static assets
+├── .env                              // Environment variables for sensitive data
+├── .gitignore                        // Git ignore file
+├── package.tson                      // Project dependencies and scripts
+└── README.md                         // Project documentation
 ```
 
 ## References

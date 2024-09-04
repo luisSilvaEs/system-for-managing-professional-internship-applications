@@ -48,12 +48,19 @@
 }
 
 .b-form__radio-buttons--horizontal {
-  div {
+  div > div {
     @apply flex flex-row;
     label {
       @apply pr-5 pl-2;
     }
 
   }
+}
+
+.b-form__error-wrapper {
+  @apply flex flex-col;
+
+  
+
 }
 

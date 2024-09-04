@@ -40,7 +40,7 @@ const StudentForm = () => {
       validate="onChange"
     >
       <div className="b-form-wrapper">
-        <div className="b-form-group b-form-group--borderless b-form__radio-buttons--horizontal">
+        <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
           <div className="b-form__error-wrapper">
             <AutoField name="opcionElegida" />
             <ErrorField name="opcionElegida" />
@@ -88,7 +88,7 @@ const StudentForm = () => {
         <div className="b-form-group">
           <h3>Datos de la empresa</h3>
           <AutoField name="nombreEmpresa" />
-          <div className="b-form-group b-form-group--borderless b-form__radio-buttons--horizontal">
+          <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
             <div className="b-form__error-wrapper">
               <RadioField
                 name="giroRamoSector"

@@ -116,3 +116,7 @@ This application should have:
 ├── package.json                  // Project dependencies and scripts
 └── README.md                     // Project documentation
 ```
+
+## References
+
+- [uniforms - Basic uniforms usage](https://uniforms.tools/docs/tutorials-basic-uniforms-usage/)

@@ -5,6 +5,7 @@ import {
   AutoField,
   AutoForm,
   SubmitField,
+  ErrorField,
   ErrorsField,
   TextField,
   RadioField,
@@ -34,13 +35,14 @@ type FormData = {
 const StudentForm = () => {
   return (
     <AutoForm
-      id="student-form"
       schema={schema}
       onSubmit={(data) => console.log(JSON.stringify(data, null, 2))}
+      validate="onChange"
     >
       <div className="b-form-wrapper">
         <div className="b-form-group b-form-group--borderless b-form__radio-buttons--horizontal">
           <AutoField name="opcionElegida" />
+          <ErrorField name="opcionElegida" />
         </div>
         <div className="b-form-group b-form-group--horizontal">
           <AutoField name="periodoProyectado" />
@@ -51,6 +53,7 @@ const StudentForm = () => {
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <h4>Nombre completo:</h4>
             <AutoField name="nombre" />
+            <ErrorField name="nombre" />
             <AutoField name="apellidoPaterno" />
             <AutoField name="apellidoMaterno" />
           </div>
@@ -73,6 +76,7 @@ const StudentForm = () => {
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="telefonoOcelular" />
             <AutoField name="email" />
+            <ErrorField name="email" />
           </div>
         </div>
         <div className="b-form-group">
@@ -89,6 +93,7 @@ const StudentForm = () => {
                 { label: "Otro", value: "Otro" },
               ]}
             />
+            <ErrorField name="giroRamoSector" />
             <DisplayIf<FormData>
               condition={(context) => context.model.giroRamoSector === "Otro"}
             >
@@ -96,7 +101,6 @@ const StudentForm = () => {
             </DisplayIf>
           </div>
         </div>
-        <ErrorsField />
         <SubmitField />
       </div>
     </AutoForm>

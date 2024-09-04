@@ -4,7 +4,7 @@ import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
 import { RadioField } from 'uniforms-unstyled';
 
 // Initialize Ajv with options
-const ajv = new Ajv({ allErrors: true, useDefaults: true, $data: true });
+const ajv = new Ajv({ allErrors: true, useDefaults: true, $data: true, strictSchema: false });
 
 // Add formats to Ajv instance
 addFormats(ajv); // Add ajv-formats to handle formats like "email"
@@ -112,7 +112,15 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
     telefonoOcelular: {
       type: 'string'
     },
-    email: { type: 'string', format: 'email' },
+    email: { 
+      type: 'string', 
+      format: 'email',
+      pattern: '^[a-zA-Z0-9._-]+@(hotmail\\.com|gmail\\.com|yahoo\\.com|me\\.com|icloud\\.com|outlook\\.com)$',
+      uniforms: { 
+        placeholder: 'example@domain.com',
+        errorMessage: "Email must be a valid format (e.g., example@gmail.com).",
+       },
+    },
     nombreEmpresa: {
       type: 'string'
     },

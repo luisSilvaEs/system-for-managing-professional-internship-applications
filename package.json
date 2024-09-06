@@ -12,6 +12,7 @@
     "ajv": "^8.17.1",
     "ajv-formats": "^3.0.1",
     "next": "14.2.7",
+    "nodemailer": "^6.9.15",
     "react": "^18",
     "react-dom": "^18",
     "uniforms": "^4.0.0-alpha.6",
@@ -22,6 +23,7 @@
   "devDependencies": {
     "@types/ajv": "^1.0.0",
     "@types/node": "^20",
+    "@types/nodemailer": "^6.4.15",
     "@types/react": "^18",
     "@types/react-dom": "^18",
     "eslint": "^8",

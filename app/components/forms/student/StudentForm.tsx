@@ -1,12 +1,11 @@
 "use client";
 
-import React, { Children, ReactElement } from "react";
+import React, { Children, ReactElement, useState, FormEvent } from "react";
 import {
   AutoField,
   AutoForm,
   SubmitField,
   ErrorField,
-  ErrorsField,
   TextField,
   RadioField,
 } from "uniforms-semantic";
@@ -33,10 +32,51 @@ type FormData = {
 };
 
 const StudentForm = () => {
+  /*
+  const [formData, setFormData] = useState({
+    opcionElegida: "",
+    periodoProyectado: "",
+    numeroResidentes: "",
+    nombre: "",
+    apellidoPaterno: "",
+    apellidoMaterno: "",
+    carrera: "",
+    numeroControl: "",
+    domicilioCalle: "",
+    domicilioNumeroExterior: "",
+    domicilioNumeroInterior: "",
+    domicilioColonia: "",
+    domicilioCP: "",
+    ciudad: "",
+    telefonoOcelular: "",
+    email: "",
+    nombreEmpresa: "",
+    giroRamoSector: "",
+    otroRamoSector: "",
+  });
+  */
+  const handlerSubmit = async (data: any) => {
+    //e.preventDefault();
+    console.log(`Handler submit function: ${JSON.stringify(data, null, 2)}`);
+    const response = await fetch("/api/email", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data, null, 2),
+    });
+
+    if (response.ok) {
+      alert("Application submitted successfully!");
+      //setFormData({ name: "", email: "", message: "" }); // Reset form
+      //window.location.href = "/students/success"; // Redirect to success page
+    } else {
+      alert("Failed to submit application. Please try again.");
+    }
+  };
+
   return (
     <AutoForm
       schema={schema}
-      onSubmit={(data) => console.log(JSON.stringify(data, null, 2))}
+      onSubmit={(data) => handlerSubmit(data)}
       validate="onChange"
     >
       <div className="b-form-wrapper">

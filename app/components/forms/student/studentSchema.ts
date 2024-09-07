@@ -21,7 +21,7 @@ type JSONSchemaTypeWithUniforms<T> = JSONSchemaType<T> & {
 // Add 'uniforms' keyword with correct definition
 const noopKeywordDefinition: KeywordDefinition = {
   keyword: 'uniforms',
-  type: 'object',
+  type: ['object', 'boolean', 'string', 'number', 'array', 'null'], // Allow various types, including "object"
   schemaType: 'object',
   code() {
     // No-op code; it doesn't modify validation results
@@ -49,7 +49,7 @@ type FormData = {
   email: string;
   nombreEmpresa: string;
   giroRamoSector: 'Industrial'|'Servicios'|'Público'|'Privado'|'Otro';
-  otroRamoSector?: string;
+  otroRamoSector?: string | null;
 };
 
 // Define JSON schema
@@ -129,7 +129,8 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
     },
     otroRamoSector: {
       type: 'string',
-      uniforms: { placeholder: 'Especifique' }
+      nullable: true, // Mark as nullable to handle optional values
+      uniforms: { placeholder: 'Especifique' },
     } 
   },
   required: ['nombre', 'email', 'opcionElegida', 'giroRamoSector'],

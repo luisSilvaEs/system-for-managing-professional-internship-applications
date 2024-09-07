@@ -31,9 +31,10 @@ export const sendConfirmationEmail = async ({
 }: EmailData): Promise<void> => {
   // Create a transporter using environment variables
   const transporter = nodemailer.createTransport({
-    service: "gmail", // Use your preferred email service
+    // Ensure these environment variables are set in your .env.local file
+    service: process.env.EMAIL_SMTP_SERVICE, 
     auth: {
-      user: process.env.EMAIL_USER, // Ensure these environment variables are set in your .env.local file
+      user: process.env.EMAIL_USER, 
       pass: process.env.EMAIL_APP_PASS,
     },
   });

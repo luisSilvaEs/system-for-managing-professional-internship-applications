@@ -1,8 +1,46 @@
 // /app/api/email/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { sendConfirmationEmail } from '../../../lib/email'; // Adjust the path to your email utility
+import { NextApiRequest, NextApiResponse } from 'next';
+import { sendEmail } from '@/lib/email';
 //import { saveToDynamoDB } from '../../../lib/dynamodb'; // Adjust the path to your DynamoDB utility
 
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  if (req.method === 'POST') {
+    
+    const {
+      nombre,
+      email,
+      nombreEmpresa,
+      opcionElegida,
+      periodoProyectado,
+      numeroResidentes,
+      apellidoPaterno,
+      apellidoMaterno,
+      carrera,
+      numeroControl,
+      domicilioCalle,
+      domicilioNumeroExterior,
+      domicilioNumeroInterior,
+      domicilioColonia,
+      domicilioCP,
+      ciudad,
+      telefonoOcelular,
+      giroRamoSector,
+      otroRamoSector,
+    } = req.body;
+
+    try {
+      await sendEmail(email, nombreEmpresa, nombre);
+      res.status(200).json({ message: 'Email sent successfully' });
+    } catch (error) {
+      res.status(500).json({ message: 'Failed to send email' });
+    }
+  } else {
+    res.setHeader('Allow', ['POST']);
+    res.status(405).end(`Method ${req.method} Not Allowed`);
+  }
+}
+
+/*
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
@@ -59,9 +97,10 @@ export async function POST(request: NextRequest) {
     */
 
     // Send confirmation email
+    /*
     await sendConfirmationEmail({ nombre, email, nombreEmpresa });
 
-    // Send success response back to the client
+    
     return NextResponse.json({
       message: 'Application submitted successfully and email sent.',
     }, { status: 200 });
@@ -71,3 +110,4 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ message: 'Failed to process application.' }, { status: 500 });
   }
 }
+*/

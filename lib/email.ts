@@ -1,5 +1,7 @@
 // /lib/email.tsx
-import nodemailer from "nodemailer";
+// lib/email.ts
+import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
+
 
 interface EmailData {
   opcionElegida?: "",
@@ -23,34 +25,33 @@ interface EmailData {
   otroRamoSector?: ""
 }
 
-// Function to send an email using nodemailer
-export const sendConfirmationEmail = async ({
-  nombre,
-  email,
-  nombreEmpresa,
-}: EmailData): Promise<void> => {
-  // Create a transporter using environment variables
-  const transporter = nodemailer.createTransport({
-    // Ensure these environment variables are set in your .env.local file
-    service: process.env.EMAIL_SMTP_SERVICE, 
-    auth: {
-      user: process.env.EMAIL_USER, 
-      pass: process.env.EMAIL_APP_PASS,
-    },
-  });
+const sesClient = new SESClient({ region: process.env.SES_REGION });
 
-  const mailOptions = {
-    from: process.env.EMAIL_USER, // Sender address from environment variables
-    to: "siel_alb@hotmail.com", // Replace with your destination email address
-    subject: `New Application from ${nombre}`,
-    text: `You have received a new application.\n\nName: ${nombre}\nEmail: ${email}\nMessage: ${nombreEmpresa}`,
+export const sendEmail = async (email: string, nombre: string, empresa: string) => {
+  const params = {
+    Source: process.env.SES_FROM_EMAIL,
+    Destination: {
+      ToAddresses: [email],
+    },
+    Message: {
+      Subject: {
+        Data: nombre,
+      },
+      Body: {
+        Text: {
+          Data: empresa,
+        },
+      },
+    },
   };
 
   try {
-    await transporter.sendMail(mailOptions);
-    console.log("Email sent successfully");
+    const command = new SendEmailCommand(params);
+    const response = await sesClient.send(command);
+    console.log("Email sent successfully:", response);
+    return response;
   } catch (error) {
     console.error("Error sending email:", error);
-    throw new Error("Error sending email.");
+    throw new Error("Failed to send email");
   }
 };

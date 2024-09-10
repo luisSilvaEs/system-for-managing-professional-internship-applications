@@ -51,7 +51,7 @@ export const sendEmail = async (email: string, nombre: string, nombreEmpresa: st
     console.log("Email sent successfully:", response);
     return response;
   } catch (error) {
-    console.error(`Error sending email: ${error} Val params: ${JSON.stringify(params)}`);
+    console.error(`Error at /lib/email.ts sending email: ${error} Val params: ${JSON.stringify(params)}`);
     throw new Error("Failed to send email");
   }
 };

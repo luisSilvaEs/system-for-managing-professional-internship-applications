@@ -117,7 +117,7 @@ export async function POST(request: NextRequest) {
 export async function POST(request: Request) {
   try {
     const { email, nombre, nombreEmpresa } = await request.json();
-
+    console.log("You got to /email/route.ts file");
     await sendEmail(email, nombre, nombreEmpresa);
     
     return NextResponse.json({ message: 'Email sent successfully' }, { status: 200 });

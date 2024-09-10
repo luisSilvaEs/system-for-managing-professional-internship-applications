@@ -27,7 +27,7 @@ interface EmailData {
 
 const sesClient = new SESClient({ region: process.env.SES_REGION });
 
-export const sendEmail = async (email: string, nombre: string, empresa: string) => {
+export const sendEmail = async (email: string, nombre: string, nombreEmpresa: string) => {
   const params = {
     Source: process.env.SES_FROM_EMAIL,
     Destination: {
@@ -39,7 +39,7 @@ export const sendEmail = async (email: string, nombre: string, empresa: string) 
       },
       Body: {
         Text: {
-          Data: empresa,
+          Data: nombreEmpresa,
         },
       },
     },

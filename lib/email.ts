@@ -28,12 +28,18 @@ interface EmailData {
 const sesClient = new SESClient({ 
   region: process.env.SES_REGION,
   credentials: {
-    accessKeyId: process.env.SES_ACCESS_KEY_ID!,
-    secretAccessKey: process.env.SES_SECRET_ACCESS_KEY!
+    accessKeyId: process.env.SES_ACCESS_KEY_ID || '',
+    secretAccessKey: process.env.SES_SECRET_ACCESS_KEY || ''
   }
  });
 
 export const sendEmail = async (email: string, nombre: string, nombreEmpresa: string) => {
+
+  if (!process.env.SES_ACCESS_KEY_ID || !process.env.SES_SECRET_ACCESS_KEY) {
+    console.error("Missing AWS SES credentials in environment variables.");
+    throw new Error("AWS SES credentials are not properly configured.");
+  }
+
   const params = {
     Source: process.env.SES_FROM_EMAIL,
     Destination: {

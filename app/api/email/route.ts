@@ -117,6 +117,12 @@ export async function POST(request: NextRequest) {
 export async function POST(request: Request) {
   try {
     const { email, nombre, nombreEmpresa } = await request.json();
+
+    if (!email || !/\S+@\S+\.\S+/.test(email)) {
+      console.error("Invalid email address:", email);
+      return NextResponse.json({ message: 'Invalid email address' }, { status: 400 });
+    }
+
     console.log("You got to /email/route.ts file");
     await sendEmail(email, nombre, nombreEmpresa);
     

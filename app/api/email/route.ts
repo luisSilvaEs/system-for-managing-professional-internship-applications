@@ -1,8 +1,10 @@
 // /app/api/email/route.ts
 import { NextApiRequest, NextApiResponse } from 'next';
+import { NextResponse } from 'next/server';
 import { sendEmail } from '@/lib/email';
 //import { saveToDynamoDB } from '../../../lib/dynamodb'; // Adjust the path to your DynamoDB utility
 
+/*
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
     
@@ -29,7 +31,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     } = req.body;
 
     try {
-      await sendEmail(email, nombreEmpresa, nombre);
+      await sendEmail(email, nombreEmpresa, body);
       res.status(200).json({ message: 'Email sent successfully' });
     } catch (error) {
       res.status(500).json({ message: 'Failed to send email' });
@@ -39,7 +41,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }
-
+*/
 /*
 export async function POST(request: NextRequest) {
   try {
@@ -111,3 +113,16 @@ export async function POST(request: NextRequest) {
   }
 }
 */
+
+export async function POST(request: Request) {
+  try {
+    const { email, nombre, nombreEmpresa } = await request.json();
+
+    await sendEmail(email, nombre, nombreEmpresa);
+    
+    return NextResponse.json({ message: 'Email sent successfully' }, { status: 200 });
+  } catch (error) {
+    console.error("Error sending email:", error);
+    return NextResponse.json({ message: 'Failed to send email' }, { status: 500 });
+  }
+}

@@ -70,6 +70,8 @@ This application should have:
 - **AWS S3**: To host the system
 - No domain is needed at this time, as the link will be sent directly to the **students**
 - **JWT**: To secure private pages
+- **AWS Amplify**
+- **AWS SES**
 
 ## Folder structure
 

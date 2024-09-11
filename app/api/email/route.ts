@@ -115,6 +115,7 @@ export async function POST(request: NextRequest) {
 */
 
 export async function POST(request: Request) {
+  console.log("SES_ACCESS_KEY_ID from environment:", process.env.SES_ACCESS_KEY_ID);
   try {
     const { email, nombre, nombreEmpresa } = await request.json();
 

@@ -11,6 +11,7 @@ import {
 } from "uniforms-semantic";
 import { Context, UnknownObject, useForm } from "uniforms";
 import { bridge as schema } from "./studentSchema";
+import { useRouter } from "next/navigation";
 
 type DisplayIfProps<Model extends UnknownObject> = {
   children: ReactElement;
@@ -32,6 +33,8 @@ type FormData = {
 };
 
 const StudentForm = () => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
   /*
   const [formData, setFormData] = useState({
     opcionElegida: "",
@@ -58,18 +61,29 @@ const StudentForm = () => {
   const handlerSubmit = async (data: any) => {
     //e.preventDefault();
     console.log(`Handler submit function: ${JSON.stringify(data, null, 2)}`);
-    const response = await fetch("/api/email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data, null, 2),
-    });
+    setIsLoading(true);
 
-    if (response.ok) {
-      alert("Application submitted successfully!");
-      //setFormData({ name: "", email: "", message: "" }); // Reset form
-      //window.location.href = "/students/success"; // Redirect to success page
-    } else {
-      alert("Failed to submit application. Please try again.");
+    try {
+      const response = await fetch("/api/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data, null, 2),
+      });
+
+      if (response.ok) {
+        alert("Application submitted successfully!");
+        //setFormData({ name: "", email: "", message: "" }); // Reset form
+        router.push("/students/success"); // Redirect to success page
+      } else {
+        console.error(
+          "Check Amplify Hosting compute logs, there was an error with the email recipient. Probably email recipient is not registered or verified in Amazon SES Sandbox"
+        );
+        alert("Failed to submit application. Please try again.");
+      }
+    } catch (error) {
+      throw new Error("Failed to submit application. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -88,7 +102,12 @@ const StudentForm = () => {
       onSubmit={(data) => handlerSubmit(data)}
       validate="onChange"
     >
-      <div className="b-form-wrapper">
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
+      <div className={`b-form-wrapper ${isLoading ? "loading" : ""}`}>
         <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
           <AutoField name="lugar" placeholder="Huauchinango, Puebla" />
           <AutoField name="fecha" value={currentFormattedDate} />
@@ -205,7 +224,7 @@ const StudentForm = () => {
             />
           </div>
         </div>
-        <SubmitField />
+        <SubmitField disabled={isLoading} />
       </div>
     </AutoForm>
   );

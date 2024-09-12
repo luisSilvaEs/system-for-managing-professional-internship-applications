@@ -1,5 +1,4 @@
 // /lib/email.tsx
-// lib/email.ts
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
 
 

@@ -304,5 +304,7 @@ _IMPORTANT: to debug and see any error or logs, navigate to **Hosting > Monitori
 
 ## References
 
-- [Uniforms - Basic uniforms usage](https://uniforms.tools/docs/tutorials-basic-uniforms-usage/)
+- [Crea Aplicacion en tiempo Record con Nextjs y AWS Amplify (Gen2)](https://www.youtube.com/watch?v=EJjiK16Lw_8&t=829s)
 - [Deploy Next.js (Miro) App on AWS Amplify w/ Env Variables in 10 min!!!](https://www.youtube.com/watch?v=-7pPvRzvYjM)
+- [Why I love AWS Amplify - Deploy Next.js (T3 Stack) in 5 minutes](https://www.youtube.com/watch?v=0B-hMvMggm8)
+- [Uniforms - Basic uniforms usage](https://uniforms.tools/docs/tutorials-basic-uniforms-usage/)

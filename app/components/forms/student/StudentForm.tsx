@@ -73,6 +73,15 @@ const StudentForm = () => {
     }
   };
 
+  const formatDate = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = date.toLocaleString("es-ES", { month: "long" }); // e.g., 'Sep'
+    const year = String(date.getFullYear()); // e.g., '24'
+    return `${day} de ${month} de ${year}`;
+  };
+
+  const currentFormattedDate = formatDate(new Date());
+
   return (
     <AutoForm
       schema={schema}
@@ -80,6 +89,18 @@ const StudentForm = () => {
       validate="onChange"
     >
       <div className="b-form-wrapper">
+        <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+          <AutoField name="lugar" placeholder="Huauchinango, Puebla" />
+          <AutoField name="fecha" value={currentFormattedDate} />
+        </div>
+        <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+          <p>
+            <span>C. Leonel Silva González</span>
+            <span>División de Estudios Profesionales</span>
+          </p>
+          <span>AT´N:C.</span>
+          <AutoField name="jefeDivision" />
+        </div>
         <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
           <div className="b-form__error-wrapper">
             <AutoField name="opcionElegida" />
@@ -87,7 +108,10 @@ const StudentForm = () => {
           </div>
         </div>
         <div className="b-form-group b-form-group--horizontal">
-          <AutoField name="periodoProyectado" />
+          <AutoField
+            name="periodoProyectado"
+            label="Periodo proyectado para la realicación del proyecto"
+          />
           <AutoField name="numeroResidentes" />
         </div>
         <div className="b-form-group b-form-group--vertical">
@@ -147,6 +171,38 @@ const StudentForm = () => {
             >
               <TextField name="otroRamoSector" placeholder="Especifique" />
             </DisplayIf>
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <h4>Domicilio:</h4>
+            <AutoField name="calleEmpresa" label="Calle" />
+            <AutoField name="numeroExteriorEmpresa" label="Numero interior" />
+            <AutoField
+              name="numeroInteriorEmpresa"
+              label="Numero exterior (Opcional)"
+            />
+            <AutoField name="coloniaEmpresa" label="Colonia" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField name="cpEmpresa" label="C.P." />
+            <AutoField name="ciudadEmpresa" label="Ciudad" />
+            <AutoField name="telefonoEmpresa" label="Telefonoe" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField
+              name="nombreTitularEmpresa"
+              label="Nombre del (a) titular de la empresa "
+            />
+            <AutoField name="puestoTitularEmpresa" label="Puesto" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField
+              name="nombrePersonaAQuienVaPresentacion"
+              label="Nombre de (la) persona a quien va dirigida la carta de presentación"
+            />
+            <AutoField
+              name="puestoPersonaAQuienVaPresentacion"
+              label="Puesto"
+            />
           </div>
         </div>
         <SubmitField />

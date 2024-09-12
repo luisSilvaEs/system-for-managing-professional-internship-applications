@@ -1,5 +1,6 @@
 import Ajv, { type KeywordDefinition, JSONSchemaType } from 'ajv';
 import addFormats from 'ajv-formats'; // Import ajv-formats
+import { StringListParameter } from 'aws-cdk-lib/aws-ssm';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
 import { RadioField } from 'uniforms-unstyled';
 
@@ -31,6 +32,9 @@ const noopKeywordDefinition: KeywordDefinition = {
 ajv.addKeyword(noopKeywordDefinition);
 
 type FormData = {
+  lugar: string;
+  fecha: string;
+  jefeDivision: string;
   opcionElegida: 'Banco de Proyectos' | 'Propuesta propia' | 'Trabajador';
   periodoProyectado: string;
   numeroResidentes: number;
@@ -50,6 +54,17 @@ type FormData = {
   nombreEmpresa: string;
   giroRamoSector: 'Industrial'|'Servicios'|'Público'|'Privado'|'Otro';
   otroRamoSector?: string | null;
+  calleEmpresa: string;
+  numeroExteriorEmpresa: string;
+  numeroInteriorEmpresa: string;
+  coloniaEmpresa: string;
+  cpEmpresa: string;
+  ciudadEmpresa: string;
+  telefonoEmpresa: string;
+  nombreTitularEmpresa: string;
+  puestoTitularEmpresa: string;
+  nombrePersonaAQuienVaPresentacion: string;
+  puestoPersonaAQuienVaPresentacion: string;
 };
 
 // Define JSON schema
@@ -57,6 +72,15 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
   title: 'Student Schema',
   type: 'object',
   properties: {
+    lugar: {
+      type: 'string'
+    },
+    fecha: {
+      type: 'string'
+    },
+    jefeDivision: {
+      type: 'string'
+    },
     opcionElegida: {
       type: 'string',
       enum: ['Banco de Proyectos', 'Propuesta propia', 'Trabajador'],
@@ -73,7 +97,9 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       type: 'string'
     },
     numeroResidentes: {
-      type: 'integer'
+      type: 'integer',
+      minimum: 1,
+      maximum: 2
     },
     nombre: { type: 'string' },
     apellidoPaterno: { type: 'string' },
@@ -131,7 +157,40 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       type: 'string',
       nullable: true, // Mark as nullable to handle optional values
       uniforms: { placeholder: 'Especifique' },
-    } 
+    },
+    calleEmpresa: {
+      type: 'string',
+    },
+    numeroExteriorEmpresa: {
+      type: 'string',
+    },
+    numeroInteriorEmpresa: {
+      type: 'string',
+    },
+    coloniaEmpresa: {
+      type: 'string',
+    },
+    cpEmpresa: {
+      type: 'string',
+    },
+    ciudadEmpresa: {
+      type: 'string',
+    },
+    telefonoEmpresa: {
+      type: 'string',
+    },
+    nombreTitularEmpresa: {
+      type: 'string',
+    },
+    puestoTitularEmpresa: {
+      type: 'string',
+    },
+    nombrePersonaAQuienVaPresentacion: {
+      type: 'string',
+    },
+    puestoPersonaAQuienVaPresentacion: {
+      type: 'string',
+    }
   },
   required: ['nombre', 'email', 'opcionElegida', 'giroRamoSector'],
 };

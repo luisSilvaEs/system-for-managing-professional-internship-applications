@@ -49,9 +49,17 @@ export const sendEmail = async (email: string, nombre: string, nombreEmpresa: st
         Data: nombre,
       },
       Body: {
-        Text: {
-          Data: nombreEmpresa,
-        },
+        Html: {
+          Data: `
+          <html>
+              <body>
+                <h1>Hello from Amazon SES!</h1>
+                <p>This is a test email sent using Amazon SES with HTML content.</p>
+                <p>Best Regards,<br/>${nombreEmpresa}</p>
+              </body>
+            </html>
+          `
+        }
       },
     },
   };

@@ -67,9 +67,24 @@ const StudentForm = () => {
     const { error } = useForm(); //The useForm() hook from uniforms provides access to the current state of the form.
 
     const searchMissingFields = () => {
-      console.log("Hello world!!", error);
-      if (error == null || !!error) {
-        alert("Dejaste algún campo obligatorio sin llenar o marcar");
+      console.log("Hello world!!", typeof error);
+      if (!!error && (error as any).details) {
+        const errorList = (error as any).details.map((err: any) => {
+          return err.params.missingProperty;
+        });
+        if (errorList.lenght > 1) {
+          alert(
+            `Dejaste los siguientes campos sin llenar o marcar: ${errorList.join(
+              ", "
+            )}`
+          );
+        } else {
+          alert(
+            `Dejaste el siguiente campo sin llenar o marcar: ${errorList.join(
+              ", "
+            )}`
+          );
+        }
       }
     };
 

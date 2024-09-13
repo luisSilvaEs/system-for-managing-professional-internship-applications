@@ -1,16 +1,16 @@
 "use client";
 
-import React, { Children, ReactElement, useState, FormEvent } from "react";
+import React, { Children, ReactElement, useState, useEffect } from "react";
 import {
   AutoField,
   AutoForm,
-  SubmitField,
   ErrorField,
   TextField,
   RadioField,
 } from "uniforms-semantic";
 import { Context, UnknownObject, useForm } from "uniforms";
 import { bridge as schema } from "./studentSchema";
+import { useRouter } from "next/navigation";
 
 type DisplayIfProps<Model extends UnknownObject> = {
   children: ReactElement;
@@ -32,54 +32,102 @@ type FormData = {
 };
 
 const StudentForm = () => {
-  /*
-  const [formData, setFormData] = useState({
-    opcionElegida: "",
-    periodoProyectado: "",
-    numeroResidentes: "",
-    nombre: "",
-    apellidoPaterno: "",
-    apellidoMaterno: "",
-    carrera: "",
-    numeroControl: "",
-    domicilioCalle: "",
-    domicilioNumeroExterior: "",
-    domicilioNumeroInterior: "",
-    domicilioColonia: "",
-    domicilioCP: "",
-    ciudad: "",
-    telefonoOcelular: "",
-    email: "",
-    nombreEmpresa: "",
-    giroRamoSector: "",
-    otroRamoSector: "",
-  });
-  */
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+
   const handlerSubmit = async (data: any) => {
     //e.preventDefault();
     console.log(`Handler submit function: ${JSON.stringify(data, null, 2)}`);
-    const response = await fetch("/api/email", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data, null, 2),
-    });
+    setIsLoading(true);
 
-    if (response.ok) {
-      alert("Application submitted successfully!");
-      //setFormData({ name: "", email: "", message: "" }); // Reset form
-      //window.location.href = "/students/success"; // Redirect to success page
-    } else {
-      alert("Failed to submit application. Please try again.");
+    try {
+      const response = await fetch("/api/email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data, null, 2),
+      });
+
+      if (response.ok) {
+        alert("Application submitted successfully!");
+        router.push("/students/success"); // Redirect to success page
+      } else {
+        console.error(
+          "Check Amplify Hosting compute logs, there was an error with the email recipient. Probably email recipient is not registered or verified in Amazon SES Sandbox"
+        );
+        alert("Failed to submit application. Please try again.");
+      }
+    } catch (error) {
+      throw new Error("Failed to submit application. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   };
 
+  const SubmitFieldCustom = () => {
+    const { error } = useForm(); //The useForm() hook from uniforms provides access to the current state of the form.
+
+    const searchMissingFields = () => {
+      console.log("Hello world!!", typeof error);
+      if (!!error && (error as any).details) {
+        const errorList = (error as any).details.map((err: any) => {
+          return err.params.missingProperty;
+        });
+        if (errorList.lenght > 1) {
+          alert(
+            `Dejaste los siguientes campos sin llenar o marcar: ${errorList.join(
+              ", "
+            )}`
+          );
+        } else {
+          alert(
+            `Dejaste el siguiente campo sin llenar o marcar: ${errorList.join(
+              ", "
+            )}`
+          );
+        }
+      }
+    };
+
+    return (
+      <input
+        type="submit"
+        className="ui button"
+        onClick={() => {
+          searchMissingFields();
+        }}
+      />
+    );
+  };
+
+  const formatDate = (date: Date) => {
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = date.toLocaleString("es-ES", { month: "long" }); // e.g., 'Sep'
+    const year = String(date.getFullYear()); // e.g., '24'
+    return `${day} de ${month} de ${year}`;
+  };
+
+  const currentFormattedDate = formatDate(new Date());
+
   return (
-    <AutoForm
-      schema={schema}
-      onSubmit={(data) => handlerSubmit(data)}
-      validate="onChange"
-    >
-      <div className="b-form-wrapper">
+    <AutoForm schema={schema} onSubmit={(data) => handlerSubmit(data)}>
+      {isLoading && (
+        <div className="loading-overlay">
+          <div className="spinner"></div>
+        </div>
+      )}
+      <div className={`b-form-wrapper ${isLoading ? "loading" : ""}`}>
+        <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+          <AutoField name="lugar" placeholder="Huauchinango, Puebla" />
+          <AutoField name="fecha" value={currentFormattedDate} />
+        </div>
+        <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+          <p>
+            <span>C. Leonel Silva González</span>
+            <span>División de Estudios Profesionales</span>
+          </p>
+          <span>AT´N:C.</span>
+          <AutoField name="jefeDivision" />
+        </div>
         <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
           <div className="b-form__error-wrapper">
             <AutoField name="opcionElegida" />
@@ -87,7 +135,10 @@ const StudentForm = () => {
           </div>
         </div>
         <div className="b-form-group b-form-group--horizontal">
-          <AutoField name="periodoProyectado" />
+          <AutoField
+            name="periodoProyectado"
+            label="Periodo proyectado para la realicación del proyecto"
+          />
           <AutoField name="numeroResidentes" />
         </div>
         <div className="b-form-group b-form-group--vertical">
@@ -148,8 +199,40 @@ const StudentForm = () => {
               <TextField name="otroRamoSector" placeholder="Especifique" />
             </DisplayIf>
           </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <h4>Domicilio:</h4>
+            <AutoField name="calleEmpresa" label="Calle" />
+            <AutoField name="numeroExteriorEmpresa" label="Numero interior" />
+            <AutoField
+              name="numeroInteriorEmpresa"
+              label="Numero exterior (Opcional)"
+            />
+            <AutoField name="coloniaEmpresa" label="Colonia" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField name="cpEmpresa" label="C.P." />
+            <AutoField name="ciudadEmpresa" label="Ciudad" />
+            <AutoField name="telefonoEmpresa" label="Telefono" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField
+              name="nombreTitularEmpresa"
+              label="Nombre del (a) titular de la empresa "
+            />
+            <AutoField name="puestoTitularEmpresa" label="Puesto" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField
+              name="nombrePersonaAQuienVaPresentacion"
+              label="Nombre de (la) persona a quien va dirigida la carta de presentación"
+            />
+            <AutoField
+              name="puestoPersonaAQuienVaPresentacion"
+              label="Puesto"
+            />
+          </div>
         </div>
-        <SubmitField />
+        <SubmitFieldCustom />
       </div>
     </AutoForm>
   );

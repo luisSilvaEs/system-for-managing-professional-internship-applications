@@ -1,10 +1,9 @@
 "use client";
 
-import React, { Children, ReactElement, useState, FormEvent } from "react";
+import React, { Children, ReactElement, useState, useEffect } from "react";
 import {
   AutoField,
   AutoForm,
-  SubmitField,
   ErrorField,
   TextField,
   RadioField,
@@ -35,29 +34,7 @@ type FormData = {
 const StudentForm = () => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
-  /*
-  const [formData, setFormData] = useState({
-    opcionElegida: "",
-    periodoProyectado: "",
-    numeroResidentes: "",
-    nombre: "",
-    apellidoPaterno: "",
-    apellidoMaterno: "",
-    carrera: "",
-    numeroControl: "",
-    domicilioCalle: "",
-    domicilioNumeroExterior: "",
-    domicilioNumeroInterior: "",
-    domicilioColonia: "",
-    domicilioCP: "",
-    ciudad: "",
-    telefonoOcelular: "",
-    email: "",
-    nombreEmpresa: "",
-    giroRamoSector: "",
-    otroRamoSector: "",
-  });
-  */
+
   const handlerSubmit = async (data: any) => {
     //e.preventDefault();
     console.log(`Handler submit function: ${JSON.stringify(data, null, 2)}`);
@@ -72,7 +49,6 @@ const StudentForm = () => {
 
       if (response.ok) {
         alert("Application submitted successfully!");
-        //setFormData({ name: "", email: "", message: "" }); // Reset form
         router.push("/students/success"); // Redirect to success page
       } else {
         console.error(
@@ -87,6 +63,27 @@ const StudentForm = () => {
     }
   };
 
+  const SubmitFieldCustom = () => {
+    const { error } = useForm(); //The useForm() hook from uniforms provides access to the current state of the form.
+
+    const searchMissingFields = () => {
+      console.log("Hello world!!", error);
+      if (error == null || !!error) {
+        alert("Dejaste algún campo obligatorio sin llenar o marcar");
+      }
+    };
+
+    return (
+      <input
+        type="submit"
+        className="ui button"
+        onClick={() => {
+          searchMissingFields();
+        }}
+      />
+    );
+  };
+
   const formatDate = (date: Date) => {
     const day = String(date.getDate()).padStart(2, "0");
     const month = date.toLocaleString("es-ES", { month: "long" }); // e.g., 'Sep'
@@ -97,11 +94,7 @@ const StudentForm = () => {
   const currentFormattedDate = formatDate(new Date());
 
   return (
-    <AutoForm
-      schema={schema}
-      onSubmit={(data) => handlerSubmit(data)}
-      validate="onChange"
-    >
+    <AutoForm schema={schema} onSubmit={(data) => handlerSubmit(data)}>
       {isLoading && (
         <div className="loading-overlay">
           <div className="spinner"></div>
@@ -204,7 +197,7 @@ const StudentForm = () => {
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="cpEmpresa" label="C.P." />
             <AutoField name="ciudadEmpresa" label="Ciudad" />
-            <AutoField name="telefonoEmpresa" label="Telefonoe" />
+            <AutoField name="telefonoEmpresa" label="Telefono" />
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField
@@ -224,7 +217,7 @@ const StudentForm = () => {
             />
           </div>
         </div>
-        <SubmitField disabled={isLoading} />
+        <SubmitFieldCustom />
       </div>
     </AutoForm>
   );

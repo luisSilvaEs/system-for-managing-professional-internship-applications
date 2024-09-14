@@ -23,14 +23,38 @@ export const getPdfFieldNames = async ( filePath: string ) => {
 };
 
 export const downloadPdfFromS3 = async (bucketName: string, key: string): Promise<Uint8Array> => {
+  console.log(`downloadPdfFromS3 function, params: bucket name: ${bucketName}, file: ${key}`);
+  
+  try {
     const command = new GetObjectCommand({ Bucket: bucketName, Key: key });
     const { Body } = await s3.send(command);
+
+    if (!Body) {
+      throw new Error(`Failed to retrieve object from S3. Body is undefined.`);
+    }
+
     const chunks: Uint8Array[] = [];
     for await (const chunk of Body as any) {
-        chunks.push(chunk);
+      chunks.push(chunk);
     }
+
+    if (chunks.length === 0) {
+      throw new Error(`No data received for file ${key} from bucket ${bucketName}.`);
+    }
+
+    console.log(`Successfully downloaded PDF from S3: ${bucketName}/${key}`);
     return Buffer.concat(chunks);
-}
+  } catch (error) {
+    if (error instanceof Error) {
+        console.error(`Error downloading PDF from S3: ${error.message}`);
+        throw new Error(`Failed to download PDF from S3: ${error.message}`);
+      } else {
+        console.error(`Unexpected error: ${String(error)}`);
+        throw new Error(`Unexpected error while downloading PDF from S3.`);
+      }
+  }
+};
+
 
 const uploadPdfToS3 = async(bucketName: string, key: string, fileContent: Uint8Array) => {
     const params = {

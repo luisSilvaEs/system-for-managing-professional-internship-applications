@@ -22,7 +22,7 @@ export const getPdfFieldNames = async ( filePath: string ) => {
     });
 };
 
-const downloadPdfFromS3 = async (bucketName: string, key: string): Promise<Uint8Array> => {
+export const downloadPdfFromS3 = async (bucketName: string, key: string): Promise<Uint8Array> => {
     const command = new GetObjectCommand({ Bucket: bucketName, Key: key });
     const { Body } = await s3.send(command);
     const chunks: Uint8Array[] = [];
@@ -76,13 +76,15 @@ export const generatePDF = async (s3BucketName: string, s3FilePath: string, data
     const optionFieldTwo = `checkbox${formatStringToCamelCaps(giroRamoSector)}`;
     form.getCheckBox( removeSpanishSymbols(optionFieldTwo) ).check();
 
-    const pdfBytes = await pdfDoc.save();
-    fs.writeFileSync("./tmp/Solicitud-de-Residencia-Nueva.pdf", pdfBytes);
-    console.log("PDF filled and saved locally successfully");
+    const numeroControl = form.getTextField("numeroControl").getText();
 
-    const newPDFKey = "new-files/Solicitud-de-Residencia-Nueva.pdf"
+    const pdfBytes = await pdfDoc.save();
+    //fs.writeFileSync("./tmp/Solicitud-de-Residencia-Nueva.pdf", pdfBytes);
+    //console.log("PDF filled and saved locally successfully");
+
+    const newPDFKey = `new-files/Solicitud-de-Residencia-Nueva-${numeroControl}.pdf`;
     await uploadPdfToS3(s3BucketName, newPDFKey, pdfBytes);
     console.log("PDF filled and saved in S3 successfully");
-
+    return newPDFKey;
 };
 

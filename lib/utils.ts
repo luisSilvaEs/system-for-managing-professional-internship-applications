@@ -21,18 +21,12 @@ export const formatStringToCamelCaps = (str: string) => {
 };
 
 export const removeSpanishSymbols = (input: string): string => {
-    // Normalize the string to decompose accented characters into their base characters
-    return input
-      .normalize("NFD") // Normalize to "NFD" form (decomposed form)
-      .replace(/[\u0300-\u036f]/g, "") // Remove diacritical marks
-      .replace(/[¡¿]/g, ""); // Remove Spanish-specific symbols like '¡' and '¿'
-  }
-  
-  // Example usage:
-  const originalText = "¡Hola! ¿Cómo estás? Él tiene un interés increíble.";
-  const cleanedText = removeSpanishSymbols(originalText);
-  console.log(cleanedText); // Output: "Hola! Como estas? El tiene un interes increible."
-  
+  // Normalize the string to decompose accented characters into their base characters
+  return input
+    .normalize("NFD") // Normalize to "NFD" form (decomposed form)
+    .replace(/[\u0300-\u036f]/g, "") // Remove diacritical marks
+    .replace(/[¡¿]/g, ""); // Remove Spanish-specific symbols like '¡' and '¿'
+}
 
 export const formatDataForServices = (data:any) => {
 

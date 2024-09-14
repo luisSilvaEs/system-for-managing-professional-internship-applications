@@ -18,6 +18,7 @@ export const sendEmail = async (data:any) => {
   const s3BucketName = process.env.S3_PDF_BUCKET_NAME || '';
   const s3filePath =  process.env.S3_PDF_TEMPLATE_FILE_PATH || '';
   console.log(`Bucket: ${s3BucketName} Resource: ${s3filePath}`);
+  /*
   const newPDFKey = await generatePDF(s3BucketName, s3filePath, data) || "";
   const pdfBytes = await downloadPdfFromS3(s3BucketName, newPDFKey);
 
@@ -27,6 +28,8 @@ export const sendEmail = async (data:any) => {
   }
 
   const attachment = Buffer.from(pdfBytes).toString('base64');
+  */
+ const attachment = "file.pdf";
 
   const rawEmailData = `From: ${process.env.SES_FROM_EMAIL}
 To: ${emailResidente}

@@ -1,6 +1,9 @@
 import { PDFDocument } from 'pdf-lib';
 import fs from 'fs';
+import { S3Client, GetObjectCommand } from '@aws-sdk/client-s3';
 import { formatStringToCamelCaps, removeSpanishSymbols } from "./utils";
+
+const s3 = new S3Client({ region: process.env.SES_REGION });
 
 //Used in dev to get fields from a new PDF
 export const getPdfFieldNames = async ( filePath: string ) => {
@@ -19,8 +22,20 @@ export const getPdfFieldNames = async ( filePath: string ) => {
     });
 };
 
-export const generatePDF = async (filePath: string, data: any) => {
-    const existingPdfBytes = fs.readFileSync(filePath);
+const downloadPdfFromS3 = async (bucketName: string, key: string): Promise<Uint8Array> => {
+    const command = new GetObjectCommand({ Bucket: bucketName, Key: key });
+    const { Body } = await s3.send(command);
+    const chunks: Uint8Array[] = [];
+    for await (const chunk of Body as any) {
+      chunks.push(chunk);
+    }
+    return Buffer.concat(chunks);
+  }
+
+export const generatePDF = async (s3BucketName: string, s3FilePath: string, data: any) => {
+    //const existingPdfBytes = fs.readFileSync(filePath);//locally
+    const existingPdfBytes = await downloadPdfFromS3(s3BucketName, s3FilePath);
+    
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const form = pdfDoc.getForm();
     const fields = form.getFields();

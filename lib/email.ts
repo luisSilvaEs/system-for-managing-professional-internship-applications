@@ -13,7 +13,11 @@ const sesClient = new SESClient({
 export const sendEmail = async (data:any) => {
   //getPdfFieldNames("./tmp/Solicitud-de-Residencia_2024-fillable.pdf");
   const { emailResidente, nombreResidente, nombreEmpresa } = data;
-  generatePDF("./tmp/Solicitud-de-Residencia_2024-fillable.pdf", data );
+  //generatePDF("./tmp/Solicitud-de-Residencia_2024-fillable.pdf", data );//locally
+  const s3BucketName = process.env.S3_PDF_BUCKET_NAME || '';
+  const s3filePath =  process.env.S3_PDF_TEMPLATE_FILE_PATH || '';
+  console.log(`Bucket ${s3BucketName} Resource${s3filePath}`);
+  generatePDF(s3BucketName, s3filePath, data);
   if (!process.env.SES_ACCESS_KEY_ID || !process.env.SES_SECRET_ACCESS_KEY) {
     console.error("Missing AWS SES credentials in environment variables.");
     throw new Error("AWS SES credentials are not properly configured.");

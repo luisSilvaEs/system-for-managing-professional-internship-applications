@@ -18,8 +18,9 @@ export const sendEmail = async (data:any) => {
   const s3BucketName = process.env.S3_PDF_BUCKET_NAME || '';
   const s3filePath =  process.env.S3_PDF_TEMPLATE_FILE_PATH || '';
   console.log(`Bucket: ${s3BucketName} Resource: ${s3filePath}`);
-  /*
+  
   const newPDFKey = await generatePDF(s3BucketName, s3filePath, data) || "";
+  /*
   const pdfBytes = await downloadPdfFromS3(s3BucketName, newPDFKey);
 
   if (!process.env.SES_ACCESS_KEY_ID || !process.env.SES_SECRET_ACCESS_KEY) {

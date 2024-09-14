@@ -13,9 +13,9 @@ const s3 = new S3Client({
 
 //Used in dev to get fields from a new PDF
 export const getPdfFieldNames = async ( filePath: string ) => {
-    console.log("Got here");
+
     const existingPdfBytes = fs.readFileSync(filePath);
-    console.log("PDF Bytes Length:", existingPdfBytes.length);
+    //console.log("PDF Bytes Length:", existingPdfBytes.length);
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
     const form = pdfDoc.getForm();
     
@@ -29,7 +29,6 @@ export const getPdfFieldNames = async ( filePath: string ) => {
 };
 
 export const downloadPdfFromS3 = async (bucketName: string, key: string): Promise<Uint8Array> => {
-  console.log(`downloadPdfFromS3 function, params: bucket name: ${bucketName}, file: ${key}`);
   
   try {
     const command = new GetObjectCommand({ Bucket: bucketName, Key: key });

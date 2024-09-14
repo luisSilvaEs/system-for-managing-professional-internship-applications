@@ -20,17 +20,10 @@ export const sendEmail = async (data:any) => {
   console.log(`Bucket: ${s3BucketName} Resource: ${s3filePath}`);
   
   const newPDFKey = await generatePDF(s3BucketName, s3filePath, data) || "";
-  /*
+  
   const pdfBytes = await downloadPdfFromS3(s3BucketName, newPDFKey);
 
-  if (!process.env.SES_ACCESS_KEY_ID || !process.env.SES_SECRET_ACCESS_KEY) {
-    console.error("Missing AWS SES credentials in environment variables.");
-    throw new Error("AWS SES credentials are not properly configured.");
-  }
-
   const attachment = Buffer.from(pdfBytes).toString('base64');
-  */
- const attachment = "file.pdf";
 
   const rawEmailData = `From: ${process.env.SES_FROM_EMAIL}
 To: ${emailResidente}

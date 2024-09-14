@@ -9,7 +9,7 @@ const sesClient = new SESClient({
     accessKeyId: process.env.SES_ACCESS_KEY_ID || '',
     secretAccessKey: process.env.SES_SECRET_ACCESS_KEY || ''
   }
- });
+});
 
 export const sendEmail = async (data:any) => {
   //getPdfFieldNames("./tmp/Solicitud-de-Residencia_2024-fillable.pdf");

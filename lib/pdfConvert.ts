@@ -3,7 +3,13 @@ import fs from 'fs';
 import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
 import { formatStringToCamelCaps, removeSpanishSymbols } from "./utils";
 
-const s3 = new S3Client({ region: process.env.SES_REGION });
+const s3 = new S3Client({ 
+    region: process.env.SES_REGION,
+    credentials: {
+      accessKeyId: process.env.SES_ACCESS_KEY_ID || '',
+      secretAccessKey: process.env.SES_SECRET_ACCESS_KEY || ''
+    }
+});
 
 //Used in dev to get fields from a new PDF
 export const getPdfFieldNames = async ( filePath: string ) => {

@@ -54,8 +54,29 @@ export const generatePDF = async (s3BucketName: string, s3FilePath: string, data
     const existingPdfBytes = await downloadPdfFromS3(s3BucketName, s3FilePath);
 
     const pdfDoc = await PDFDocument.load(existingPdfBytes);
+
+    if (!pdfDoc) {
+        console.error('Failed to load PDF document.');
+        return;
+    }
+
+    if (pdfDoc.getPageCount() === 0) {
+        console.error('PDF document has no pages.');
+    return;
+    } else {
+        console.log(`PDF document loaded successfully with ${pdfDoc.getPageCount()} pages.`);
+    }
+      
+      
+
     const form = pdfDoc.getForm();
     const fields = form.getFields();
+
+    if (fields.length === 0) {
+        console.error('No form fields found in the PDF document.');
+    } else {
+        console.log(`Found ${fields.length} form fields in the PDF document.`);
+    }
 
     fields.forEach((field) => {
         const type = field.constructor.name;

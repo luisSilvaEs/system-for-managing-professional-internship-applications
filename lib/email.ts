@@ -1,28 +1,6 @@
 // /lib/email.tsx
 import { SESClient, SendEmailCommand } from "@aws-sdk/client-ses";
-
-
-interface EmailData {
-  opcionElegida?: "",
-  periodoProyectado?: "",
-  numeroResidentes?: "",
-  nombre: "",
-  apellidoPaterno?: "",
-  apellidoMaterno?: "",
-  carrera?: "",
-  numeroControl?: "",
-  domicilioCalle?: "",
-  domicilioNumeroExterior?: "",
-  domicilioNumeroInterior?: "",
-  domicilioColonia?: "",
-  domicilioCP?: "",
-  ciudad?: "",
-  telefonoOcelular?: "",
-  email: "",
-  nombreEmpresa: "",
-  giroRamoSector?: "",
-  otroRamoSector?: ""
-}
+import { generatePDF } from '@/lib/pdfConvert';
 
 const sesClient = new SESClient({ 
   region: process.env.SES_REGION,
@@ -32,8 +10,10 @@ const sesClient = new SESClient({
   }
  });
 
-export const sendEmail = async (email: string, nombre: string, nombreEmpresa: string) => {
-
+export const sendEmail = async (data:any) => {
+  //getPdfFieldNames("./tmp/Solicitud-de-Residencia_2024-fillable.pdf");
+  const { emailResidente, nombreResidente, nombreEmpresa } = data;
+  generatePDF("./tmp/Solicitud-de-Residencia_2024-fillable.pdf", data );
   if (!process.env.SES_ACCESS_KEY_ID || !process.env.SES_SECRET_ACCESS_KEY) {
     console.error("Missing AWS SES credentials in environment variables.");
     throw new Error("AWS SES credentials are not properly configured.");
@@ -42,11 +22,11 @@ export const sendEmail = async (email: string, nombre: string, nombreEmpresa: st
   const params = {
     Source: process.env.SES_FROM_EMAIL,
     Destination: {
-      ToAddresses: [email],
+      ToAddresses: [emailResidente],
     },
     Message: {
       Subject: {
-        Data: nombre,
+        Data: nombreResidente,
       },
       Body: {
         Html: {

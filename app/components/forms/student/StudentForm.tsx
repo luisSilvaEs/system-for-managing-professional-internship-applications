@@ -11,6 +11,7 @@ import {
 import { Context, UnknownObject, useForm } from "uniforms";
 import { bridge as schema } from "./studentSchema";
 import { useRouter } from "next/navigation";
+import { formatDataForServices } from "@/lib/utils";
 
 type DisplayIfProps<Model extends UnknownObject> = {
   children: ReactElement;
@@ -37,14 +38,17 @@ const StudentForm = () => {
 
   const handlerSubmit = async (data: any) => {
     //e.preventDefault();
-    console.log(`Handler submit function: ${JSON.stringify(data, null, 2)}`);
+    const dataToSend = formatDataForServices(data);
+    console.log(
+      `Handler submit function: ${JSON.stringify(dataToSend, null, 2)}`
+    );
     setIsLoading(true);
 
     try {
       const response = await fetch("/api/email", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data, null, 2),
+        body: JSON.stringify(dataToSend, null, 2),
       });
 
       if (response.ok) {

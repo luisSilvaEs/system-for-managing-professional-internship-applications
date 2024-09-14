@@ -7,15 +7,16 @@ import { sendEmail } from '@/lib/email';
 export async function POST(request: Request) {
   //console.log("SES_ACCESS_KEY_ID from environment:", process.env.SES_ACCESS_KEY_ID); //Added to debug on Amplify
   try {
-    const { email, nombre, nombreEmpresa } = await request.json();
+    const data = await request.json();
+    const { emailResidente } = data;
 
-    if (!email || !/\S+@\S+\.\S+/.test(email)) {
-      console.error("Invalid email address:", email);
+    if (!emailResidente || !/\S+@\S+\.\S+/.test(emailResidente)) {
+      console.error("Invalid email address:", emailResidente);
       return NextResponse.json({ message: 'Invalid email address' }, { status: 400 });
     }
 
     //console.log("You got to /email/route.ts file");//Added to debug on Amplify
-    await sendEmail(email, nombre, nombreEmpresa);
+    await sendEmail(data);
     
     return NextResponse.json({ message: 'Email sent successfully' }, { status: 200 });
   } catch (error) {

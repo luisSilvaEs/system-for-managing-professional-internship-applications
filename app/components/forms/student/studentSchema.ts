@@ -2,6 +2,7 @@ import Ajv, { type KeywordDefinition, JSONSchemaType } from "ajv";
 import addFormats from "ajv-formats"; // Import ajv-formats
 import { JSONSchemaBridge } from "uniforms-bridge-json-schema";
 import { RadioField } from "uniforms-semantic";
+import { getCustomDateRange } from "@/lib/utils";
 
 // Initialize Ajv with options
 const ajv = new Ajv({ allErrors: true, useDefaults: true, $data: true, strictSchema: false });
@@ -109,7 +110,8 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       },
     },
     periodoProyectado: {
-      type: "string"
+      type: "string",
+      value: `${getCustomDateRange()}`
     },
     numeroResidentes: {
       type: "integer",

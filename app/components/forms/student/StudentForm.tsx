@@ -129,36 +129,32 @@ const StudentForm = ({ title, summary }: PropsForm) => {
           <h2 className="text-lg uppercase font-bold">{title}</h2>
           <p>{summary}</p>
         </div>
-        <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-          <AutoField name="lugar" placeholder="Huauchinango, Puebla" />
-          <AutoField name="fecha" value={currentFormattedDate} />
+        <div className="b-form-group b-form-group--borderless b-form-group--horizontal">
+          <AutoField name="lugar" className="w-80" />
+          <AutoField
+            name="fecha"
+            value={currentFormattedDate}
+            className="w-80"
+          />
         </div>
-        <div className="b-form-group b-form-group--horizontal b-form-group--borderless items-center">
-          <p>
-            <span>C. Leonel Silva González</span>
-            <span>División de Estudios Profesionales</span>
-          </p>
-          <span>AT´N:C.</span>
+        <div className="b-form-group  b-form-group--borderless">
           <AutoField name="jefeDivision" />
         </div>
         <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
           <div className="b-form__error-wrapper">
-            <AutoField name="opcionElegida" label="Opción elegida:" />
+            <AutoField name="opcionElegida" />
             <ErrorField name="opcionElegida" />
           </div>
         </div>
         <div className="b-form-group b-form-group--horizontal">
-          <AutoField
-            name="periodoProyectado"
-            label="Periodo proyectado para la realicación del proyecto"
-          />
+          <AutoField name="periodoProyectado" />
           <AutoField name="numeroResidentes" />
         </div>
         <h3>Datos del(a) residente</h3>
         <div className="b-form-group b-form-group--vertical">
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <div className="b-form__error-wrapper">
-              <AutoField name="nombre" label="Nombre(s)" />
+              <AutoField name="nombre" className="w-80" />
               <ErrorField name="nombre" />
             </div>
             <AutoField name="apellidoPaterno" />
@@ -166,7 +162,7 @@ const StudentForm = ({ title, summary }: PropsForm) => {
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="carrera" />
-            <AutoField name="numeroControl" />
+            <AutoField name="numeroControl" className="w-1/6" />
           </div>
           <hr />
           <h4 className="text-center uppercase">Domicilio</h4>
@@ -174,18 +170,12 @@ const StudentForm = ({ title, summary }: PropsForm) => {
             <AutoField name="domicilioCalle" label="Calle" className="w-full" />
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="domicilioNumeroExterior" label="Num. exterior" />
-            <AutoField
-              name="domicilioNumeroInterior"
-              label="Num. interior (opcional)"
-            />
+            <AutoField name="domicilioNumeroExterior" />
+            <AutoField name="domicilioNumeroInterior" />
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField
-              name="domicilioColonia"
-              label="Colonia o Fraccionamiento"
-            />
-            <AutoField name="domicilioCP" label="C.P." />
+            <AutoField name="domicilioColonia" />
+            <AutoField name="domicilioCP" />
             <AutoField name="ciudad" />
           </div>
           <hr />
@@ -204,7 +194,6 @@ const StudentForm = ({ title, summary }: PropsForm) => {
             <div className="b-form__error-wrapper">
               <RadioField
                 name="giroRamoSector"
-                label="Giro, ramo o sector:"
                 options={[
                   { label: "Industrial", value: "Industrial" },
                   { label: "Servicios", value: "Servicios" },
@@ -218,41 +207,37 @@ const StudentForm = ({ title, summary }: PropsForm) => {
             <DisplayIf<FormData>
               condition={(context) => context.model.giroRamoSector === "Otro"}
             >
-              <TextField name="otroRamoSector" placeholder="Especifique" />
+              <TextField name="otroRamoSector" />
             </DisplayIf>
           </div>
           <hr />
           <h4 className="text-center uppercase">Domicilio</h4>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="calleEmpresa" label="Calle" />
-            <AutoField name="numeroExteriorEmpresa" label="Num. exterior" />
-            <AutoField
-              name="numeroInteriorEmpresa"
-              label="Num. interior (Opcional)"
-            />
+            <AutoField name="calleEmpresa" className="w-full" />
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="coloniaEmpresa" label="Colonia" />
-            <AutoField name="cpEmpresa" label="C.P." />
-            <AutoField name="ciudadEmpresa" label="Ciudad" />
-            <AutoField name="telefonoEmpresa" label="Teléfono" />
+            <AutoField name="numeroExteriorEmpresa" />
+            <AutoField name="numeroInteriorEmpresa" />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField name="coloniaEmpresa" />
+            <AutoField name="cpEmpresa" />
+            <AutoField name="ciudadEmpresa" />
+            <AutoField name="telefonoEmpresa" />
           </div>
           <hr />
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField
-              name="nombreTitularEmpresa"
-              label="Nombre del (a) titular de la empresa "
-            />
-            <AutoField name="puestoTitularEmpresa" label="Puesto" />
+            <AutoField name="nombreTitularEmpresa" className="w-1/2" />
+            <AutoField name="puestoTitularEmpresa" className="w-1/3" />
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField
               name="nombrePersonaAQuienVaPresentacion"
-              label="Nombre de (la) persona a quien va dirigida la carta de presentación"
+              className="w-1/2"
             />
             <AutoField
               name="puestoPersonaAQuienVaPresentacion"
-              label="Puesto"
+              className="w-1/3"
             />
           </div>
         </div>

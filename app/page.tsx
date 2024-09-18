@@ -5,7 +5,12 @@ export default function Home() {
     <div>
       <StudentForm
         title="Solicitud de residencia profesional"
-        summary="Favor de llenar el siguiente formulario para procesar la solicitud de residencia profesional. TODOS los campos son obligatorios."
+        instructions={
+          <p>
+            Favor de llenar <strong style={{ color: "#db2828" }}>TODOS</strong>{" "}
+            los campos para procesar la solicitud.
+          </p>
+        }
       />
     </div>
   );

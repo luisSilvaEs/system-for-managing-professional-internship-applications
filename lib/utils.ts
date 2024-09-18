@@ -28,6 +28,20 @@ export const removeSpanishSymbols = (input: string): string => {
     .replace(/[¡¿]/g, ""); // Remove Spanish-specific symbols like '¡' and '¿'
 }
 
+export const getCustomDateRange = () : string => {
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const currentMonth = currentDate.getMonth() + 1;
+
+  if (currentMonth >= 1 && currentMonth <= 4) {
+    return `Marzo - Julio ${currentYear}`;
+  } else if (currentMonth >= 8 && currentMonth <= 9) {
+    return `Agosto - Diciembre ${currentYear}`;
+  }
+
+  return "Date not in the specified ranges";
+};
+
 export const formatDataForServices = (data:any) => {
 
     const {

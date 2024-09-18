@@ -13,7 +13,13 @@ const sesClient = new SESClient({
 
 export const sendEmail = async (data:any) => {
   //getPdfFieldNames("./tmp/Solicitud-de-Residencia_2024-fillable.pdf");
-  const { emailResidente, nombreResidente, nombreEmpresa } = data;
+  const { 
+    emailResidente,
+    nombreResidente, 
+    numeroControl, 
+    carreraResidente, 
+    nombreEmpresa 
+    } = data;
   //generatePDF("./tmp/Solicitud-de-Residencia_2024-fillable.pdf", data );//locally
   const s3BucketName = process.env.S3_PDF_BUCKET_NAME || '';
   const s3filePath =  process.env.S3_PDF_TEMPLATE_FILE_PATH || '';
@@ -29,17 +35,24 @@ export const sendEmail = async (data:any) => {
 To: ${emailResidente}
 Subject: Solcidud residencia de ${nombreResidente}
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="NextPart"
+Content-Type: multipart/related; boundary="NextPart"
 
 --NextPart
+Content-Type: multipart/alternative; boundary="HtmlPart"
+
+--HtmlPart
 Content-Type: text/html; charset=utf-8
 
 <html>
   <body>
     <h1>Solicidud de residencia profesional nuevo.</h1>
-    <p>El alumno ${nombreResidente} de la carrera TDB y con numéro de control TDB
-    ha llenado el formulario para realizar prácticas en la empresa ${nombreEmpresa}.</p>
+    <p>El alumno <strong>${nombreResidente}</strong> de la carrera <strong>${carreraResidente}</strong> y con número de control <strong>${numeroControl}</strong>
+    ha llenado el formulario para realizar prácticas en la empresa <strong>${nombreEmpresa}</strong>.</p>
     <p>Para ver la solicitud completa, abrir el archivo adjunto.</p>
+    
+    <!-- Attachment inside the body -->
+    <embed src="cid:Solicitud-de-Residencia-Nueva.pdf" type="application/pdf" width="600" height="400" />
+
     <p>Excelente día</p>
   </body>
   <footer>
@@ -49,14 +62,18 @@ Content-Type: text/html; charset=utf-8
   </footer>
 </html>
 
+--HtmlPart--
+
 --NextPart
 Content-Type: application/pdf; name="Solicitud-de-Residencia-Nueva.pdf"
-Content-Disposition: attachment; filename="Solicitud-de-Residencia-Nueva.pdf"
+Content-Disposition: inline; filename="Solicitud-de-Residencia-Nueva.pdf"
+Content-ID: <Solicitud-de-Residencia-Nueva.pdf>
 Content-Transfer-Encoding: base64
 
 ${attachment}
 
---NextPart--`;
+--NextPart--
+`;
 
 
   const rawEmailParams = {

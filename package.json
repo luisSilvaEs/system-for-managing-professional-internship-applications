@@ -19,10 +19,11 @@
     "pdf-lib": "^1.17.1",
     "react": "^18",
     "react-dom": "^18",
+    "semantic-ui-css": "^2.5.0",
+    "semantic-ui-react": "^2.1.5",
     "uniforms": "^4.0.0-alpha.6",
     "uniforms-bridge-json-schema": "^4.0.0-alpha.6",
-    "uniforms-semantic": "^4.0.0-alpha.6",
-    "uniforms-unstyled": "^4.0.0-alpha.6"
+    "uniforms-semantic": "^4.0.0-alpha.6"
   },
   "devDependencies": {
     "@aws-amplify/backend": "^1.2.1",

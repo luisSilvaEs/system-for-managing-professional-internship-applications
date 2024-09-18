@@ -2,7 +2,7 @@ import Ajv, { type KeywordDefinition, JSONSchemaType } from 'ajv';
 import addFormats from 'ajv-formats'; // Import ajv-formats
 import { StringListParameter } from 'aws-cdk-lib/aws-ssm';
 import { JSONSchemaBridge } from 'uniforms-bridge-json-schema';
-import { RadioField } from 'uniforms-unstyled';
+import { RadioField } from 'uniforms-semantic';
 
 // Initialize Ajv with options
 const ajv = new Ajv({ allErrors: true, useDefaults: true, $data: true, strictSchema: false });
@@ -91,6 +91,7 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
           { label: 'Propuesta propia', value: 'Propuesta propia' },
           { label: 'Trabajador', value: 'Trabajador' },
         ],
+        errorMessage: `Debe marcar de entre alguna de las opciones mostradas arriba`
       },
     },
     periodoProyectado: {
@@ -99,9 +100,11 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
     numeroResidentes: {
       type: 'integer',
       minimum: 1,
-      maximum: 2
+      maximum: 3
     },
-    nombre: { type: 'string' },
+    nombre: { type: 'string', uniforms: {
+      errorMessage: `Campo "Nombre(s)" es obligatorio`
+    } },
     apellidoPaterno: { type: 'string' },
     apellidoMaterno: { type: 'string' },
     carrera: {
@@ -144,7 +147,7 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       pattern: '^[a-zA-Z0-9._-]+@(hotmail\\.com|gmail\\.com|yahoo\\.com|me\\.com|icloud\\.com|outlook\\.com)$',
       uniforms: { 
         placeholder: 'example@domain.com',
-        errorMessage: "Email must be a valid format (e.g., example@gmail.com).",
+        errorMessage: "Email debe tener un formato válido (e.g., example@gmail.com).",
        },
     },
     nombreEmpresa: {

@@ -13,6 +13,11 @@ import { bridge as schema } from "./studentSchema";
 import { useRouter } from "next/navigation";
 import { formatDataForServices } from "@/lib/utils";
 
+interface PropsForm {
+  title: string;
+  summary: string;
+}
+
 type DisplayIfProps<Model extends UnknownObject> = {
   children: ReactElement;
   condition: (context: Context<Model>) => boolean;
@@ -32,7 +37,7 @@ type FormData = {
   otroRamoSector?: string;
 };
 
-const StudentForm = () => {
+const StudentForm = ({ title, summary }: PropsForm) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -120,11 +125,15 @@ const StudentForm = () => {
         </div>
       )}
       <div className={`b-form-wrapper ${isLoading ? "loading" : ""}`}>
+        <div className="b-form-group b-form-group--borderless flex flex-col items-center justify-center">
+          <h2 className="text-lg uppercase font-bold">{title}</h2>
+          <p>{summary}</p>
+        </div>
         <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
           <AutoField name="lugar" placeholder="Huauchinango, Puebla" />
           <AutoField name="fecha" value={currentFormattedDate} />
         </div>
-        <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+        <div className="b-form-group b-form-group--horizontal b-form-group--borderless items-center">
           <p>
             <span>C. Leonel Silva González</span>
             <span>División de Estudios Profesionales</span>
@@ -134,7 +143,7 @@ const StudentForm = () => {
         </div>
         <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
           <div className="b-form__error-wrapper">
-            <AutoField name="opcionElegida" />
+            <AutoField name="opcionElegida" label="Opción elegida:" />
             <ErrorField name="opcionElegida" />
           </div>
         </div>
@@ -145,12 +154,11 @@ const StudentForm = () => {
           />
           <AutoField name="numeroResidentes" />
         </div>
+        <h3>Datos del(a) residente</h3>
         <div className="b-form-group b-form-group--vertical">
-          <h3>Datos del(a) residente</h3>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <h4>Nombre completo:</h4>
             <div className="b-form__error-wrapper">
-              <AutoField name="nombre" />
+              <AutoField name="nombre" label="Nombre(s)" />
               <ErrorField name="nombre" />
             </div>
             <AutoField name="apellidoPaterno" />
@@ -160,33 +168,43 @@ const StudentForm = () => {
             <AutoField name="carrera" />
             <AutoField name="numeroControl" />
           </div>
-
+          <hr />
+          <h4 className="text-center uppercase">Domicilio</h4>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <h4>Domicilio:</h4>
-            <AutoField name="domicilioCalle" />
-            <AutoField name="domicilioNumeroExterior" />
-            <AutoField name="domicilioNumeroInterior" />
+            <AutoField name="domicilioCalle" label="Calle" className="w-full" />
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="domicilioColonia" />
-            <AutoField name="domicilioCP" />
+            <AutoField name="domicilioNumeroExterior" label="Num. exterior" />
+            <AutoField
+              name="domicilioNumeroInterior"
+              label="Num. interior (opcional)"
+            />
+          </div>
+          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField
+              name="domicilioColonia"
+              label="Colonia o Fraccionamiento"
+            />
+            <AutoField name="domicilioCP" label="C.P." />
             <AutoField name="ciudad" />
           </div>
+          <hr />
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="telefonoOcelular" />
+            <AutoField name="telefonoOcelular" label="Teléfono o celular" />
             <div className="b-form__error-wrapper">
               <AutoField name="email" />
               <ErrorField name="email" />
             </div>
           </div>
         </div>
+        <h3>Datos de la empresa</h3>
         <div className="b-form-group">
-          <h3>Datos de la empresa</h3>
           <AutoField name="nombreEmpresa" />
           <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
             <div className="b-form__error-wrapper">
               <RadioField
                 name="giroRamoSector"
+                label="Giro, ramo o sector:"
                 options={[
                   { label: "Industrial", value: "Industrial" },
                   { label: "Servicios", value: "Servicios" },
@@ -203,21 +221,23 @@ const StudentForm = () => {
               <TextField name="otroRamoSector" placeholder="Especifique" />
             </DisplayIf>
           </div>
+          <hr />
+          <h4 className="text-center uppercase">Domicilio</h4>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <h4>Domicilio:</h4>
             <AutoField name="calleEmpresa" label="Calle" />
-            <AutoField name="numeroExteriorEmpresa" label="Numero interior" />
+            <AutoField name="numeroExteriorEmpresa" label="Num. exterior" />
             <AutoField
               name="numeroInteriorEmpresa"
-              label="Numero exterior (Opcional)"
+              label="Num. interior (Opcional)"
             />
-            <AutoField name="coloniaEmpresa" label="Colonia" />
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+            <AutoField name="coloniaEmpresa" label="Colonia" />
             <AutoField name="cpEmpresa" label="C.P." />
             <AutoField name="ciudadEmpresa" label="Ciudad" />
-            <AutoField name="telefonoEmpresa" label="Telefono" />
+            <AutoField name="telefonoEmpresa" label="Teléfono" />
           </div>
+          <hr />
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField
               name="nombreTitularEmpresa"

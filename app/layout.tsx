@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "semantic-ui-css/semantic.min.css";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,7 +18,7 @@ export default function RootLayout({
   return (
     <html lang="en" className="h-full">
       <body
-        className={`${inter.className} h-full bg-slate-50 text-black container mx-auto max-w-7xl px-2 py-4 sm:px-6 sm:py-32 lg:px-8`}
+        className={`${inter.className} h-full bg-white text-black container mx-auto max-w-7xl px-2 py-4 sm:px-6 sm:py-32 lg:px-8`}
       >
         {children}
       </body>

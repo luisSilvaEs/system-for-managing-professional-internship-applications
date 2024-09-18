@@ -46,7 +46,7 @@ type FormData = {
   domicilioNumeroExterior: string;
   domicilioNumeroInterior: string;
   domicilioColonia: string;
-  domicilioCP: string;
+  domicilioCP: number;
   ciudad: string;
   telefonoOcelular: string;
   email: string;
@@ -57,7 +57,7 @@ type FormData = {
   numeroExteriorEmpresa: string;
   numeroInteriorEmpresa: string;
   coloniaEmpresa: string;
-  cpEmpresa: string;
+  cpEmpresa: number;
   ciudadEmpresa: string;
   telefonoEmpresa: string;
   nombreTitularEmpresa: string;
@@ -149,8 +149,12 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       label: "Colonia"
     },
     domicilioCP: {
-      type: "string",
-      label: "C.P."
+      type: "number",
+      label: "C.P.",
+      pattern: "^\d{5}$",
+      uniforms: { 
+        errorMessage: "Código postal debe tener solo dígitos y de 5 cifras",
+      }
     },
     ciudad: {
       type: "string",
@@ -168,7 +172,7 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       uniforms: { 
         placeholder: "example@domain.com",
         errorMessage: "Email debe tener un formato válido (e.g., example@gmail.com).",
-       },
+      }
     },
     nombreEmpresa: {
       type: "string",
@@ -200,8 +204,12 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       label: "Colonia"
     },
     cpEmpresa: {
-      type: "string",
-      label: "C.P."
+      type: "number",
+      pattern: "^\d{5}$",
+      uniforms: { 
+        errorMessage: "Código postal debe tener solo dígitos y de 5 cifras",
+      },
+      label: "C.P.",
     },
     ciudadEmpresa: {
       type: "string",
@@ -228,7 +236,7 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       label: "Puesto"
     }
   },
-  required: ["nombre", "email", "opcionElegida", "giroRamoSector"],
+  required: ["nombre", "email", "domicilioCP", "opcionElegida", "giroRamoSector"],
 };
 
 // Corrected validator function with proper type signature

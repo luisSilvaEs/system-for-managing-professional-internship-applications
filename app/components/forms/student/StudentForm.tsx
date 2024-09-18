@@ -15,7 +15,8 @@ import { formatDataForServices } from "@/lib/utils";
 
 interface PropsForm {
   title: string;
-  summary: string;
+  summary?: React.ReactNode;
+  instructions?: React.ReactNode;
 }
 
 type DisplayIfProps<Model extends UnknownObject> = {
@@ -37,7 +38,7 @@ type FormData = {
   otroRamoSector?: string;
 };
 
-const StudentForm = ({ title, summary }: PropsForm) => {
+const StudentForm = ({ title, summary, instructions }: PropsForm) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
 
@@ -127,7 +128,8 @@ const StudentForm = ({ title, summary }: PropsForm) => {
       <div className={`b-form-wrapper ${isLoading ? "loading" : ""}`}>
         <div className="b-form-group b-form-group--borderless flex flex-col items-center justify-center">
           <h2 className="text-lg uppercase font-bold">{title}</h2>
-          <p>{summary}</p>
+          {summary && <p>{summary}</p>}
+          {instructions && instructions}
         </div>
         <div className="b-form-group b-form-group--borderless b-form-group--horizontal">
           <AutoField name="lugar" className="w-80" />
@@ -150,7 +152,7 @@ const StudentForm = ({ title, summary }: PropsForm) => {
           <AutoField name="periodoProyectado" />
           <AutoField name="numeroResidentes" />
         </div>
-        <h3>Datos del(a) residente</h3>
+        <h3>Datos del (a) residente</h3>
         <div className="b-form-group b-form-group--vertical">
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <div className="b-form__error-wrapper">
@@ -167,7 +169,7 @@ const StudentForm = ({ title, summary }: PropsForm) => {
           <hr />
           <h4 className="text-center uppercase">Domicilio</h4>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="domicilioCalle" label="Calle" className="w-full" />
+            <AutoField name="domicilioCalle" className="w-full" />
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="domicilioNumeroExterior" />
@@ -176,11 +178,12 @@ const StudentForm = ({ title, summary }: PropsForm) => {
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="domicilioColonia" />
             <AutoField name="domicilioCP" />
+            <ErrorField name="domicilioCP" />
             <AutoField name="ciudad" />
           </div>
           <hr />
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="telefonoOcelular" label="Teléfono o celular" />
+            <AutoField name="telefonoOcelular" />
             <div className="b-form__error-wrapper">
               <AutoField name="email" />
               <ErrorField name="email" />
@@ -222,6 +225,7 @@ const StudentForm = ({ title, summary }: PropsForm) => {
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="coloniaEmpresa" />
             <AutoField name="cpEmpresa" />
+            <ErrorField name="cpEmpresa" />
             <AutoField name="ciudadEmpresa" />
             <AutoField name="telefonoEmpresa" />
           </div>

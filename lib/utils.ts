@@ -42,6 +42,13 @@ export const getCustomDateRange = () : string => {
   return "Date not in the specified ranges";
 };
 
+export const currentFormattedDate = (date: Date) : string => {
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = date.toLocaleString("es-ES", { month: "long" }); // e.g., 'Sep'
+  const year = String(date.getFullYear()); // e.g., '24'
+  return `${day} de ${month} de ${year}`;
+};
+
 export const formatDataForServices = (data:any) => {
 
     const {
@@ -91,9 +98,12 @@ export const formatDataForServices = (data:any) => {
         periodo: periodoProyectado,
         numeroResidentes: `${numeroResidentes}`,
         nombreResidente: `${nombre} ${apellidoPaterno} ${apellidoMaterno}`,
+        nombre: nombre,
+        apellidoPaterno: apellidoPaterno,
+        apellidoMaterno: apellidoMaterno,
         carreraResidente: carrera,
         numeroControl: numeroControl,
-        calleResidente: `${domicilioCalle} #${domicilioNumeroExterior} ${domicilioNumeroInterior && domicilioNumeroInterior !== "" ? "Int "+domicilioNumeroInterior : "" }`,
+        calleResidente: `${domicilioCalle} #${domicilioNumeroExterior} ${typeof domicilioNumeroInterior !== "undefined" ? "Int "+domicilioNumeroInterior : "" }`,
         coloniaResidente: domicilioColonia,
         cpResidente: domicilioCP,
         ciudadResidente: ciudad,
@@ -102,8 +112,8 @@ export const formatDataForServices = (data:any) => {
         telefonoCasaResidente: '',
         nombreEmpresa: nombreEmpresa,
         giroRamoSector: giroRamoSector,
-        otroGiro: otroRamoSector,
-        calleEmpresa: `${calleEmpresa} #${numeroExteriorEmpresa} ${numeroInteriorEmpresa && numeroInteriorEmpresa !== "" ? "Int "+numeroInteriorEmpresa : "" }`,
+        otroGiro: typeof otroRamoSector !== "undefined" ? otroRamoSector : "N/A" ,
+        calleEmpresa: `${calleEmpresa} #${numeroExteriorEmpresa} ${typeof numeroInteriorEmpresa !== "undefined" ? "Int "+numeroInteriorEmpresa : "" }`,
         coloniaEmpresa: coloniaEmpresa,
         cpEmpresa: cpEmpresa,
         ciudadEmpresa: ciudadEmpresa,

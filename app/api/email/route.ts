@@ -2,7 +2,7 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import { sendEmail } from '@/lib/email';
-//import { saveToDynamoDB } from '../../../lib/dynamodb'; // Adjust the path to your DynamoDB utility
+import { saveToDynamoDB } from '@/lib/dynamodb';
 
 export async function POST(request: Request) {
   //console.log("SES_ACCESS_KEY_ID from environment:", process.env.SES_ACCESS_KEY_ID); //Added to debug on Amplify
@@ -17,6 +17,7 @@ export async function POST(request: Request) {
 
     //console.log("You got to /email/route.ts file");//Added to debug on Amplify
     await sendEmail(data);
+    await saveToDynamoDB(data);
     
     return NextResponse.json({ message: 'Email sent successfully' }, { status: 200 });
   } catch (error) {

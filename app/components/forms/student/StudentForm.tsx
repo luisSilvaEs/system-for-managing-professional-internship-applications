@@ -12,6 +12,7 @@ import { Context, UnknownObject, useForm } from "uniforms";
 import { bridge as schema } from "./studentSchema";
 import { useRouter } from "next/navigation";
 import { formatDataForServices } from "@/lib/utils";
+import { currentFormattedDate, getCustomDateRange } from "@/lib/utils";
 
 interface PropsForm {
   title: string;
@@ -109,15 +110,6 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     );
   };
 
-  const formatDate = (date: Date) => {
-    const day = String(date.getDate()).padStart(2, "0");
-    const month = date.toLocaleString("es-ES", { month: "long" }); // e.g., 'Sep'
-    const year = String(date.getFullYear()); // e.g., '24'
-    return `${day} de ${month} de ${year}`;
-  };
-
-  const currentFormattedDate = formatDate(new Date());
-
   return (
     <AutoForm schema={schema} onSubmit={(data) => handlerSubmit(data)}>
       {isLoading && (
@@ -135,7 +127,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
           <AutoField name="lugar" className="w-80" />
           <AutoField
             name="fecha"
-            value={currentFormattedDate}
+            value={currentFormattedDate(new Date())}
             className="w-80"
           />
         </div>
@@ -149,7 +141,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
           </div>
         </div>
         <div className="b-form-group b-form-group--horizontal">
-          <AutoField name="periodoProyectado" />
+          <AutoField name="periodoProyectado" value={getCustomDateRange()} />
           <AutoField name="numeroResidentes" />
         </div>
         <h3>Datos del (a) residente</h3>

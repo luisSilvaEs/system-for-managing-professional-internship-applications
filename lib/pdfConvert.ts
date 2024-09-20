@@ -110,8 +110,10 @@ export const generatePDF = async (s3BucketName: string, s3FilePath: string, data
     fields.forEach((field) => {
         const type = field.constructor.name;
         const fieldName = field.getName();
-
         if ( data[fieldName] !== undefined ) {
+            if ( typeof data[fieldName] == "number" )
+              form.getTextField(fieldName).setText(data[fieldName].toString());
+            else 
             form.getTextField(fieldName).setText(data[fieldName]);
         }
         

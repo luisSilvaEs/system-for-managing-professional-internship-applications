@@ -1,7 +1,7 @@
 // /app/api/email/route.ts
 import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
-import { sendEmail } from '@/lib/email';
+import { sendEmail, createAttachment } from '@/lib/email';
 import { saveToDynamoDB } from '@/lib/dynamodb';
 
 export async function POST(request: Request) {
@@ -16,7 +16,8 @@ export async function POST(request: Request) {
     }
 
     //console.log("You got to /email/route.ts file");//Added to debug on Amplify
-    await sendEmail(data);
+    const attachmentPDF = await createAttachment( data );
+    await sendEmail(data, attachmentPDF);
     await saveToDynamoDB(data);
     
     return NextResponse.json({ message: 'Email sent successfully' }, { status: 200 });

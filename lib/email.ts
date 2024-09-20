@@ -11,7 +11,7 @@ const sesClient = new SESClient({
   }
 });
 
-export const sendEmail = async (data:any) => {
+export const sendEmail = async (data:any, attachment?: any) => {
   //getPdfFieldNames("./tmp/Solicitud-de-Residencia_2024-fillable.pdf");
   const { 
     emailResidente,
@@ -20,20 +20,11 @@ export const sendEmail = async (data:any) => {
     carreraResidente, 
     nombreEmpresa 
     } = data;
-  //generatePDF("./tmp/Solicitud-de-Residencia_2024-fillable.pdf", data );//locally
-  const s3BucketName = process.env.S3_PDF_BUCKET_NAME || '';
-  const s3filePath =  process.env.S3_PDF_TEMPLATE_FILE_PATH || '';
-  console.log(`Bucket: ${s3BucketName} Resource: ${s3filePath}`);
   
-  const newPDFKey = await generatePDF(s3BucketName, s3filePath, data) || "";
-  
-  const pdfBytes = await downloadPdfFromS3(s3BucketName, newPDFKey);
-
-  const attachment = Buffer.from(pdfBytes).toString('base64');
 
   const rawEmailData = `From: ${process.env.SES_FROM_EMAIL}
 To: ${emailResidente}
-Subject: Solcidud residencia de ${nombreResidente}
+Subject: Solicitud residencia de ${nombreResidente}
 MIME-Version: 1.0
 Content-Type: multipart/related; boundary="NextPart"
 
@@ -93,4 +84,19 @@ ${attachment}
     console.error(`Error at /lib/email.ts sending email: ${error} Val params: ${JSON.stringify(rawEmailParams)}`);
     throw new Error("Failed to send email");
   }
+};
+
+export const createAttachment = async (data:any) => {
+  //generatePDF("./tmp/Solicitud-de-Residencia_2024-fillable.pdf", data );//locally
+  const s3BucketName = process.env.S3_PDF_BUCKET_NAME || '';
+  const s3filePath =  process.env.S3_PDF_TEMPLATE_FILE_PATH || '';
+  console.log(`Bucket: ${s3BucketName} Resource: ${s3filePath}`);
+  
+  const newPDFKey = await generatePDF(s3BucketName, s3filePath, data) || "";
+  
+  const pdfBytes = await downloadPdfFromS3(s3BucketName, newPDFKey);
+
+  const attachment = Buffer.from(pdfBytes).toString('base64');
+
+  return attachment;
 };

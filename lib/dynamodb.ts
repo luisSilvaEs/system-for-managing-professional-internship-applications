@@ -1,13 +1,5 @@
-import { DynamoDBClient, PutItemCommand } from "@aws-sdk/client-dynamodb";
-
-// Initialize the DynamoDB client
-const dynamoClient = new DynamoDBClient({
-    region: process.env.SES_REGION,
-    credentials: {
-        accessKeyId: process.env.SES_ACCESS_KEY_ID || '',
-        secretAccessKey: process.env.SES_SECRET_ACCESS_KEY || '',
-    }
-});
+import { PutItemCommand } from "@aws-sdk/client-dynamodb";
+import dynamoClient from "@/lib/dynamoClient";
 
 export async function saveToDynamoDB(data:any) {
     const {

@@ -4,6 +4,7 @@ import { getDropdownItems } from "./utilities";
 import { useState, useEffect } from "react";
 import Select from "../select/Select";
 import Table from "../table/Table";
+import { StudentFilter } from "./utilities";
 
 const studentsMock = [
   {
@@ -14,7 +15,7 @@ const studentsMock = [
     carreraResidente: "Computer Science",
     calleResidente: "123 Elm St, Springfield",
     periodo: "June 2023 - August 2023",
-    nombreEmpresa: "Computer Science",
+    nombreEmpresa: "Tech Innovators Inc.",
   },
   {
     nombre: "Jane",
@@ -24,7 +25,7 @@ const studentsMock = [
     carreraResidente: "Mechanical Engineering",
     calleResidente: "456 Oak St, Metropolis",
     periodo: "May 2023 - July 2023",
-    nombreEmpresa: "Mechanical Engineering",
+    nombreEmpresa: "Precision Mechanics Ltd.",
   },
   {
     nombre: "Alex",
@@ -34,7 +35,7 @@ const studentsMock = [
     carreraResidente: "Electrical Engineering",
     calleResidente: "789 Pine St, Gotham",
     periodo: "July 2023 - September 2023",
-    nombreEmpresa: "Electrical Engineering",
+    nombreEmpresa: "ElectroTech Solutions",
   },
   {
     nombre: "Emily",
@@ -44,7 +45,7 @@ const studentsMock = [
     carreraResidente: "Civil Engineering",
     calleResidente: "321 Maple St, Star City",
     periodo: "June 2023 - August 2023",
-    nombreEmpresa: "Civil Engineering",
+    nombreEmpresa: "Urban Constructors Co.",
   },
   {
     nombre: "Chris",
@@ -54,7 +55,7 @@ const studentsMock = [
     carreraResidente: "Software Engineering",
     calleResidente: "654 Cedar St, Central City",
     periodo: "May 2023 - July 2023",
-    nombreEmpresa: "Software Engineering",
+    nombreEmpresa: "SoftWorks Solutions",
   },
   {
     nombre: "Sarah",
@@ -64,7 +65,7 @@ const studentsMock = [
     carreraResidente: "Industrial Design",
     calleResidente: "987 Birch St, Coast City",
     periodo: "July 2023 - September 2023",
-    nombreEmpresa: "Industrial Design",
+    nombreEmpresa: "Creative Design Studios",
   },
   {
     nombre: "David",
@@ -74,7 +75,7 @@ const studentsMock = [
     carreraResidente: "Chemical Engineering",
     calleResidente: "246 Willow St, Keystone",
     periodo: "June 2023 - August 2023",
-    nombreEmpresa: "Chemical Engineering",
+    nombreEmpresa: "ChemTech Industries",
   },
   {
     nombre: "Laura",
@@ -84,7 +85,7 @@ const studentsMock = [
     carreraResidente: "Architecture",
     calleResidente: "135 Redwood St, Fawcett City",
     periodo: "May 2023 - July 2023",
-    nombreEmpresa: "Architecture",
+    nombreEmpresa: "Skyline Architects",
   },
   {
     nombre: "Michael",
@@ -94,7 +95,7 @@ const studentsMock = [
     carreraResidente: "Graphic Design",
     calleResidente: "753 Fir St, Midway City",
     periodo: "July 2023 - September 2023",
-    nombreEmpresa: "Graphic Design",
+    nombreEmpresa: "DesignLab Studio",
   },
   {
     nombre: "Sophia",
@@ -104,17 +105,17 @@ const studentsMock = [
     carreraResidente: "Biomedical Engineering",
     calleResidente: "852 Spruce St, Hub City",
     periodo: "June 2023 - August 2023",
-    nombreEmpresa: "Biomedical Engineering",
+    nombreEmpresa: "BioInnovations Inc.",
   },
   {
     nombre: "Daniel",
     apellidoMaterno: "Joseph",
     apellidoPaterno: "Lopez",
     numeroControl: "CN011",
-    carreraResidente: "Data Science",
+    carreraResidente: "Computer Science",
     calleResidente: "159 Hickory St, Blüdhaven",
     periodo: "May 2023 - July 2023",
-    nombreEmpresa: "Data Science",
+    nombreEmpresa: "CyberTech Solutions",
   },
   {
     nombre: "Olivia",
@@ -124,17 +125,17 @@ const studentsMock = [
     carreraResidente: "Environmental Science",
     calleResidente: "357 Chestnut St, River City",
     periodo: "July 2023 - September 2023",
-    nombreEmpresa: "Environmental Science",
+    nombreEmpresa: "EcoWorld Enterprises",
   },
   {
     nombre: "James",
     apellidoMaterno: "Edward",
     apellidoPaterno: "Perez",
     numeroControl: "CN013",
-    carreraResidente: "Physics",
+    carreraResidente: "Mechanical Engineering",
     calleResidente: "951 Walnut St, Opal City",
     periodo: "June 2023 - August 2023",
-    nombreEmpresa: "Physics",
+    nombreEmpresa: "MechaWorks Ltd.",
   },
   {
     nombre: "Mia",
@@ -144,7 +145,7 @@ const studentsMock = [
     carreraResidente: "Mathematics",
     calleResidente: "753 Ash St, Emerald City",
     periodo: "May 2023 - July 2023",
-    nombreEmpresa: "Mathematics",
+    nombreEmpresa: "DataMetrics Corp.",
   },
   {
     nombre: "Ethan",
@@ -154,51 +155,101 @@ const studentsMock = [
     carreraResidente: "Information Technology",
     calleResidente: "159 Poplar St, Ivy Town",
     periodo: "July 2023 - September 2023",
-    nombreEmpresa: "Information Technology",
+    nombreEmpresa: "IT Solutions Inc.",
   },
 ];
 
 const Filter = () => {
+  const studentFilter = new StudentFilter(studentsMock);
+  const [filteredStudents, setFilteredStudents] = useState(studentsMock);
+
   const careersList = getDropdownItems("carreraResidente", studentsMock);
-  console.log("career", careersList);
   const internshipPeriodList = getDropdownItems("periodo", studentsMock);
 
   const [selectedCareer, setSelectedCareer] = useState(""); // State to store the selected value in the parent
-  const [selectedValuePeriod, setSelectedPeriod] = useState("");
+  const [selectedPeriod, setSelectedPeriod] = useState("");
+  const [searchInput, setSearchInput] = useState("");
+  const [placeholderInput, setPlaceholderInput] = useState(
+    "Ingresa un nombre o número"
+  );
+  const [placeholderSelectCareer, setPlaceholderSelectCareer] =
+    useState("Carrera");
+  const [placeholderSelectPeriod, setPlaceholderSelectPeriod] =
+    useState("Período");
 
-  const handleSelectCareer = (value: any) => {
-    setSelectedCareer(value); // Update parent state with selected value
-    console.log("Selected in Parent:", value); // Optional: Debugging
+  const handleFilter = (
+    input: string,
+    career?: string,
+    internshipPeriod?: string
+  ) => {
+    const results = studentFilter.filterCombined(
+      input,
+      career,
+      internshipPeriod
+    );
+    setFilteredStudents(results); // Update the state with filtered students
   };
 
-  const handleSelectPeriod = (value: any) => {
-    setSelectedPeriod(value); // Update parent state with selected value
-    console.log("Selected in Parent:", value); // Optional: Debugging
+  // Handlers for dropdowns and search input
+  const handleSearchInput = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = e.target.value;
+    setSearchInput(inputValue);
+    handleFilter(inputValue, selectedCareer, selectedPeriod);
+  };
+
+  const handleCareerSelect = (career: string) => {
+    setSelectedCareer(career);
+    handleFilter(searchInput, career, selectedPeriod);
+  };
+
+  const handlePeriodSelect = (internshipPeriod: string) => {
+    setSelectedPeriod(internshipPeriod);
+    handleFilter(searchInput, selectedCareer, internshipPeriod);
+  };
+
+  const resetFilters = () => {
+    setSelectedCareer("");
+    setSelectedPeriod("");
+    setSearchInput("");
+    setFilteredStudents(studentsMock); // Reset to original student data
+
+    setPlaceholderInput("Ingresa un nombre o número");
+    setPlaceholderSelectCareer("Carrera");
+    setPlaceholderSelectPeriod("Período");
   };
 
   return (
-    <div className="container mx-auto p-4 space-y-4">
-      <h1 className="text-2xl font-bold mb-4">Student Filter</h1>
+    <div>
       <div className="flex flex-col md:flex-row gap-4">
         <input
           id="price"
           name="price"
           type="text"
-          placeholder="Ingresa un nombre o número"
+          placeholder={placeholderInput}
+          value={searchInput}
           className="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+          onChange={handleSearchInput}
         />
         <Select
-          onSelect={handleSelectCareer}
+          onSelect={handleCareerSelect}
           items={careersList}
-          placeholder="Carreras"
+          placeholder={placeholderSelectCareer}
         />
         <Select
-          onSelect={handleSelectPeriod}
+          onSelect={handlePeriodSelect}
           items={internshipPeriodList}
-          placeholder="Periodo"
+          placeholder={placeholderSelectPeriod}
         />
       </div>
-      <Table list={studentsMock} rowsPerPage={2} />
+      <div className="flex flex-col md:flex-row gap-4 justify-end">
+        <button
+          onClick={resetFilters}
+          className="px-4 py-2 text-sm font-semibold leading-6 text-gray-900 bg-slate-100 rounded hover:bg-slate-300"
+        >
+          Reset
+        </button>
+      </div>
+      <Table list={filteredStudents} rowsPerPage={5} />
     </div>
   );
 };

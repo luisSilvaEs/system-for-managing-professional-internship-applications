@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Select from "../select/Select";
 import Table from "../table/Table";
 import { StudentFilter } from "./utilities";
+import fetchData from "@/lib/fetchDataDB";
 
 const studentsMock = [
   {
@@ -160,11 +161,19 @@ const studentsMock = [
 ];
 
 const Filter = () => {
-  const studentFilter = new StudentFilter(studentsMock);
-  const [filteredStudents, setFilteredStudents] = useState(studentsMock);
+  const [data, setData] = useState([]);
+  useEffect(() => {
+    const getData = async () => {
+      const result = await fetchData();
+      setData(result);
+    };
+    getData();
+  }, []);
+  const studentFilter = new StudentFilter(data);
+  const [filteredStudents, setFilteredStudents] = useState(data);
 
-  const careersList = getDropdownItems("carreraResidente", studentsMock);
-  const internshipPeriodList = getDropdownItems("periodo", studentsMock);
+  const careersList = getDropdownItems("carreraResidente", data);
+  const internshipPeriodList = getDropdownItems("periodo", data);
 
   const [selectedCareer, setSelectedCareer] = useState(""); // State to store the selected value in the parent
   const [selectedPeriod, setSelectedPeriod] = useState("");

@@ -1,7 +1,17 @@
-import React from "react";
+import StudentForm from "@/app/components/forms/student/StudentForm";
 
-const StudentPage = () => {
-  return <div>Page</div>;
-};
-
-export default StudentPage;
+export default function Home() {
+  return (
+    <div>
+      <StudentForm
+        title="Solicitud de residencia profesional"
+        instructions={
+          <p>
+            Favor de llenar <strong style={{ color: "#db2828" }}>TODOS</strong>{" "}
+            los campos para procesar la solicitud.
+          </p>
+        }
+      />
+    </div>
+  );
+}

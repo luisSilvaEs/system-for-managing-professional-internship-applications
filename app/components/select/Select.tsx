@@ -1,3 +1,5 @@
+"use client";
+
 import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
 import { useState } from "react";
@@ -9,7 +11,6 @@ interface SelectProps {
 }
 
 const Select = ({ onSelect, items, placeholder }: SelectProps) => {
-  console.log("Items", items);
   const [selectedItem, setSelectedItem] = useState("");
   const handleSelect = (value: string) => {
     setSelectedItem(value);

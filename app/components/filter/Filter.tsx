@@ -1,12 +1,12 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { CleanedItem, AttributeValue } from "@/types/student";
 import { getDropdownItems } from "./utilities";
-import { useState, useEffect } from "react";
-import Select from "../select/Select";
-import Table from "../table/Table";
 import { StudentFilter } from "./utilities";
 import fetchData from "@/lib/fetchDataDB";
+import Select from "../select/Select";
+import Table from "../table/Table";
 
 const Filter = () => {
   const [data, setData] = useState<CleanedItem[]>([]);
@@ -15,7 +15,7 @@ const Filter = () => {
     const getData = async () => {
       const result = await fetchData();
       if (result) {
-        console.log("Query->", result);
+        //console.log("Query->", result);
         const cleanedData: CleanedItem[] = result.map(
           (item: Record<string, AttributeValue>) => {
             return Object.keys(item).reduce((acc, key) => {
@@ -25,7 +25,7 @@ const Filter = () => {
             }, {} as CleanedItem);
           }
         );
-        console.log("cleaned->", cleanedData);
+        //("cleaned->", cleanedData);
         setData(cleanedData);
         setFilteredStudents(cleanedData);
       } else {

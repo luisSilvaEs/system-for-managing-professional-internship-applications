@@ -1,6 +1,6 @@
 "use client";
 
-import { StudentDynamoDB, CleanedItem, AttributeValue } from "@/types/student";
+import { CleanedItem, AttributeValue } from "@/types/student";
 import { getDropdownItems } from "./utilities";
 import { useState, useEffect } from "react";
 import Select from "../select/Select";

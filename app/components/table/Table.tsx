@@ -1,40 +1,8 @@
 import { useState } from "react";
-
-type StudentDynamoDB = {
-  id: number;
-  numeroControl: string;
-  apellidoMaterno: string;
-  apellidoPaterno: string;
-  nombre: string;
-  carreraResidente: string;
-  periodo: string;
-  telefono: string;
-  lugar: string;
-  fecha: string;
-  email: string;
-  jefeDivision: string;
-  opcionElegida: string;
-  numeroResidentes: string;
-  calleResidente: string;
-  coloniaResidente: string;
-  cpResidente: number;
-  ciudad: string;
-  nombreEmpresa: string;
-  giroRamoSector: string;
-  otroRamoSector: string;
-  calleEmpresa: string;
-  coloniaEmpresa: string;
-  cpEmpresa: number;
-  ciudadEmpresa: string;
-  telefonoEmpresa: string;
-  nombreTitularEmpresa: string;
-  puestoTitularEmpresa: string;
-  nombrePersonaCartaPresentacion: string;
-  puestoPersonaCartaPresentacion: string;
-};
+import { CleanedItem } from "@/types/student";
 
 interface TableProps {
-  list: StudentDynamoDB[];
+  list: CleanedItem[];
   rowsPerPage?: number;
 }
 
@@ -65,7 +33,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
           </tr>
         </thead>
         <tbody className="text-gray-600 text-sm font-light">
-          {currentData.map((item: StudentDynamoDB) => (
+          {currentData.map((item: CleanedItem) => (
             <tr
               key={item.id}
               className="border-b border-gray-200 hover:bg-gray-100"

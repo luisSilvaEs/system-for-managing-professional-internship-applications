@@ -110,6 +110,8 @@ This application should have:
 │   └── StudentForm.module.css        // Styles specific to StudentForm component
 ├── /public
 │   └── favicon.ico                   // Favicon and other static assets
+├── /types
+│   ├── student.ts                    // Type definitions related to students (e.g., StudentDynamoDB, CleanedItem)
 ├── .env                              // Environment variables for sensitive data
 ├── .gitignore                        // Git ignore file
 ├── package.tson                      // Project dependencies and scripts

@@ -1,5 +1,6 @@
 "use client";
 
+import { StudentDynamoDB, CleanedItem, AttributeValue } from "@/types/student";
 import { getDropdownItems } from "./utilities";
 import { useState, useEffect } from "react";
 import Select from "../select/Select";
@@ -7,171 +8,34 @@ import Table from "../table/Table";
 import { StudentFilter } from "./utilities";
 import fetchData from "@/lib/fetchDataDB";
 
-const studentsMock = [
-  {
-    nombre: "John",
-    apellidoMaterno: "Michael",
-    apellidoPaterno: "Doe",
-    numeroControl: "CN001",
-    carreraResidente: "Computer Science",
-    calleResidente: "123 Elm St, Springfield",
-    periodo: "June 2023 - August 2023",
-    nombreEmpresa: "Tech Innovators Inc.",
-  },
-  {
-    nombre: "Jane",
-    apellidoMaterno: "Elizabeth",
-    apellidoPaterno: "Smith",
-    numeroControl: "CN002",
-    carreraResidente: "Mechanical Engineering",
-    calleResidente: "456 Oak St, Metropolis",
-    periodo: "May 2023 - July 2023",
-    nombreEmpresa: "Precision Mechanics Ltd.",
-  },
-  {
-    nombre: "Alex",
-    apellidoMaterno: "James",
-    apellidoPaterno: "Brown",
-    numeroControl: "CN003",
-    carreraResidente: "Electrical Engineering",
-    calleResidente: "789 Pine St, Gotham",
-    periodo: "July 2023 - September 2023",
-    nombreEmpresa: "ElectroTech Solutions",
-  },
-  {
-    nombre: "Emily",
-    apellidoMaterno: "Grace",
-    apellidoPaterno: "Davis",
-    numeroControl: "CN004",
-    carreraResidente: "Civil Engineering",
-    calleResidente: "321 Maple St, Star City",
-    periodo: "June 2023 - August 2023",
-    nombreEmpresa: "Urban Constructors Co.",
-  },
-  {
-    nombre: "Chris",
-    apellidoMaterno: "John",
-    apellidoPaterno: "Miller",
-    numeroControl: "CN005",
-    carreraResidente: "Software Engineering",
-    calleResidente: "654 Cedar St, Central City",
-    periodo: "May 2023 - July 2023",
-    nombreEmpresa: "SoftWorks Solutions",
-  },
-  {
-    nombre: "Sarah",
-    apellidoMaterno: "Louise",
-    apellidoPaterno: "Garcia",
-    numeroControl: "CN006",
-    carreraResidente: "Industrial Design",
-    calleResidente: "987 Birch St, Coast City",
-    periodo: "July 2023 - September 2023",
-    nombreEmpresa: "Creative Design Studios",
-  },
-  {
-    nombre: "David",
-    apellidoMaterno: "Andrew",
-    apellidoPaterno: "Martinez",
-    numeroControl: "CN007",
-    carreraResidente: "Chemical Engineering",
-    calleResidente: "246 Willow St, Keystone",
-    periodo: "June 2023 - August 2023",
-    nombreEmpresa: "ChemTech Industries",
-  },
-  {
-    nombre: "Laura",
-    apellidoMaterno: "Marie",
-    apellidoPaterno: "Rodriguez",
-    numeroControl: "CN008",
-    carreraResidente: "Architecture",
-    calleResidente: "135 Redwood St, Fawcett City",
-    periodo: "May 2023 - July 2023",
-    nombreEmpresa: "Skyline Architects",
-  },
-  {
-    nombre: "Michael",
-    apellidoMaterno: "Paul",
-    apellidoPaterno: "Hernandez",
-    numeroControl: "CN009",
-    carreraResidente: "Graphic Design",
-    calleResidente: "753 Fir St, Midway City",
-    periodo: "July 2023 - September 2023",
-    nombreEmpresa: "DesignLab Studio",
-  },
-  {
-    nombre: "Sophia",
-    apellidoMaterno: "Ann",
-    apellidoPaterno: "Wilson",
-    numeroControl: "CN010",
-    carreraResidente: "Biomedical Engineering",
-    calleResidente: "852 Spruce St, Hub City",
-    periodo: "June 2023 - August 2023",
-    nombreEmpresa: "BioInnovations Inc.",
-  },
-  {
-    nombre: "Daniel",
-    apellidoMaterno: "Joseph",
-    apellidoPaterno: "Lopez",
-    numeroControl: "CN011",
-    carreraResidente: "Computer Science",
-    calleResidente: "159 Hickory St, Blüdhaven",
-    periodo: "May 2023 - July 2023",
-    nombreEmpresa: "CyberTech Solutions",
-  },
-  {
-    nombre: "Olivia",
-    apellidoMaterno: "Rose",
-    apellidoPaterno: "Gonzalez",
-    numeroControl: "CN012",
-    carreraResidente: "Environmental Science",
-    calleResidente: "357 Chestnut St, River City",
-    periodo: "July 2023 - September 2023",
-    nombreEmpresa: "EcoWorld Enterprises",
-  },
-  {
-    nombre: "James",
-    apellidoMaterno: "Edward",
-    apellidoPaterno: "Perez",
-    numeroControl: "CN013",
-    carreraResidente: "Mechanical Engineering",
-    calleResidente: "951 Walnut St, Opal City",
-    periodo: "June 2023 - August 2023",
-    nombreEmpresa: "MechaWorks Ltd.",
-  },
-  {
-    nombre: "Mia",
-    apellidoMaterno: "Eleanor",
-    apellidoPaterno: "Kim",
-    numeroControl: "CN014",
-    carreraResidente: "Mathematics",
-    calleResidente: "753 Ash St, Emerald City",
-    periodo: "May 2023 - July 2023",
-    nombreEmpresa: "DataMetrics Corp.",
-  },
-  {
-    nombre: "Ethan",
-    apellidoMaterno: "David",
-    apellidoPaterno: "Nguyen",
-    numeroControl: "CN015",
-    carreraResidente: "Information Technology",
-    calleResidente: "159 Poplar St, Ivy Town",
-    periodo: "July 2023 - September 2023",
-    nombreEmpresa: "IT Solutions Inc.",
-  },
-];
-
 const Filter = () => {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<CleanedItem[]>([]);
+  const [filteredStudents, setFilteredStudents] = useState<CleanedItem[]>([]);
   useEffect(() => {
     const getData = async () => {
       const result = await fetchData();
-      setData(result);
+      if (result) {
+        console.log("Query->", result);
+        const cleanedData: CleanedItem[] = result.map(
+          (item: Record<string, AttributeValue>) => {
+            return Object.keys(item).reduce((acc, key) => {
+              const value = item[key];
+              acc[key] = value.S || value.N || ""; // Type-safe check for S or N
+              return acc;
+            }, {} as CleanedItem);
+          }
+        );
+        console.log("cleaned->", cleanedData);
+        setData(cleanedData);
+        setFilteredStudents(cleanedData);
+      } else {
+        console.error("No data was fetched");
+      }
     };
     getData();
   }, []);
-  const studentFilter = new StudentFilter(data);
-  const [filteredStudents, setFilteredStudents] = useState(data);
 
+  const studentFilter = new StudentFilter(data);
   const careersList = getDropdownItems("carreraResidente", data);
   const internshipPeriodList = getDropdownItems("periodo", data);
 
@@ -220,7 +84,7 @@ const Filter = () => {
     setSelectedCareer("");
     setSelectedPeriod("");
     setSearchInput("");
-    setFilteredStudents(studentsMock); // Reset to original student data
+    setFilteredStudents(data); // Reset to original student data
 
     setPlaceholderInput("Ingresa un nombre o número");
     setPlaceholderSelectCareer("Carrera");

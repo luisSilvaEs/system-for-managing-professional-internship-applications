@@ -127,3 +127,97 @@ export const formatDataForServices = (data:any) => {
     return dataForServices;
 };
 
+// Function to convert specific keys to more user-friendly labels
+const convertKeyToLabel = (key: string): string => {
+  switch (key) {
+    case "numeroControl":
+      return "Numero de Control";
+    case "nombrePersonaCartaPresentacion":
+      return "Nombre de Persona de Carta de Presentacion";
+    case "apellidoMaterno":
+    case "apellidoPaterno":
+    case "nombre":
+      return "Nombre Completo";
+    case "carreraResidente":
+      return "Carrera a la que pertence";
+    case "periodo":
+      return "Periodo proyectado para la realización del proyecto";
+    case "numeroControl":
+      return "Número de control";
+    case "telefono":
+      return "Teléfono";
+    case "lugar":
+      return "Lugar";
+    case "fecha":
+      return "Fecha";
+    case "email":
+      return "Email";
+    case "jefeDivision":
+      return "Jefe de División";
+    case "opcionElegida":
+      return "Opcion Elegida";
+    case "numeroResidentes":
+      return "Número de Residentes";
+    case "calleResidente":
+      return "Calle";
+    case "coloniaResidente":
+      return "Colonia";
+    case "cpResidente":
+      return "Código Postal";
+    case "ciudad":
+      return "Ciudad";
+    case "nombreEmpresa":
+      return "Nombre";
+    case "giroRamoSector":
+      return "Giro, ramo o sector";
+    case "otroRamoSector":
+      return "Otro";
+    case "calleEmpresa":
+      return "Calle";
+    case "coloniaEmpresa":
+      return "Colonia";
+    case "cpEmpresa":
+      return "Código Postal";
+    case "ciudadEmpresa":
+      return "Ciudad";
+    case "telefonoEmpresa":
+      return "Teléfono";
+    case "nombreTitularEmpresa":
+      return "Titular de la Empresa";
+    case "puestoTitularEmpresa":
+      return "Puesto del(a) Titular de la Empresa";
+    case "nombrePersonaCartaPresentacion":
+      return "Nombre de la Persona a quien va dirigida la cara de presentación";
+    case "puestoPersonaCartaPresentacion":
+      return "Puesto de la Persona a quien va dirigida la cara de presentación";
+    default:
+      return key; // Fallback to return the key if no specific label is defined
+  }
+};
+
+
+export const extractKeyValuePairs = (obj: any, keys: string[]): { label: string; paragraph: string }[] => {
+  const result: { label: string; paragraph: string }[] = [];
+  
+  if (keys.includes('nombre') && keys.includes('apellidoPaterno') && keys.includes('apellidoMaterno')) {
+    const fullName = `${obj.nombre || ''} ${obj.apellidoPaterno || ''} ${obj.apellidoMaterno || ''}`.trim();
+    result.push({
+      label: convertKeyToLabel('nombre'), // "Nombre Completo"
+      paragraph: fullName,
+    });
+
+    keys = keys.filter(key => !['nombre', 'apellidoPaterno', 'apellidoMaterno'].includes(key));
+  }
+
+  keys.forEach(key => {
+    if (obj.hasOwnProperty(key)) {
+      result.push({
+        label: convertKeyToLabel(key),
+        paragraph: obj[key],
+      });
+    }
+  });
+
+  return result;
+};
+

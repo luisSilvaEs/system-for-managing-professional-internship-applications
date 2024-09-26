@@ -20,8 +20,8 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
   const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const router = useRouter();
-  const handleRowClick = (numeroControl: string) => {
-    router.push(`/private/queries/studentDetail/${numeroControl}`); // Navigate to the dynamic page
+  const handleRowClick = (numeroControl: string, id: number) => {
+    router.push(`/private/queries/studentDetail/${numeroControl}?id=${id}`); // Navigate to the dynamic page
   };
 
   return (
@@ -44,7 +44,9 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
             <tr
               key={item.id}
               className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
-              onClick={() => handleRowClick(item.numeroControl as string)}
+              onClick={() =>
+                handleRowClick(item.numeroControl as string, item.id as number)
+              }
             >
               <td className="border-b border-gray-200 hover:bg-gray-100">
                 {item.numeroControl}

@@ -5,8 +5,10 @@ import Card from "@/app/components/card/Card";
 import { getEntryByID } from "@/lib/dynamodb";
 import { useEffect, useState } from "react";
 import { extractKeyValuePairs } from "@/lib/utils";
+import { generatePresignedUrl } from "@/lib/s3downloadNew";
 
 export default function StudentDetail() {
+  const { numeroControl } = useParams();
   const searchParams = useSearchParams();
   const [personalData, setPersonalData] = useState<
     { label: string; paragraph: string }[]
@@ -18,6 +20,11 @@ export default function StudentDetail() {
   const [companyData, setCompanyData] = useState<
     { label: string; paragraph: string }[]
   >([]);
+
+  const [urlDownload, setURLDownload] = useState("");
+
+  const bucketName = process.env.NEXT_PUBLIC_S3_PDF_BUCKET_NAME;
+  const objectKey = `new-files/Solicitud-de-Residencia-Nueva-${numeroControl}.pdf`;
 
   const fieldsPersonal = [
     "apellidoMaterno",
@@ -63,7 +70,6 @@ export default function StudentDetail() {
       const id = idString ? Number(idString) : null;
       if (id !== null) {
         const dynamoDBData = await getEntryByID(id);
-        console.log(`Dina: ${dynamoDBData.Item}`);
         const dynamoItem = dynamoDBData.Item;
         const personal = extractKeyValuePairs(dynamoItem, fieldsPersonal);
         setPersonalData(personal);
@@ -74,6 +80,11 @@ export default function StudentDetail() {
       } else {
         console.warn("'id' could not be obtained from URL");
       }
+
+      generatePresignedUrl(bucketName, objectKey).then((url) => {
+        console.log("Pre-signed URL:", url);
+        setURLDownload(url);
+      });
     };
     fetchData();
   }, []);
@@ -84,6 +95,11 @@ export default function StudentDetail() {
       <Card header="Datos personales" data={personalData} />
       <Card header="Datos de la residencia" data={internshipData} />
       <Card header="Datos de la empresa" data={companyData} />
+      <div className="flex justify-center">
+        <a href={urlDownload} download>
+          <button className="ui button">Descargar PDF</button>
+        </a>
+      </div>
     </div>
   );
 }

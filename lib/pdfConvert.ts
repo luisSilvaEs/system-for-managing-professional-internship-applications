@@ -1,6 +1,7 @@
 import { PDFDocument } from 'pdf-lib';
 import fs from 'fs';
-import { S3Client, GetObjectCommand, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, GetObjectCommand } from '@aws-sdk/client-s3';
+
 import { formatStringToCamelCaps, removeSpanishSymbols } from "./utils";
 
 const s3 = new S3Client({ 
@@ -139,4 +140,6 @@ export const generatePDF = async (s3BucketName: string, s3FilePath: string, data
     console.log("PDF filled and saved in S3 successfully");
     return newPDFKey;
 };
+
+
 

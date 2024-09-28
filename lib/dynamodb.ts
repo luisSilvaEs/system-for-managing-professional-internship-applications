@@ -1,5 +1,23 @@
-import { PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { PutItemCommand, ScanCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import dynamoClient from "@/lib/dynamoClient";
+import { GetItemResponse, DynamoDBItem } from "@/types/student";
+
+const fetchData = async () => {
+    const params = {
+      TableName: process.env.NEXT_PUBLIC_TABLE_NAME || '', 
+    };
+  
+    try {
+      const data = await dynamoClient.send(new ScanCommand(params));
+      return data.Items; // Returns the items from the DynamoDB table
+    } catch (error) {
+      console.error("Error fetching data from DynamoDB:", error);
+      return [];
+    }
+  };
+  
+  export default fetchData;
 
 export async function saveToDynamoDB(data:any) {
     const {
@@ -70,7 +88,7 @@ export async function saveToDynamoDB(data:any) {
             timestamp: { S: new Date().toISOString() }
         }
     };
-    console.log("-->", params);
+    //console.log("-->", params);
     try {
         const command = new PutItemCommand(params);
         const response = await dynamoClient.send(command);
@@ -80,3 +98,30 @@ export async function saveToDynamoDB(data:any) {
         throw new Error("Failed to save data to DynamoDB");
     }
 }
+
+export const getEntryByID = async (id: number): Promise<GetItemResponse> => {
+  try {
+    const params = {
+      TableName: process.env.NEXT_PUBLIC_TABLE_NAME || '',
+      Key: marshall({
+        id: id,
+      }),
+    };
+    //marshall is used to convert the JavaScript object into a format suitable for DynamoDB
+
+    const command = new GetItemCommand(params);//GetItemCommand is used to fetch a specific entry from DynamoDB.
+    const response = await dynamoClient.send(command);
+
+    if (response.Item) {
+        const item: DynamoDBItem = unmarshall(response.Item);
+        console.log('Response', item);
+        return { Item: item }; // unmarshall is used to parse the DynamoDB response back into a standard JavaScript object.
+    } else {
+      return {}; // Handle case where the item doesn't exist
+    }
+  } catch (error) {
+    console.error('Error fetching item from DynamoDB:', error);
+    throw new Error('Error fetching item');
+  }
+};
+

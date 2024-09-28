@@ -10,8 +10,5 @@ const dynamoClient = new DynamoDBClient({
     }
 });
 
-console.log('SES_REGION:', process.env.SES_REGION);
-console.log('SES_ACCESS_KEY_ID:', process.env.SES_ACCESS_KEY_ID);
-console.log('SES_SECRET_ACCESS_KEY:', process.env.SES_SECRET_ACCESS_KEY);
 
 export default dynamoClient;

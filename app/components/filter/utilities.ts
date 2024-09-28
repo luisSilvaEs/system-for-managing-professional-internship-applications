@@ -1,35 +1,4 @@
-type StudentDynamoDB = {
-    id: number;
-    numeroControl: string;
-    apellidoMaterno: string;
-    apellidoPaterno: string;
-    nombre: string;
-    carreraResidente: string;
-    periodo: string;
-    telefono: string;
-    lugar: string;
-    fecha: string;
-    email: string;
-    jefeDivision: string;
-    opcionElegida: string;
-    numeroResidentes: string;
-    calleResidente: string;
-    coloniaResidente: string;
-    cpResidente: number;
-    ciudad: string;
-    nombreEmpresa: string;
-    giroRamoSector: string;
-    otroRamoSector: string;
-    calleEmpresa: string;
-    coloniaEmpresa: string;
-    cpEmpresa: number;
-    ciudadEmpresa: string;
-    telefonoEmpresa: string;
-    nombreTitularEmpresa: string;
-    puestoTitularEmpresa: string;
-    nombrePersonaCartaPresentacion: string;
-    puestoPersonaCartaPresentacion: string;
-  };
+import { StudentDynamoDB } from "@/types/student";
 /*
 T is a generic placeholder that will be replaced with the actual type of the items in the array when the function is called. 
 This makes the function flexible and able to work with any array of objects:
@@ -102,27 +71,4 @@ export class StudentFilter {
         return filteredStudents;
     }
 }
-  
-// Example usage from an input or dropdown
-const studentFilter = new StudentFilter(students);
-
-// Function to call when typing in a name or control number input
-function onNameOrControlInput(input: string, career?: string, period?: string) {
-return studentFilter.filterCombined(input, career, period);
-}
-
-// Function to call when selecting a career from a dropdown
-function onCareerDropdownSelect(career: string, input?: string, period?: string) {
-return studentFilter.filterCombined(input || '', career, period);
-}
-
-// Function to call when selecting an internship period from a dropdown
-function onInternshipPeriodSelect(period: string, input?: string, career?: string) {
-return studentFilter.filterCombined(input || '', career, period);
-}
-
-// Example of calling the functions:
-const result = onNameOrControlInput('John'); // Filter by name or control number
-const resultWithCareer = onCareerDropdownSelect('Computer Science'); // Filter by career
-const resultWithPeriod = onInternshipPeriodSelect('June 2023 - August 2023'); // Filter by internship period
   

@@ -1,0 +1,185 @@
+"use client";
+
+import React, { Children, ReactElement, useState } from "react";
+import { AutoField, AutoForm, ErrorField, TextField } from "uniforms-semantic";
+import { useForm, Context, UnknownObject } from "uniforms";
+import { bridge } from "./registerSchema";
+import { Field } from "@/types/login";
+import { useRouter } from "next/navigation";
+
+type DisplayIfProps<Model extends UnknownObject> = {
+  children: ReactElement;
+  condition: (context: Context<Model>) => boolean;
+};
+
+// Custom DisplayIf component
+function DisplayIf<Model extends UnknownObject>({
+  children,
+  condition,
+}: DisplayIfProps<Model>) {
+  const uniforms = useForm<Model>();
+  return condition(uniforms) ? Children.only(children) : null;
+}
+
+interface RegisterFields {
+  email: Field;
+  password: Field;
+  confirmPassword: Field;
+  name: Field;
+  fatherName: Field;
+  motherName: Field;
+  username?: Field;
+}
+
+const RegisterForm = ({
+  email,
+  password,
+  confirmPassword,
+  name,
+  fatherName,
+  motherName,
+}: RegisterFields) => {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const handelSubmit = async (data: any) => {
+    if (data.password !== data.confirmPassword) {
+      setPasswordError("Passwords do not match. Please try again.");
+      return;
+    } else {
+      setPasswordError(null);
+    }
+    console.log(`Handler submit function: ${JSON.stringify(data, null, 2)}`);
+    setIsLoading(true);
+    try {
+      const response = await fetch("/api/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data, null, 2),
+      });
+      if (response.ok) {
+        router.push("/private/queries");
+      } else {
+        console.error(
+          "Check Amplify Hosting compute logs, there was an error with the email recipient. Probably email recipient is not registered or verified in Amazon SES Sandbox"
+        );
+        alert("Failed to to login. Please try again.");
+      }
+    } catch (error) {
+      throw new Error("Failed to submit application. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const SubmitFieldCustom = () => {
+    const { error } = useForm(); //The useForm() hook from uniforms provides access to the current state of the form.
+
+    const searchMissingFields = () => {
+      console.log("Hello world!!", typeof error);
+      if (!!error && (error as any).details) {
+        const errorList = (error as any).details.map((err: any) => {
+          return err.params.missingProperty;
+        });
+        if (errorList.lenght > 1) {
+          alert(
+            `Olvidaste llenar los siguientes campos: ${errorList.join(", ")}`
+          );
+        } else {
+          alert(`Olvidaste el siguiente campo : ${errorList.join(", ")}`);
+        }
+      }
+    };
+
+    return (
+      <input
+        type="submit"
+        className="ui button inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+        value="Registrarse"
+        onClick={() => {
+          searchMissingFields();
+        }}
+      />
+    );
+  };
+
+  return (
+    <div className="space-y-8">
+      <AutoForm schema={bridge} onSubmit={(data) => handelSubmit(data)}>
+        {isLoading && (
+          <div className="loading-overlay">
+            <div className="spinner"></div>
+          </div>
+        )}
+        <div className={`${isLoading ? "loading" : ""}`}>
+          {name && (
+            <AutoField
+              name={name.name}
+              label={name.label}
+              placeholder={name.placeholder && name.placeholder}
+              className="space-y-2"
+            />
+          )}
+          {fatherName && (
+            <AutoField
+              name={fatherName.name}
+              label={fatherName.label}
+              placeholder={fatherName.placeholder && fatherName.placeholder}
+              className="space-y-2"
+            />
+          )}
+          {motherName && (
+            <AutoField
+              name={motherName.name}
+              label={motherName.label}
+              placeholder={motherName.placeholder && motherName.placeholder}
+              className="space-y-2"
+            />
+          )}
+          {email && (
+            <AutoField
+              name={email.name}
+              label={email.label}
+              placeholder={email.placeholder && email.placeholder}
+              className="space-y-2"
+            />
+          )}
+          {password && (
+            <>
+              <AutoField
+                name={password.name}
+                label={password.label}
+                placeholder={password.placeholder && password.placeholder}
+                className="space-y-2"
+              />
+              <ErrorField name={password.name} />
+            </>
+          )}
+          {confirmPassword && (
+            <DisplayIf condition={(context) => !!context.model.password}>
+              <>
+                <AutoField
+                  name={confirmPassword.name}
+                  label={confirmPassword.label}
+                  placeholder={
+                    confirmPassword.placeholder && confirmPassword.placeholder
+                  }
+                  className="space-y-2"
+                />
+                <ErrorField name={confirmPassword.name} />
+              </>
+            </DisplayIf>
+          )}
+          {passwordError && (
+            <div className="text-red-500 text-sm">{passwordError}</div>
+          )}
+        </div>
+        <div className="mt-3">
+          <SubmitFieldCustom />
+        </div>
+      </AutoForm>
+    </div>
+  );
+};
+
+export default RegisterForm;

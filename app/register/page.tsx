@@ -1,10 +1,12 @@
+"use client";
+
 import React from "react";
 import RegisterForm from "@/app/components/forms/register/RegisterForm";
 import { Field } from "@/types/login";
 
 const name: Field = {
   label: "Nombre",
-  name: "email",
+  name: "name",
   placeholder: "Ingrese su nombre(s)",
 };
 
@@ -50,12 +52,12 @@ export default function Register() {
         </div>
         <div className="p-6">
           <RegisterForm
-            email={email}
-            password={password}
-            confirmPassword={confirmPassword}
             name={name}
             fatherName={fatherName}
             motherName={motherName}
+            email={email}
+            password={password}
+            confirmPassword={confirmPassword}
           />
         </div>
       </div>

@@ -1,11 +1,12 @@
 "use client";
 
 import React, { Children, ReactElement, useState } from "react";
-import { AutoField, AutoForm, ErrorField, TextField } from "uniforms-semantic";
+import { AutoField, AutoForm, ErrorField } from "uniforms-semantic";
 import { useForm, Context, UnknownObject } from "uniforms";
 import { bridge } from "./registerSchema";
 import { Field } from "@/types/login";
 import { useRouter } from "next/navigation";
+import { formatUserForServices } from "@/lib/utils";
 
 type DisplayIfProps<Model extends UnknownObject> = {
   children: ReactElement;
@@ -22,22 +23,21 @@ function DisplayIf<Model extends UnknownObject>({
 }
 
 interface RegisterFields {
-  email: Field;
-  password: Field;
-  confirmPassword: Field;
   name: Field;
   fatherName: Field;
   motherName: Field;
-  username?: Field;
+  email: Field;
+  password: Field;
+  confirmPassword: Field;
 }
 
 const RegisterForm = ({
-  email,
-  password,
-  confirmPassword,
   name,
   fatherName,
   motherName,
+  email,
+  password,
+  confirmPassword,
 }: RegisterFields) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
@@ -48,27 +48,35 @@ const RegisterForm = ({
       return;
     } else {
       setPasswordError(null);
-    }
-    console.log(`Handler submit function: ${JSON.stringify(data, null, 2)}`);
-    setIsLoading(true);
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data, null, 2),
-      });
-      if (response.ok) {
-        router.push("/private/queries");
-      } else {
-        console.error(
-          "Check Amplify Hosting compute logs, there was an error with the email recipient. Probably email recipient is not registered or verified in Amazon SES Sandbox"
+
+      try {
+        /*
+        console.log(
+          `Handler submit function: ${JSON.stringify(data, null, 2)}`
         );
-        alert("Failed to to login. Please try again.");
+        */
+        const dataFormattedForServices = formatUserForServices(data);
+        console.log(
+          `Data formated: ${JSON.stringify(dataFormattedForServices, null, 2)}`
+        );
+        setIsLoading(true);
+        const response = await fetch("/api/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataFormattedForServices, null, 2),
+        });
+
+        if (response.ok) {
+          router.push("/login");
+        } else {
+          console.error("Error, could not connect to backed");
+          alert("Failed to create user. Please try again.");
+        }
+      } catch (error) {
+        throw new Error("Failed to submit application. Please try again.");
+      } finally {
+        setIsLoading(false);
       }
-    } catch (error) {
-      throw new Error("Failed to submit application. Please try again.");
-    } finally {
-      setIsLoading(false);
     }
   };
 

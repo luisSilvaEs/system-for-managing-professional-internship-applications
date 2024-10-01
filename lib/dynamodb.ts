@@ -2,6 +2,7 @@ import { PutItemCommand, ScanCommand, GetItemCommand } from "@aws-sdk/client-dyn
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import dynamoClient from "@/lib/dynamoClient";
 import { GetItemResponse, DynamoDBItem } from "@/types/student";
+import { hashPassword } from "@/security/passwords";
 
 const fetchData = async () => {
     const params = {
@@ -102,11 +103,24 @@ export async function saveToDynamoDB(data:any) {
 export async function saveUserToDynamoDB(data: any) {
   console.log("Hi from saveUserToDynamoDB", data);
   const { email, password, name, fatherName, motherName } = data;
+
+  if (!email || !password || !name || !fatherName || !motherName) {
+    throw new Error("Missing required fields");
+  }
+
+  let hashedPassword;
+  try {
+    hashedPassword = await hashPassword(password);
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    throw new Error("Failed to hash password");
+  }
+
   const params = {
     TableName: process.env.DYNAMODB_TABLE_USERS_NAME,
     Item: {
       email: { S: email },
-      password: { S: password },
+      password: { S: hashedPassword },
       name: { S: name },
       fatherName: { S: fatherName },
       motherName: { S: motherName },
@@ -117,8 +131,8 @@ export async function saveUserToDynamoDB(data: any) {
   console.log("Params", params);
 
   try {
-    const commandUser = new PutItemCommand(params);
-    const response = await dynamoClient.send(commandUser);
+    const command = new PutItemCommand(params);
+    const response = await dynamoClient.send(command);
     console.log("User saved to DynamoDB successfully:", response);
   } catch (error) {
       console.error("Error saving to DynamoDB:", error);

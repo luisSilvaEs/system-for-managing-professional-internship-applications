@@ -9,17 +9,23 @@ export async function POST(request: Request) {
     const data = await request.json();
     const { email, password, name, fatherName, motherName } = data;
     console.log("POST function /app/api/register", data);
-    /*
-    const hashedPassword = hashPassword(password);
     
+    await hashPassword(password).then(
+      (hashedPassword)=>{
+        data.password = hashedPassword
+        saveUserToDynamoDB(data)
+      }
+    );
+    /*
     const dynamoDBData = {
         ...data
     };
-    
-    dynamoDBData.password = hashedPassword;
     */
+    
+    //dynamoDBData.password = hashedPassword;
+    
 
-    await saveUserToDynamoDB(data);
+    //await saveUserToDynamoDB(dynamoDBData);
     
     return NextResponse.json({ message: 'User added to the data base' }, { status: 200 });
   } catch (error) {

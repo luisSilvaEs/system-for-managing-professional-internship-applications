@@ -99,6 +99,33 @@ export async function saveToDynamoDB(data:any) {
     }
 }
 
+export async function saveUserToDynamoDB(data: any) {
+  console.log("Hi from saveUserToDynamoDB", data);
+  const { email, password, name, fatherName, motherName } = data;
+  const params = {
+    TableName: process.env.DYNAMODB_TABLE_USERS_NAME,
+    Item: {
+      email: { S: email },
+      password: { S: password },
+      name: { S: name },
+      fatherName: { S: fatherName },
+      motherName: { S: motherName },
+      timestamp: { S: new Date().toISOString() }
+    }
+  }
+
+  console.log("Params", params);
+
+  try {
+    const commandUser = new PutItemCommand(params);
+    const response = await dynamoClient.send(commandUser);
+    console.log("User saved to DynamoDB successfully:", response);
+  } catch (error) {
+      console.error("Error saving to DynamoDB:", error);
+      throw new Error("Failed to save user to DynamoDB");
+  }
+}
+
 export const getEntryByID = async (id: number): Promise<GetItemResponse> => {
   try {
     const params = {
@@ -125,3 +152,29 @@ export const getEntryByID = async (id: number): Promise<GetItemResponse> => {
   }
 };
 
+/*
+export const getUserByEmail = async ( email: string ): Promise<GetItemResponse> => {
+  try {
+    const params = {
+      TableName: process.env.NEXT_PUBLIC_USER_SYS_TABLE_NAME || '',
+      Key: marshall({
+        email: email,
+      }),
+    };
+    //marshall is used to convert the JavaScript object into a format suitable for DynamoDB
+    const command = new GetItemCommand(params);//GetItemCommand is used to fetch a specific entry from DynamoDB.
+    const response = await dynamoClient.send(command);
+
+    if (response.Item) {
+        const item: DynamoDBItem = unmarshall(response.Item);
+        console.log('Response', item);
+        return { Item: item }; // unmarshall is used to parse the DynamoDB response back into a standard JavaScript object.
+    } else {
+      return {}; // Handle case where the item doesn't exist
+    }
+  } catch (error) {
+    console.error('Error fetching user from DynamoDB:', error);
+    throw new Error('Error fetching item');
+  }
+};
+*/

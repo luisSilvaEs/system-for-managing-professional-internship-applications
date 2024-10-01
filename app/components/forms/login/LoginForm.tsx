@@ -16,6 +16,7 @@ interface LoginFields {
 const LoginForm = ({ email, password }: LoginFields) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+
   const handelSubmit = async (data: any) => {
     console.log(`Handler submit function: ${JSON.stringify(data, null, 2)}`);
     setIsLoading(true);
@@ -26,15 +27,14 @@ const LoginForm = ({ email, password }: LoginFields) => {
         body: JSON.stringify(data, null, 2),
       });
       if (response.ok) {
+        console.log("Redirect to /private/queries");
         router.push("/private/queries");
       } else {
-        console.error(
-          "Check Amplify Hosting compute logs, there was an error with the email recipient. Probably email recipient is not registered or verified in Amazon SES Sandbox"
-        );
-        alert("Failed to to login. Please try again.");
+        console.error("Login failed. Check the response for more details.");
+        alert("Failed to login. Please try again.");
       }
     } catch (error) {
-      throw new Error("Failed to submit application. Please try again.");
+      throw new Error("Error during login.");
     } finally {
       setIsLoading(false);
     }

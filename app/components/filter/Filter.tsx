@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { CleanedItem, AttributeValue } from "@/types/student";
 import { getDropdownItems } from "./utilities";
 import { StudentFilter } from "./utilities";
-import fetchData from "@/lib/dynamodb";
+import fetchData from "@/lib/fetchStudentData";
 import Select from "../select/Select";
 import Table from "../table/Table";
 

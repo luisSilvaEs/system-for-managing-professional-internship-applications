@@ -16,16 +16,6 @@ export async function POST(request: Request) {
         saveUserToDynamoDB(data)
       }
     );
-    /*
-    const dynamoDBData = {
-        ...data
-    };
-    */
-    
-    //dynamoDBData.password = hashedPassword;
-    
-
-    //await saveUserToDynamoDB(dynamoDBData);
     
     return NextResponse.json({ message: 'User added to the data base' }, { status: 200 });
   } catch (error) {

@@ -1,24 +1,8 @@
-import { PutItemCommand, ScanCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { PutItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import dynamoClient from "@/lib/dynamoClient";
 import { GetItemResponse, DynamoDBItem } from "@/types/student";
 import { hashPassword } from "@/security/passwords";
-
-const fetchData = async () => {
-    const params = {
-      TableName: process.env.NEXT_PUBLIC_TABLE_NAME || '', 
-    };
-  
-    try {
-      const data = await dynamoClient.send(new ScanCommand(params));
-      return data.Items; // Returns the items from the DynamoDB table
-    } catch (error) {
-      console.error("Error fetching data from DynamoDB:", error);
-      return [];
-    }
-  };
-  
-  export default fetchData;
 
 export async function saveToDynamoDB(data:any) {
     const {
@@ -100,6 +84,7 @@ export async function saveToDynamoDB(data:any) {
     }
 }
 
+
 export async function saveUserToDynamoDB(data: any) {
   console.log("Hi from saveUserToDynamoDB", data);
   const { email, password, name, fatherName, motherName } = data;
@@ -166,11 +151,11 @@ export const getEntryByID = async (id: number): Promise<GetItemResponse> => {
   }
 };
 
-/*
+
 export const getUserByEmail = async ( email: string ): Promise<GetItemResponse> => {
   try {
     const params = {
-      TableName: process.env.NEXT_PUBLIC_USER_SYS_TABLE_NAME || '',
+      TableName: process.env.DYNAMODB_TABLE_USERS_NAME || '',
       Key: marshall({
         email: email,
       }),
@@ -181,7 +166,7 @@ export const getUserByEmail = async ( email: string ): Promise<GetItemResponse> 
 
     if (response.Item) {
         const item: DynamoDBItem = unmarshall(response.Item);
-        console.log('Response', item);
+        console.log('Response from users table', item);
         return { Item: item }; // unmarshall is used to parse the DynamoDB response back into a standard JavaScript object.
     } else {
       return {}; // Handle case where the item doesn't exist
@@ -191,4 +176,4 @@ export const getUserByEmail = async ( email: string ): Promise<GetItemResponse> 
     throw new Error('Error fetching item');
   }
 };
-*/
+

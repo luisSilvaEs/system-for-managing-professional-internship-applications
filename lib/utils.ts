@@ -127,6 +127,20 @@ export const formatDataForServices = (data:any) => {
     return dataForServices;
 };
 
+export const formatUserForServices = (data:any) => {
+  const {email, password, name, fatherName, motherName} = data;
+
+  const userForServices = {
+    email: email,
+    password: password,
+    name: name,
+    fatherName: fatherName,
+    motherName: motherName
+  }
+
+  return userForServices;
+}
+
 // Function to convert specific keys to more user-friendly labels
 const convertKeyToLabel = (key: string): string => {
   switch (key) {

@@ -47,7 +47,8 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
             type: "string"
         },
         password: {
-            type: "string"
+            type: "string",
+            uniforms: { type: 'password' },
         }
     },
     required: ["email", "password"]

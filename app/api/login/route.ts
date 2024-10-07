@@ -29,12 +29,13 @@ export async function POST(request: NextRequest) {
     const response = NextResponse.json({ success: true });
     response.cookies.set('token', token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV !== 'development',
       path: '/',
       maxAge: 60 * 60, // 1 hour
     });
+    console.log(`Response-> ${response.cookies}`);
     
-    return NextResponse.json({ success: true });
+    //return NextResponse.json({ success: true });
+    return response;
     
   } catch (error) {
     return NextResponse.json({ error: 'Internal Server Error->' }, { status: 500 });

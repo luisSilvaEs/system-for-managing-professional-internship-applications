@@ -4,7 +4,7 @@ import { verifyPassword } from "@/security/passwords";
 import jwt from 'jsonwebtoken';
 import { getUserByEmail } from '@/lib/dynamodb'; // Example function to get user details from DynamoDB
 
-const JWT_SECRET = process.env.NEXT_PUBLIC_JWT_SECRET;
+const JWT_SECRET = process.env.JWT_SECRET;
 
 export async function POST(request: NextRequest) {
   try {

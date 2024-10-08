@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     console.log('Plain password:', password);
     console.log('Hashed password from DB:', Item.password);
 
-    const passwordMatch = await verifyPassword(password, Item.password); // Compare passwords
+    const passwordMatch = verifyPassword(password, Item.password); // Compare passwords
 
     if (!passwordMatch) {
       console.log(`Password do not match. DynamoDB hashed password: ${Item.password} <-:-> DynamoDB hashed password: ${passwordMatch}`);

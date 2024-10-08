@@ -1,18 +1,20 @@
-export async function hashPassword(plainPassword: string) {
-  try {
-    const argon2 = await import('argon2');
-    const hashedPassword = await argon2.hash(plainPassword);
-    return hashedPassword;
-  } catch (error) {
-    throw new Error('Error hashing password');
-  }
+import { pbkdf2Sync, randomBytes } from 'crypto';
+
+const SALT_LENGTH = 16; // Length of the salt in bytes
+const HASH_ITERATIONS = 1000; // Number of iterations
+const HASH_LENGTH = 64; // Length of the derived key (hash) in bytes
+const DIGEST_ALGORITHM = 'sha512'; // Hashing algorithm
+
+// Hash a password using PBKDF2
+export function hashPassword(plainPassword: string): string {
+  const salt = randomBytes(SALT_LENGTH).toString('hex');
+  const hashedPassword = pbkdf2Sync(plainPassword, salt, HASH_ITERATIONS, HASH_LENGTH, DIGEST_ALGORITHM).toString('hex');
+  return `${salt}:${hashedPassword}`; // Return salt and hashed password
 }
 
-export async function verifyPassword(plainPassword: string, hashedPassword: string) {
-  try {
-    const argon2 = await import('argon2');
-    return await argon2.verify(hashedPassword, plainPassword);
-  } catch (error) {
-    throw new Error('Error verifying password');
-  }
+// Verify a password against a stored hashed password
+export function verifyPassword(plainPassword: string, hashedPassword: string): boolean {
+  const [salt, storedHash] = hashedPassword.split(':');
+  const hashedAttempt = pbkdf2Sync(plainPassword, salt, HASH_ITERATIONS, HASH_LENGTH, DIGEST_ALGORITHM).toString('hex');
+  return storedHash === hashedAttempt; // Compare stored hash and hash attempt
 }

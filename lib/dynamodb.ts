@@ -95,7 +95,7 @@ export async function saveUserToDynamoDB(data: any) {
 
   let hashedPassword;
   try {
-    hashedPassword = await hashPassword(password);
+    hashedPassword = hashPassword(password);
   } catch (error) {
     console.error("Error hashing password:", error);
     throw new Error("Failed to hash password");

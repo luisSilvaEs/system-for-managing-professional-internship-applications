@@ -1,7 +1,6 @@
-import argon2 from 'argon2';
-
 export async function hashPassword(plainPassword: string) {
   try {
+    const argon2 = await import('argon2');
     const hashedPassword = await argon2.hash(plainPassword);
     return hashedPassword;
   } catch (error) {
@@ -11,6 +10,7 @@ export async function hashPassword(plainPassword: string) {
 
 export async function verifyPassword(plainPassword: string, hashedPassword: string) {
   try {
+    const argon2 = await import('argon2');
     return await argon2.verify(hashedPassword, plainPassword);
   } catch (error) {
     throw new Error('Error verifying password');

@@ -2,7 +2,6 @@
 import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import { saveUserToDynamoDB } from '@/lib/dynamodb';
-import { hashPassword } from "@/security/passwords";
 
 export async function POST(request: Request) {
   try {
@@ -10,12 +9,7 @@ export async function POST(request: Request) {
     const { email, password, name, fatherName, motherName } = data;
     console.log("POST function /app/api/register", data);
     
-    await hashPassword(password).then(
-      (hashedPassword)=>{
-        data.password = hashedPassword
-        saveUserToDynamoDB(data)
-      }
-    );
+    await saveUserToDynamoDB(data);
     
     return NextResponse.json({ message: 'User added to the data base' }, { status: 200 });
   } catch (error) {

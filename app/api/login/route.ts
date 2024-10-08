@@ -1,8 +1,8 @@
-// /app/api/auth/login.ts
+// /app/api/login/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyPassword } from "@/security/passwords";
 import jwt from 'jsonwebtoken';
-import { getUserByEmail } from '@/lib/dynamodb'; // Example function to get user details from DynamoDB
+import { getUserByEmail } from '@/lib/dynamodb'; //function to get user details from DynamoDB
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
@@ -10,15 +10,12 @@ export async function POST(request: NextRequest) {
   try {
     const { email, password } = await request.json();
     const { Item } = await getUserByEmail(email); // Retrieve user from DynamoDB by email
-    console.log(`User: ${Item.email} and password: ${Item.password} `)
     
     if (!Item) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    console.log(`User: ${Item.email}`);
-    console.log('Plain password:', password);
-    console.log('Hashed password from DB:', Item.password);
+    console.log(`User: ${Item.email} and password: ${Item.password} `)
 
     const passwordMatch = verifyPassword(password, Item.password); // Compare passwords
 

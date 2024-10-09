@@ -15,12 +15,12 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Invalid credentials' }, { status: 401 });
     }
 
-    console.log(`User: ${Item.email} and password: ${Item.password} `)
+    //console.log(`User: ${Item.email} and password: ${Item.password} `)
 
     const passwordMatch = verifyPassword(password, Item.password); // Compare passwords
 
     if (!passwordMatch) {
-      console.log(`Password do not match. DynamoDB hashed password: ${Item.password} <-:-> DynamoDB hashed password: ${passwordMatch}`);
+      //console.log(`Password do not match. DynamoDB hashed password: ${Item.password} <-:-> DynamoDB hashed password: ${passwordMatch}`);
       return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
     }
 

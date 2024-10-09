@@ -25,7 +25,7 @@ const motherName: Field = {
 const email: Field = {
   label: "Correo electrónico",
   name: "email",
-  placeholder: "Ingrese su correo",
+  placeholder: "un_correo@dominio.com",
 };
 
 const password: Field = {
@@ -49,6 +49,19 @@ export default function Register() {
             Registrarse
           </h3>
           <p>Crea una cuenta para iniciar.</p>
+          <p>
+            Los campos marcados con{""}
+            <span
+              style={{
+                margin: "-.2em 0 0 .2em",
+                content: "*",
+                color: "#db2828",
+              }}
+            >
+              *
+            </span>{" "}
+            son obligatorios
+          </p>
         </div>
         <div className="p-6">
           <RegisterForm

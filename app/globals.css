@@ -23,7 +23,9 @@ label {
 
   input {
     @apply border-0 bg-white py-1.5 pl-1;
-    
+    &::placeholder {
+      font-style: italic;
+    }
   }
 
   select {

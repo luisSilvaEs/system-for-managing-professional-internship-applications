@@ -30,6 +30,14 @@ const noopKeywordDefinition: KeywordDefinition = {
 
 ajv.addKeyword(noopKeywordDefinition);
 
+function validateEmailPattern(schema: any, data: FormData) {
+  const emailPattern = new RegExp(schema.properties.email.pattern);
+  if (!emailPattern.test(data.email)) {
+    return [{ message: "Error, correo electrónico DEBE tener dominio huauchinango.tecnm.mx o hotmail.com", params: { keyword: "emailPattern" } }];
+  }
+  return null;
+}
+
 type FormData = {
   lugar: string;
   fecha: string;
@@ -166,7 +174,7 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
     },
     email: { 
       type: "string", 
-      label: "Correo eléctronico (email)",
+      label: "Correo electrónico (email)",
       format: "email",
       pattern: "^[a-zA-Z0-9._-]+@(hotmail\\.com|gmail\\.com|yahoo\\.com|me\\.com|icloud\\.com|outlook\\.com)$",
       uniforms: { 
@@ -245,6 +253,11 @@ function createValidator(schema: object) {
 
   return (model: Record<string, unknown>) => {
     validator(model);
+    const emailErrors = validateEmailPattern(schema, model as FormData);
+    if (emailErrors) {
+      return { details: emailErrors };
+    }
+
     return validator.errors?.length ? { details: validator.errors } : null;
   };
 }

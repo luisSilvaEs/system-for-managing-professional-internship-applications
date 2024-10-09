@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Children, ReactElement, useState } from "react";
+import React, { Children, ReactElement, useState, useRef } from "react";
 import {
   AutoField,
   AutoForm,
@@ -42,6 +42,7 @@ type FormData = {
 const StudentForm = ({ title, summary, instructions }: PropsForm) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const formRef = useRef<any>(null);
 
   const handlerSubmit = async (data: any) => {
     //e.preventDefault();
@@ -109,8 +110,31 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     );
   };
 
+  const ClearFieldsButton = () => {
+    const handleReset = () => {
+      if (formRef.current) {
+        formRef.current.reset(); // Reset form fields using ref
+      }
+    };
+
+    return (
+      <button
+        type="button"
+        className="ui button"
+        onClick={handleReset}
+        disabled={isLoading}
+      >
+        Limpiar Campos
+      </button>
+    );
+  };
+
   return (
-    <AutoForm schema={schema} onSubmit={(data) => handlerSubmit(data)}>
+    <AutoForm
+      schema={schema}
+      onSubmit={(data) => handlerSubmit(data)}
+      ref={formRef}
+    >
       {isLoading && (
         <div className="loading-overlay">
           <div className="spinner"></div>
@@ -237,6 +261,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
           </div>
         </div>
         <SubmitFieldCustom />
+        <ClearFieldsButton />
       </div>
     </AutoForm>
   );

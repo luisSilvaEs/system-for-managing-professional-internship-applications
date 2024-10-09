@@ -7,6 +7,46 @@ import { useEffect, useState } from "react";
 import { extractKeyValuePairs } from "@/lib/utils";
 import { generatePresignedUrl } from "@/lib/s3downloadNew";
 
+const fieldsPersonal = [
+  "apellidoMaterno",
+  "apellidoPaterno",
+  "nombre",
+  "carreraResidente",
+  "periodo",
+  "numeroControl",
+  "telefono",
+  "email",
+  "calleResidente",
+  "coloniaResidente",
+  "cpResidente",
+  "ciudad",
+];
+
+const fieldsInternship = [
+  "jefeDivision",
+  "opcionElegida",
+  "numeroResidentes",
+  "lugar",
+  "fecha",
+];
+
+const fieldsCompany = [
+  "nombreEmpresa",
+  "giroRamoSector",
+  "otroRamoSector",
+  "calleEmpresa",
+  "coloniaEmpresa",
+  "cpEmpresa",
+  "ciudadEmpresa",
+  "telefonoEmpresa",
+  "nombreTitularEmpresa",
+  "puestoTitularEmpresa",
+  "nombrePersonaCartaPresentacion",
+  "puestoPersonaCartaPresentacion",
+];
+
+const bucketName = process.env.NEXT_PUBLIC_S3_PDF_BUCKET_NAME;
+
 export default function StudentDetail() {
   const { numeroControl } = useParams();
   const searchParams = useSearchParams();
@@ -23,46 +63,7 @@ export default function StudentDetail() {
 
   const [urlDownload, setURLDownload] = useState("");
 
-  const bucketName = process.env.NEXT_PUBLIC_S3_PDF_BUCKET_NAME;
   const objectKey = `new-files/Solicitud-de-Residencia-Nueva-${numeroControl}.pdf`;
-
-  const fieldsPersonal = [
-    "apellidoMaterno",
-    "apellidoPaterno",
-    "nombre",
-    "carreraResidente",
-    "periodo",
-    "numeroControl",
-    "telefono",
-    "email",
-    "calleResidente",
-    "coloniaResidente",
-    "cpResidente",
-    "ciudad",
-  ];
-
-  const fieldsInternship = [
-    "jefeDivision",
-    "opcionElegida",
-    "numeroResidentes",
-    "lugar",
-    "fecha",
-  ];
-
-  const fieldsCompany = [
-    "nombreEmpresa",
-    "giroRamoSector",
-    "otroRamoSector",
-    "calleEmpresa",
-    "coloniaEmpresa",
-    "cpEmpresa",
-    "ciudadEmpresa",
-    "telefonoEmpresa",
-    "nombreTitularEmpresa",
-    "puestoTitularEmpresa",
-    "nombrePersonaCartaPresentacion",
-    "puestoPersonaCartaPresentacion",
-  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -81,13 +82,20 @@ export default function StudentDetail() {
         console.warn("'id' could not be obtained from URL");
       }
 
+      if (!bucketName) {
+        console.error(
+          "S3 bucket name is not defined. Error from /app/private/queries/studentDetail/[numeroControl]/page.tsx"
+        );
+        return;
+      }
+
       generatePresignedUrl(bucketName, objectKey).then((url) => {
         console.log("Pre-signed URL:", url);
         setURLDownload(url);
       });
     };
     fetchData();
-  }, []);
+  }, [objectKey, searchParams]);
 
   return (
     <div className="container mx-auto p-4 space-y-6">

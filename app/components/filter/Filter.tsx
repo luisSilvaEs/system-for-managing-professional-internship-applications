@@ -7,6 +7,7 @@ import { StudentFilter } from "./utilities";
 import fetchData from "@/lib/fetchStudentData";
 import Select from "../select/Select";
 import Table from "../table/Table";
+import { StudentDynamoDB } from "@/types/student";
 
 const Filter = () => {
   const [data, setData] = useState<CleanedItem[]>([]);
@@ -15,7 +16,6 @@ const Filter = () => {
     const getData = async () => {
       const result = await fetchData();
       if (result) {
-        //console.log("Query->", result);
         const cleanedData: CleanedItem[] = result.map(
           (item: Record<string, AttributeValue>) => {
             return Object.keys(item).reduce((acc, key) => {
@@ -25,9 +25,47 @@ const Filter = () => {
             }, {} as CleanedItem);
           }
         );
-        //("cleaned->", cleanedData);
-        setData(cleanedData);
-        setFilteredStudents(cleanedData);
+
+        // Transform CleanedItem[] to StudentDynamoDB[]
+        const studentData: StudentDynamoDB[] = cleanedData.map((item) => ({
+          id: Number(item.id),
+          numeroControl: String(item.numeroControl),
+          apellidoMaterno: String(item.apellidoMaterno),
+          apellidoPaterno: String(item.apellidoPaterno),
+          nombre: String(item.nombre),
+          carreraResidente: String(item.carreraResidente),
+          periodo: String(item.periodo),
+          telefono: String(item.telefono),
+          lugar: String(item.lugar),
+          fecha: String(item.fecha),
+          email: String(item.email),
+          jefeDivision: String(item.jefeDivision),
+          opcionElegida: String(item.opcionElegida),
+          numeroResidentes: String(item.numeroResidentes),
+          calleResidente: String(item.calleResidente),
+          coloniaResidente: String(item.coloniaResidente),
+          cpResidente: Number(item.cpResidente),
+          ciudad: String(item.ciudad),
+          nombreEmpresa: String(item.nombreEmpresa),
+          giroRamoSector: String(item.giroRamoSector),
+          otroRamoSector: String(item.otroRamoSector),
+          calleEmpresa: String(item.calleEmpresa),
+          coloniaEmpresa: String(item.coloniaEmpresa),
+          cpEmpresa: Number(item.cpEmpresa),
+          ciudadEmpresa: String(item.ciudadEmpresa),
+          telefonoEmpresa: String(item.telefonoEmpresa),
+          nombreTitularEmpresa: String(item.nombreTitularEmpresa),
+          puestoTitularEmpresa: String(item.puestoTitularEmpresa),
+          nombrePersonaCartaPresentacion: String(
+            item.nombrePersonaCartaPresentacion
+          ),
+          puestoPersonaCartaPresentacion: String(
+            item.puestoPersonaCartaPresentacion
+          ),
+        }));
+
+        setData(studentData);
+        setFilteredStudents(studentData);
       } else {
         console.error("No data was fetched");
       }

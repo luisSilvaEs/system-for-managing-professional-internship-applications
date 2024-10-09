@@ -39,7 +39,7 @@ export const getCustomDateRange = () : string => {
     return `Agosto - Diciembre ${currentYear}`;
   }
 
-  return "Date not in the specified ranges";
+  return "Periodo cerrado";
 };
 
 export const currentFormattedDate = (date: Date) : string => {

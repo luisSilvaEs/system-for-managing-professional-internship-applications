@@ -59,13 +59,15 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
       });
 
       if (response.ok) {
-        alert("Application submitted successfully!");
+        alert("Formulario enviado exitosamente!");
         router.push("/students/success"); // Redirect to success page
       } else {
         console.error(
           "Check Amplify Hosting compute logs, there was an error with the email recipient. Probably email recipient is not registered or verified in Amazon SES Sandbox"
         );
-        alert("Failed to submit application. Please try again.");
+        alert(
+          "Falla al intentar enviar el formulario, favor de intentar mas tarde."
+        );
       }
     } catch (error) {
       throw new Error("Failed to submit application. Please try again.");
@@ -90,11 +92,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
             )}`
           );
         } else {
-          alert(
-            `Dejaste el siguiente campo sin llenar o marcar: ${errorList.join(
-              ", "
-            )}`
-          );
+          alert((error as any).details[0].message);
         }
       }
     };

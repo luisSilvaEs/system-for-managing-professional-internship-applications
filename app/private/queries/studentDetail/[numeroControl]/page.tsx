@@ -82,6 +82,13 @@ export default function StudentDetail() {
         console.warn("'id' could not be obtained from URL");
       }
 
+      if (!bucketName) {
+        console.error(
+          "S3 bucket name is not defined. Error from /app/private/queries/studentDetail/[numeroControl]/page.tsx"
+        );
+        return;
+      }
+
       generatePresignedUrl(bucketName, objectKey).then((url) => {
         console.log("Pre-signed URL:", url);
         setURLDownload(url);

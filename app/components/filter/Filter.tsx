@@ -1,17 +1,19 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { CleanedItem, AttributeValue } from "@/types/student";
+import { CleanedItem, AttributeValue, StudentDynamoDB } from "@/types/student";
 import { getDropdownItems } from "./utilities";
 import { StudentFilter } from "./utilities";
 import fetchData from "@/lib/fetchStudentData";
 import Select from "../select/Select";
 import Table from "../table/Table";
-import { StudentDynamoDB } from "@/types/student";
 
 const Filter = () => {
-  const [data, setData] = useState<CleanedItem[]>([]);
-  const [filteredStudents, setFilteredStudents] = useState<CleanedItem[]>([]);
+  const [data, setData] = useState<StudentDynamoDB[]>([]);
+  const [filteredStudents, setFilteredStudents] = useState<StudentDynamoDB[]>(
+    []
+  );
+
   useEffect(() => {
     const getData = async () => {
       const result = await fetchData();

@@ -139,9 +139,9 @@ export const getEntryByID = async (id: number): Promise<GetItemResponse> => {
     const response = await dynamoClient.send(command);
 
     if (response.Item) {
-        const item: DynamoDBItem = unmarshall(response.Item);
+        const item: DynamoDBItem = unmarshall(response.Item); // unmarshall is used to parse the DynamoDB response back into a standard JavaScript object.
         console.log('Response', item);
-        return { Item: item }; // unmarshall is used to parse the DynamoDB response back into a standard JavaScript object.
+        return { Item: item }; 
     } else {
       return {}; // Handle case where the item doesn't exist
     }
@@ -152,7 +152,7 @@ export const getEntryByID = async (id: number): Promise<GetItemResponse> => {
 };
 
 
-export const getUserByEmail = async ( email: string ): Promise<GetItemResponse> => {
+export const getUserByEmail = async ( email: string ): Promise<any> => {
   try {
     const params = {
       TableName: process.env.DYNAMODB_TABLE_USERS_NAME || '',

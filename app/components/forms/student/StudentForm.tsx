@@ -80,7 +80,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     const { error } = useForm(); //The useForm() hook from uniforms provides access to the current state of the form.
 
     const searchMissingFields = () => {
-      console.log("Hello world!!", typeof error);
+      console.log("Hello world!!", error);
       if (!!error && (error as any).details) {
         const errorList = (error as any).details.map((err: any) => {
           return err.params.missingProperty;
@@ -101,6 +101,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
       <input
         type="submit"
         className="ui button"
+        value="Enviar"
         onClick={() => {
           searchMissingFields();
         }}

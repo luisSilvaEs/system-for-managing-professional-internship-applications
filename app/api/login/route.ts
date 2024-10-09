@@ -22,6 +22,11 @@ export async function POST(request: NextRequest) {
     }
 
     // Generate JWT
+
+    if (!JWT_SECRET) {
+      console.error("JWT_SECRET is not defined");
+      return NextResponse.json({ error: 'Internal Server Error' }, { status: 500 });
+    }
     
     const token = jwt.sign({ userId: Item.email }, JWT_SECRET, { expiresIn: '1h' });
 

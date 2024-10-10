@@ -23,7 +23,9 @@ label {
 
   input {
     @apply border-0 bg-white py-1.5 pl-1;
-    
+    &::placeholder {
+      font-style: italic;
+    }
   }
 
   select {
@@ -32,6 +34,46 @@ label {
     padding-bottom: 6px!important;
   }
 
+}
+
+.b-form__buttons {
+  display: flex;
+  justify-content: space-between;
+
+  @media (max-width: 490px) {
+    justify-content: center;
+    flex-direction: column-reverse;
+  }
+
+  .button {
+    @apply md:ml-8;
+
+    @media (max-width: 490px) {
+      width: 100%;
+      margin: 5px 0;
+    }
+
+  }
+}
+
+.b-form-wrapper .b-form__buttons {
+  display: flex;
+  justify-content: end;
+
+  @media (max-width: 490px) {
+    justify-content: center;
+    flex-direction: column-reverse;
+  }
+
+  .button {
+    @apply md:ml-8;
+
+    @media (max-width: 490px) {
+      width: 100%;
+      margin: 5px 0;
+    }
+
+  }
 }
 
 .field .ui.input input{
@@ -120,6 +162,23 @@ label {
     transform: rotate(360deg);
   }
 }
+
+ol, ul {
+  list-style: disc;
+}
+
+.b-button-primary,
+.b-button-primary.ui.button[type="submit"],
+.b-form-wrapper .b-button-primary.ui.button[type="submit"] {
+  @apply text-white font-semibold text-sm bg-slate-900 rounded-lg hover:bg-slate-700 h-10;
+}
+
+.b-button-secondary,
+.b-button-secondary.ui.button,
+.b-form-wrapper .b-button-secondary.ui.button {
+  @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors h-10;
+}
+
 
 
 

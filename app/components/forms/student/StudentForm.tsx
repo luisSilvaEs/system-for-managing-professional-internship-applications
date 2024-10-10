@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Children, ReactElement, useState } from "react";
+import React, { Children, ReactElement, useState, useRef } from "react";
 import {
   AutoField,
   AutoForm,
@@ -42,6 +42,7 @@ type FormData = {
 const StudentForm = ({ title, summary, instructions }: PropsForm) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const formRef = useRef<any>(null);
 
   const handlerSubmit = async (data: any) => {
     //e.preventDefault();
@@ -59,13 +60,15 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
       });
 
       if (response.ok) {
-        alert("Application submitted successfully!");
+        alert("Formulario enviado exitosamente!");
         router.push("/students/success"); // Redirect to success page
       } else {
         console.error(
           "Check Amplify Hosting compute logs, there was an error with the email recipient. Probably email recipient is not registered or verified in Amazon SES Sandbox"
         );
-        alert("Failed to submit application. Please try again.");
+        alert(
+          "Falla al intentar enviar el formulario, favor de intentar mas tarde."
+        );
       }
     } catch (error) {
       throw new Error("Failed to submit application. Please try again.");
@@ -78,7 +81,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     const { error } = useForm(); //The useForm() hook from uniforms provides access to the current state of the form.
 
     const searchMissingFields = () => {
-      console.log("Hello world!!", typeof error);
+      console.log("Hello world!!", error);
       if (!!error && (error as any).details) {
         const errorList = (error as any).details.map((err: any) => {
           return err.params.missingProperty;
@@ -90,11 +93,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
             )}`
           );
         } else {
-          alert(
-            `Dejaste el siguiente campo sin llenar o marcar: ${errorList.join(
-              ", "
-            )}`
-          );
+          alert((error as any).details[0].message);
         }
       }
     };
@@ -102,7 +101,8 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     return (
       <input
         type="submit"
-        className="ui button"
+        className="ui button b-button-primary xs:w-full md:w-1/12"
+        value="Enviar"
         onClick={() => {
           searchMissingFields();
         }}
@@ -110,8 +110,31 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     );
   };
 
+  const ClearFieldsButton = () => {
+    const handleReset = () => {
+      if (formRef.current) {
+        formRef.current.reset(); // Reset form fields using ref
+      }
+    };
+
+    return (
+      <button
+        type="button"
+        className="ui button b-button-secondary"
+        onClick={handleReset}
+        disabled={isLoading}
+      >
+        Limpiar Campos
+      </button>
+    );
+  };
+
   return (
-    <AutoForm schema={schema} onSubmit={(data) => handlerSubmit(data)}>
+    <AutoForm
+      schema={schema}
+      onSubmit={(data) => handlerSubmit(data)}
+      ref={formRef}
+    >
       {isLoading && (
         <div className="loading-overlay">
           <div className="spinner"></div>
@@ -237,7 +260,10 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
             />
           </div>
         </div>
-        <SubmitFieldCustom />
+        <div className="sm:mt-4 md:mt-10 b-form__buttons">
+          <ClearFieldsButton />
+          <SubmitFieldCustom />
+        </div>
       </div>
     </AutoForm>
   );

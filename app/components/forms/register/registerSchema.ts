@@ -20,7 +20,15 @@ ajv.addKeyword(noopKeywordDefinition);
 // Custom validation to ensure password and confirmPassword match
 function validatePasswordsMatch(schema: any, data: FormData) {
   if (data.password !== data.confirmPassword) {
-    return [{ message: "Passwords do not match", params: { keyword: "passwordMatch" } }];
+    return [{ message: "Las contraseñas no coinciden", params: { keyword: "passwordMatch" } }];
+  }
+  return null;
+}
+
+function validateEmailPattern(schema: any, data: FormData) {
+  const emailPattern = new RegExp(schema.properties.email.pattern);
+  if (!emailPattern.test(data.email)) {
+    return [{ message: "Error, correo electrónico DEBE tener dominio huauchinango.tecnm.mx o hotmail.com", params: { keyword: "emailPattern" } }];
   }
   return null;
 }
@@ -57,6 +65,10 @@ const schema: JSONSchemaType<FormData> & {
       format: "email",
       pattern:
         "^[a-zA-Z0-9._-]+@(hotmail\\.com|gmail\\.com|yahoo\\.com|me\\.com|icloud\\.com|outlook\\.com|huauchinango\\.tecnm\\.mx)$",
+      uniforms: { 
+        placeholder: "example@domain.com",
+        errorMessage: "Email debe tener un formato válido (e.g., example@gmail.com).",
+      }
     },
     password: {
       type: "string",
@@ -87,10 +99,15 @@ function createValidator(schema: object) {
   return (model: Record<string, unknown>) => {
     validator(model);
 
+    const emailErrors = validateEmailPattern(schema, model as FormData);
+    if (emailErrors) {
+      return { details: emailErrors };
+    }
+
     // Add custom validation for password matching
-    const errors = validatePasswordsMatch(schema, model as FormData);
-    if (errors) {
-      return { details: errors };
+    const passwordErrors = validatePasswordsMatch(schema, model as FormData);
+    if (passwordErrors) {
+      return { details: passwordErrors };
     }
 
     return validator.errors?.length ? { details: validator.errors } : null;

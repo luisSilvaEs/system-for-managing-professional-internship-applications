@@ -62,7 +62,7 @@ const LoginForm = ({ email, password }: LoginFields) => {
     return (
       <input
         type="submit"
-        className="ui button inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+        className="ui button b-button-primary w-full"
         value="Login"
         onClick={() => {
           searchMissingFields();
@@ -97,7 +97,7 @@ const LoginForm = ({ email, password }: LoginFields) => {
             />
           )}
         </div>
-        <div className="mt-3">
+        <div className="sm:mt-4 md:mt-10 ">
           <SubmitFieldCustom />
         </div>
       </AutoForm>

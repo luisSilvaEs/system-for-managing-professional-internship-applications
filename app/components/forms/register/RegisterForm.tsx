@@ -1,6 +1,6 @@
 "use client";
 
-import React, { Children, ReactElement, useState } from "react";
+import React, { Children, ReactElement, useState, useRef } from "react";
 import { AutoField, AutoForm, ErrorField } from "uniforms-semantic";
 import { useForm, Context, UnknownObject } from "uniforms";
 import { bridge } from "./registerSchema";
@@ -42,6 +42,7 @@ const RegisterForm = ({
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const formRef = useRef<any>(null);
   const handelSubmit = async (data: any) => {
     if (data.password !== data.confirmPassword) {
       setPasswordError("Passwords do not match. Please try again.");
@@ -84,7 +85,7 @@ const RegisterForm = ({
     const { error } = useForm(); //The useForm() hook from uniforms provides access to the current state of the form.
 
     const searchMissingFields = () => {
-      console.log("Hello world!!", typeof error);
+      console.log("Hello world!!", error);
       if (!!error && (error as any).details) {
         const errorList = (error as any).details.map((err: any) => {
           return err.params.missingProperty;
@@ -94,7 +95,7 @@ const RegisterForm = ({
             `Olvidaste llenar los siguientes campos: ${errorList.join(", ")}`
           );
         } else {
-          alert(`Olvidaste el siguiente campo : ${errorList.join(", ")}`);
+          alert((error as any).details[0].message);
         }
       }
     };
@@ -102,7 +103,7 @@ const RegisterForm = ({
     return (
       <input
         type="submit"
-        className="ui button inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+        className="ui button b-button-primary"
         value="Registrarse"
         onClick={() => {
           searchMissingFields();
@@ -111,9 +112,32 @@ const RegisterForm = ({
     );
   };
 
+  const ClearFieldsButton = () => {
+    const handleReset = () => {
+      if (formRef.current) {
+        formRef.current.reset(); // Reset form fields using ref
+      }
+    };
+
+    return (
+      <button
+        type="button"
+        className="ui button b-button-secondary"
+        onClick={handleReset}
+        disabled={isLoading}
+      >
+        Limpiar Campos
+      </button>
+    );
+  };
+
   return (
     <div className="space-y-8">
-      <AutoForm schema={bridge} onSubmit={(data) => handelSubmit(data)}>
+      <AutoForm
+        schema={bridge}
+        onSubmit={(data) => handelSubmit(data)}
+        ref={formRef}
+      >
         {isLoading && (
           <div className="loading-overlay">
             <div className="spinner"></div>
@@ -182,7 +206,8 @@ const RegisterForm = ({
             <div className="text-red-500 text-sm">{passwordError}</div>
           )}
         </div>
-        <div className="mt-3">
+        <div className="sm:mt-4 md:mt-10 b-form__buttons justify-center">
+          <ClearFieldsButton />
           <SubmitFieldCustom />
         </div>
       </AutoForm>

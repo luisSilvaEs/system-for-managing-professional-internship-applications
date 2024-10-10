@@ -30,6 +30,14 @@ const noopKeywordDefinition: KeywordDefinition = {
 
 ajv.addKeyword(noopKeywordDefinition);
 
+function validateEmailPattern(schema: any, data: FormData) {
+  const emailPattern = new RegExp(schema.properties.email.pattern);
+  if (!emailPattern.test(data.email)) {
+    return [{ message: "Error, correo electrónico DEBE tener dominio huauchinango.tecnm.mx o hotmail.com", params: { keyword: "emailPattern" } }];
+  }
+  return null;
+}
+
 type FormData = {
   lugar: string;
   fecha: string;
@@ -114,13 +122,18 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
     numeroResidentes: {
       type: "integer",
       minimum: 1,
-      maximum: 3
+      maximum: 3,
+      uniforms: { placeholder: "1" }
     },
-    nombre: { type: "string", uniforms: {
-      errorMessage: `Campo "Nombre(s)" es obligatorio`
-    } },
-    apellidoPaterno: { type: "string" },
-    apellidoMaterno: { type: "string" },
+    nombre: { 
+      type: "string",
+      uniforms: {
+        errorMessage: `Campo "Nombre(s)" es obligatorio`,
+        placeholder: "José María"
+      } 
+    },
+    apellidoPaterno: { type: "string" , uniforms: { placeholder: "Peréz" } },
+    apellidoMaterno: { type: "string", uniforms: { placeholder: "González" } },
     carrera: {
       type: "string",
       enum: ["Ingeniería en Administración", "Ingeniería Eléctrica", "Ingeniería Informática", "Ingeniería Industrial", "Ingeniería Mecatrónica", "Ingeniería en Sistemas Computacionales", "Maestría en Tecnologías de la Información"],
@@ -139,34 +152,41 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
     numeroControl: { 
       type: "string",
       label: "Num. de control",
-      uniforms: { placeholder: "G1234567" }
+      pattern: "^[A-Za-z]\d{8}$",
+      uniforms: { placeholder: "ejemplo: G12345678" }
     },
-    domicilioCalle: { type: "string", label: "Calle o fraccionamiento" },
-    domicilioNumeroExterior: { type: "string", label: "Num. exterior" },
-    domicilioNumeroInterior: { type: "string", label: "Num. interior (opcional)" },
+    domicilioCalle: { type: "string", label: "Calle o fraccionamiento", uniforms: { placeholder: "ejemplo: Av. Tecnológico" } },
+    domicilioNumeroExterior: { type: "string", label: "Num. exterior", uniforms: { placeholder: "80" } },
+    domicilioNumeroInterior: { type: "string", label: "Num. interior (opcional)", uniforms: { placeholder: "3B" } },
     domicilioColonia: {
       type: "string",
-      label: "Colonia"
+      label: "Colonia",
+      uniforms: { placeholder: "ejemplo: 5 de Octubre" }
     },
     domicilioCP: {
       type: "number",
       label: "C.P.",
       pattern: "^\d{5}$",
       uniforms: { 
-        errorMessage: "Código postal debe tener solo dígitos y de 5 cifras",
+        errorMessage: "Código postal debe tener solo dígitos y ser de 5 cifras",
+        placeholder: "ejemplo: 73173"
       }
     },
     ciudad: {
       type: "string",
-      label: "Ciudad",
+      label: "Ciudad y estado",
+      uniforms: { placeholder: "Puebla, Puebla" }
     },
     telefonoOcelular: {
       type: "string",
-      label: "Teléfono o celular"
+      label: "Teléfono o celular",
+      uniforms: {
+        placeholder: "01-776-762-52-60"
+      }
     },
     email: { 
       type: "string", 
-      label: "Correo eléctronico (email)",
+      label: "Correo electrónico (email)",
       format: "email",
       pattern: "^[a-zA-Z0-9._-]+@(hotmail\\.com|gmail\\.com|yahoo\\.com|me\\.com|icloud\\.com|outlook\\.com)$",
       uniforms: { 
@@ -189,35 +209,47 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
     },
     calleEmpresa: {
       type: "string",
-      label: "Calle o Fraccionamiento"
+      label: "Calle o Fraccionamiento",
+      uniforms: { placeholder: "ejemplo: Avenida Santa Rosa de Viterbo" }
     },
     numeroExteriorEmpresa: {
       type: "string",
-      label: "Num. exterior"
+      label: "Num. exterior",
+      uniforms: { placeholder: "S/N" }
     },
     numeroInteriorEmpresa: {
       type: "string",
-      label: "Num. interior (opcional)"
+      label: "Num. interior (opcional)",
+      uniforms: { placeholder: "Lote 7" }
     },
     coloniaEmpresa: {
       type: "string",
-      label: "Colonia"
+      label: "Colonia",
+      uniforms: {
+        placeholder: "ejemplo: Manzana II Parque Industrial FINSA El Marqués"
+      }
     },
     cpEmpresa: {
       type: "number",
       pattern: "^\d{5}$",
       uniforms: { 
-        errorMessage: "Código postal debe tener solo dígitos y de 5 cifras",
+        errorMessage: "Código postal debe tener solo dígitos y ser de 5 cifras",
       },
       label: "C.P.",
     },
     ciudadEmpresa: {
       type: "string",
-      label: "Ciudad"
+      label: "Ciudad y estado",
+      uniforms: {
+        placeholder: "Monterrey, Nuevo León"
+      }
     },
     telefonoEmpresa: {
       type: "string",
-      label: "Teléfono"
+      label: "Teléfono",
+      uniforms: {
+        placeholder: "01-776-762-52-60"
+      }
     },
     nombreTitularEmpresa: {
       type: "string",
@@ -236,7 +268,38 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
       label: "Puesto"
     }
   },
-  required: ["nombre", "email", "domicilioCP", "opcionElegida", "giroRamoSector"],
+  required: [
+    "lugar",
+    "fecha",
+    "jefeDivision",
+    "periodoProyectado",
+    "numeroResidentes",
+    "carrera",
+    "nombre",
+    "apellidoPaterno",
+    "apellidoMaterno", 
+    "numeroControl", 
+    "email", 
+    "telefonoOcelular",
+    "domicilioCalle",
+    "domicilioNumeroExterior",
+    "domicilioColonia", 
+    "domicilioCP",
+    "ciudad",
+    "opcionElegida", 
+    "giroRamoSector",
+    "nombreEmpresa",
+    "calleEmpresa",
+    "numeroExteriorEmpresa",
+    "coloniaEmpresa",
+    "cpEmpresa",
+    "ciudadEmpresa",
+    "telefonoEmpresa",
+    "nombreTitularEmpresa",
+    "puestoTitularEmpresa",
+    "nombrePersonaAQuienVaPresentacion",
+    "puestoPersonaAQuienVaPresentacion"
+  ],
 };
 
 // Corrected validator function with proper type signature
@@ -245,6 +308,11 @@ function createValidator(schema: object) {
 
   return (model: Record<string, unknown>) => {
     validator(model);
+    const emailErrors = validateEmailPattern(schema, model as FormData);
+    if (emailErrors) {
+      return { details: emailErrors };
+    }
+
     return validator.errors?.length ? { details: validator.errors } : null;
   };
 }

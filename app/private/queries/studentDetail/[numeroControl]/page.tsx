@@ -98,14 +98,14 @@ export default function StudentDetail() {
   }, [objectKey, searchParams]);
 
   return (
-    <div className="container mx-auto p-4 space-y-6">
+    <div className="container mx-auto p-4 space-y-6 sm:px-6 sm:py-16">
       <h1>Detalle de estudiante</h1>
       <Card header="Datos personales" data={personalData} />
       <Card header="Datos de la residencia" data={internshipData} />
       <Card header="Datos de la empresa" data={companyData} />
       <div className="flex justify-center">
         <a href={urlDownload} download>
-          <button className="ui button">Descargar PDF</button>
+          <button className="ui button b-button-primary">Descargar PDF</button>
         </a>
       </div>
     </div>

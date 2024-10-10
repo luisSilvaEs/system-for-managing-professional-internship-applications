@@ -43,7 +43,7 @@ const templateInstructions = (
 
 export default function Home() {
   return (
-    <div>
+    <div className="py-4 sm:px-6 sm:py-32 lg:px-8">
       <StudentForm
         title="Solicitud de residencia profesional"
         instructions={templateInstructions}

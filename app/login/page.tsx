@@ -16,7 +16,7 @@ const password: Field = {
 
 export default function Login() {
   return (
-    <div className="flex items-center justify-center min-h-screen">
+    <div className="flex items-center justify-center h-5/6">
       <div className="rounded-lg border bg-card text-card-foreground shadow-sm w-full max-w-md">
         <div className="flex flex-col space-y-1.5 p-6">
           <h3 className="whitespace-nowrap text-2xl font-semibold leading-none tracking-tight">

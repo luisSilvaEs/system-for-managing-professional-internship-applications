@@ -170,13 +170,25 @@ ol, ul {
 .b-button-primary,
 .b-button-primary.ui.button[type="submit"],
 .b-form-wrapper .b-button-primary.ui.button[type="submit"] {
-  @apply text-white font-semibold text-sm bg-slate-900 rounded-lg hover:bg-slate-700 h-10;
+  @apply text-white font-semibold text-sm bg-slate-900 rounded-lg hover:bg-slate-700 h-10 ;
 }
 
 .b-button-secondary,
 .b-button-secondary.ui.button,
 .b-form-wrapper .b-button-secondary.ui.button {
   @apply inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors h-10;
+}
+
+.b-button-secondary-2 {
+  @apply text-black font-semibold text-sm bg-white rounded-lg border-slate-500 hover:bg-slate-700 h-10;
+}
+
+.b-home-button__primary {
+  @apply w-full flex justify-center align-middle px-4 py-6 text-white hover:text-white font-semibold text-lg bg-slate-900 rounded-lg hover:bg-slate-700
+}
+
+.b-home-button__secondary {
+  @apply flex justify-center align-middle px-4 py-6 text-black hover:text-black font-semibold text-lg bg-white rounded-lg border border-slate-200 hover:bg-slate-200
 }
 
 

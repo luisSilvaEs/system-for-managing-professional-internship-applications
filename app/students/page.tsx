@@ -43,11 +43,13 @@ const templateInstructions = (
 
 export default function Home() {
   return (
-    <div className="py-4 sm:px-6 sm:py-32 lg:px-8">
-      <StudentForm
-        title="Solicitud de residencia profesional"
-        instructions={templateInstructions}
-      />
+    <div className="container max-w-7xl mx-auto">
+      <div className="py-4 sm:px-6 sm:py-32 lg:px-8">
+        <StudentForm
+          title="Solicitud de residencia profesional"
+          instructions={templateInstructions}
+        />
+      </div>
     </div>
   );
 }

@@ -101,7 +101,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     return (
       <input
         type="submit"
-        className="ui button"
+        className="ui button b-button-primary xs:w-full md:w-1/12"
         value="Enviar"
         onClick={() => {
           searchMissingFields();
@@ -120,7 +120,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     return (
       <button
         type="button"
-        className="ui button"
+        className="ui button b-button-secondary"
         onClick={handleReset}
         disabled={isLoading}
       >
@@ -260,8 +260,10 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
             />
           </div>
         </div>
-        <SubmitFieldCustom />
-        <ClearFieldsButton />
+        <div className="sm:mt-4 md:mt-10 b-form__buttons">
+          <ClearFieldsButton />
+          <SubmitFieldCustom />
+        </div>
       </div>
     </AutoForm>
   );

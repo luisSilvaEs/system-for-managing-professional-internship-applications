@@ -191,6 +191,9 @@ ol, ul {
   @apply flex justify-center align-middle px-4 py-6 text-black hover:text-black font-semibold text-lg bg-white rounded-lg border border-slate-200 hover:bg-slate-200
 }
 
+footer a {
+  @apply text-black text-lg;
+}
 
 
 

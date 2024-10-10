@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaGithub, FaLinkedin } from "react-icons/fa";
 
 export default function Footer() {
   return (
@@ -12,7 +13,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            GitHub
+            <FaGithub />
           </Link>{" "}
           <Link
             href="https://www.linkedin.com/in/luis-silva-es/"
@@ -20,7 +21,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             className="text-primary hover:underline"
           >
-            LinkedIn
+            <FaLinkedin />
           </Link>
         </div>
         <div>&copy; {new Date().getFullYear()} All rights reserved</div>

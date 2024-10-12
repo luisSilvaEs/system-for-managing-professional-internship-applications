@@ -1,10 +1,9 @@
 import React from "react";
-import Link from "next/link";
 
 const LegalNotice = () => {
   return (
-    <div className="h-5/6 bg-background flex flex-col items-center justify-center p-4">
-      <div className="max-w-md w-full space-y-8">
+    <div className="bg-background flex flex-col items-center justify-center p-4 mt-12 md:mt-16">
+      <div className="max-w-md scroll-auto">
         <h1>Aviso Legal</h1>
         <p>
           La presente aplicación ha sido desarrollada de manera gratuita para el

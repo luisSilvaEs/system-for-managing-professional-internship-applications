@@ -4,6 +4,7 @@ import { Menu, MenuButton, MenuItem, MenuItems } from "@headlessui/react";
 import { FaUserCircle, FaChevronDown } from "react-icons/fa";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { handleLogout } from "@/security/logout";
 
 export default function Header() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -71,6 +72,7 @@ export default function Header() {
                   <form action="#" method="POST">
                     <MenuItem>
                       <button
+                        onClick={handleLogout}
                         type="submit"
                         className="block w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                       >

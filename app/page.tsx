@@ -29,11 +29,11 @@ const HomePage = () => {
           </div>
         </div>
         <p className="mt-8 text-center text-sm text-muted-foreground">
-          Para estudiantes: Use el botón "Formulario Estudiantes" para llenar y
-          enviar su aplicación para residencias.
+          Para estudiantes: Use el botón &quot;Formulario Estudiantes&quot; para
+          llenar y enviar su aplicación para residencias.
           <br />
-          Para administrador: Use el botón "Admin Ingreso" o "Admin Registro"
-          para acceder al sistema.
+          Para administrador: Use el botón &quot;Admin Ingreso&quot; o
+          &quot;Admin Registro&quot; para acceder al sistema.
         </p>
       </div>
     </div>

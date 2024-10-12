@@ -22,7 +22,6 @@ export default function RootLayout({
       <body
         className={`${inter.className} h-full bg-white text-black mx-auto px-2 `}
       >
-        {<Header />}
         {children}
         {<Footer />}
       </body>

@@ -30,12 +30,19 @@ export async function POST(request: NextRequest) {
     
     const token = jwt.sign({ userId: Item.email }, JWT_SECRET, { expiresIn: '1h' });
 
-    const response = NextResponse.json({ success: true });
+    const response = NextResponse.json({
+      success: true,
+      token,
+      name: Item.name,      // Add user's name to the response
+      lastName: Item.fatherName // Add user's lastName to the response
+    });
+
     response.cookies.set('token', token, {
       httpOnly: true,
       path: '/',
       maxAge: 60 * 60, // 1 hour
     });
+    
     console.log(`Response-> ${response.cookies}`);
     
     //return NextResponse.json({ success: true });

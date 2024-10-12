@@ -27,6 +27,10 @@ const LoginForm = ({ email, password }: LoginFields) => {
         body: JSON.stringify(data, null, 2),
       });
       if (response.ok) {
+        const data = await response.json();
+        const userInfo = { name: data.name, lastName: data.lastName };
+        localStorage.setItem("userInfo", JSON.stringify(userInfo));
+
         console.log("Redirect to /private/queries");
         router.push("/private/queries");
       } else {

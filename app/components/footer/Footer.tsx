@@ -24,7 +24,15 @@ export default function Footer() {
             <FaLinkedin />
           </Link>
         </div>
-        <div>&copy; {new Date().getFullYear()} All rights reserved</div>
+        <div>&copy; {new Date().getFullYear()} All rights reserved</div>{" "}
+        <Link
+          href="/legal-notice"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-primary hover:underline text-sm"
+        >
+          Aviso de privacidad
+        </Link>
       </div>
     </footer>
   );

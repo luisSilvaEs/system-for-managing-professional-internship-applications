@@ -36,7 +36,7 @@ export default function Header() {
             </h1>
             <Menu as="div" className="relative inline-block text-left">
               <div>
-                <MenuButton className="flex w-full justify-center place-items-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold rounded-md text-gray-900 border-0 hover:bg-gray-100">
+                <MenuButton className="b-header__button">
                   <FaUserCircle style={{ color: "gray", fontSize: "40px" }} />
                   <span>{loggedUser.name + " " + loggedUser.lastName}</span>
                   <FaChevronDown />

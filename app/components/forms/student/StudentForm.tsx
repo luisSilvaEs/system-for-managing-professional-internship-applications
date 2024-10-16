@@ -7,6 +7,7 @@ import {
   ErrorField,
   TextField,
   RadioField,
+  NumField,
 } from "uniforms-semantic";
 import { Context, UnknownObject, useForm } from "uniforms";
 import { bridge as schema } from "./studentSchema";
@@ -165,7 +166,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
         </div>
         <div className="b-form-group b-form-group--horizontal">
           <AutoField name="periodoProyectado" value={getCustomDateRange()} />
-          <AutoField name="numeroResidentes" />
+          <NumField name="numeroResidentes" />
         </div>
         <h3>Datos del (a) residente</h3>
         <div className="b-form-group b-form-group--vertical">
@@ -179,7 +180,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="carrera" />
-            <AutoField name="numeroControl" className="w-1/6" />
+            <NumField name="numeroControl" className="w-1/6" />
           </div>
           <hr />
           <h4 className="text-center uppercase">Domicilio</h4>
@@ -192,13 +193,13 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="domicilioColonia" />
-            <AutoField name="domicilioCP" />
+            <NumField name="domicilioCP" />
             <ErrorField name="domicilioCP" />
             <AutoField name="ciudad" />
           </div>
           <hr />
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="telefonoOcelular" />
+            <NumField name="telefonoOcelular" />
             <div className="b-form__error-wrapper">
               <AutoField name="email" />
               <ErrorField name="email" />
@@ -239,10 +240,10 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="coloniaEmpresa" />
-            <AutoField name="cpEmpresa" />
+            <NumField name="cpEmpresa" />
             <ErrorField name="cpEmpresa" />
             <AutoField name="ciudadEmpresa" />
-            <AutoField name="telefonoEmpresa" />
+            <NumField name="telefonoEmpresa" />
           </div>
           <hr />
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">

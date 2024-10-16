@@ -25,7 +25,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto b-table-container">
       <table className="min-w-full bg-white">
         <thead>
           <tr className="w-full bg-gray-200 text-gray-600 uppercase text-sm leading-normal">

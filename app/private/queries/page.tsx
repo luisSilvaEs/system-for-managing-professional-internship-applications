@@ -7,7 +7,7 @@ const QueriesPage = () => {
   return (
     <>
       <Header />
-      <div className="container mx-auto p-4 space-y-4 py-4 sm:px-6 sm:py-16">
+      <div className="container mx-auto p-4 space-y-4 py-4">
         <h1>Buscador</h1>
         <p>
           Busca por nombre, apellidos de alumno, número de control o utilice

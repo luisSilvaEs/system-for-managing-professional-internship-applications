@@ -215,6 +215,11 @@ ol, ul {
   @apply flex justify-center align-middle px-4 py-6 text-black hover:text-black font-semibold text-lg bg-white rounded-lg border border-slate-200 hover:bg-slate-200
 }
 
+.b-table-container {
+  width: 100%;
+  overflow-x: auto;
+}
+
 .b-header__button {
   @apply flex w-full justify-center place-items-center gap-x-1.5 bg-white px-3 py-2 text-sm font-semibold rounded-md text-gray-900 border-0 hover:bg-gray-100;
 }

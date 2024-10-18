@@ -11,7 +11,9 @@ const QueriesPage = () => {
         <h1>Buscador</h1>
         <p>
           Busca por nombre, apellidos de alumno, número de control o utilice
-          alguno de los dropdowns
+          alguno de los dropdowns. <br />
+          Para visualizar toda la información de un alumno en particular, haga
+          clic en la fila correspondiente a dicho alumno.
         </p>
         <Filter />
       </div>

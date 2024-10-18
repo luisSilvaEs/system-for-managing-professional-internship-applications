@@ -194,7 +194,7 @@ ol, ul {
 .b-button-primary,
 .b-button-primary.ui.button[type="submit"],
 .b-form-wrapper .b-button-primary.ui.button[type="submit"] {
-  @apply text-white dark:text-black font-semibold text-sm bg-slate-900 dark:bg-slate-50 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 h-10 ;
+  @apply text-white dark:text-black font-semibold text-sm bg-slate-900 dark:bg-slate-50 rounded-lg hover:bg-slate-700 dark:hover:bg-slate-300 h-10;
 }
 
 .b-button-secondary,
@@ -205,6 +205,11 @@ ol, ul {
 
 .b-button-secondary-2 {
   @apply text-black font-semibold text-sm bg-white rounded-lg border-slate-500 hover:bg-slate-700 h-10;
+}
+
+.b-button-download,
+.ui.button.b-button-download {
+  @apply text-white hover:text-white dark:text-black font-semibold text-sm bg-blue-500 dark:bg-blue-50 rounded-lg hover:bg-blue-700 dark:hover:bg-blue-300 h-10;
 }
 
 .b-home-button__primary {

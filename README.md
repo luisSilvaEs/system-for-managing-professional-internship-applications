@@ -75,6 +75,15 @@ This application should have:
 ```bash
 /internship-applications
 ├── /app
+│   ├── /api
+│   │   ├── /email
+│   │   │   └── route.ts             // API route to handle form submission and store data in DynamoDB
+│   │   ├── /login
+│   │   │   └── route.ts             // API route for handling user login
+│   │   ├── /logout
+│   │   │   └── route.ts
+│   │   └── /register
+│   │       └── route.ts
 │   ├── /components
 │   │   ├── /button
 │   │   │   └── Button.tsx
@@ -95,8 +104,8 @@ This application should have:
 │   │   │   │     ├── RegisterForm.tsx
 │   │   │   │     └── registerScheme.ts
 │   │   │   └── /student
-│   │   │   │     ├── StudentForm.tsx
-│   │   │   │     └── studentScheme.ts
+│   │   │         ├── StudentForm.tsx
+│   │   │         └── studentScheme.ts
 │   │   ├── /header
 │   │   │   └── Header.tsx
 │   │   ├── /select
@@ -116,11 +125,6 @@ This application should have:
 │   │   │   └── page.tsx               // First private page
 │   │   └── /page2
 │   │       └── page.tsx               // Second private page
-│   ├── /api
-│   │   ├── /email
-│   │   │   └── route.ts             // API route to handle form submission and store data in DynamoDB
-│   │   └── /auth
-│   │       └── login.ts              // API route for handling user login
 │   └── layout.ts                     // Custom layout component for all pages
 ├── /lib
 │   ├── dynamodb.ts                   // Utility to interact with DynamoDB

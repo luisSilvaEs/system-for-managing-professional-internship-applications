@@ -133,7 +133,7 @@ const Filter = () => {
 
   return (
     <div>
-      <div className="flex flex-col md:flex-row gap-4">
+      <div className="flex flex-col md:flex-row gap-4 pb-5">
         <input
           id="price"
           name="price"
@@ -154,7 +154,7 @@ const Filter = () => {
           placeholder={placeholderSelectPeriod}
         />
       </div>
-      <div className="flex flex-col md:flex-row gap-4 justify-end">
+      <div className="flex flex-col md:flex-row gap-4 justify-end py-6">
         <button
           onClick={resetFilters}
           className="px-4 py-2 text-sm font-semibold leading-6 text-gray-900 bg-slate-100 rounded hover:bg-slate-300"

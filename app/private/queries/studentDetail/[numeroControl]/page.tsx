@@ -108,7 +108,7 @@ export default function StudentDetail() {
         <Card header="Datos de la empresa" data={companyData} />
         <div className="flex justify-center">
           <a href={urlDownload} download>
-            <button className="ui button b-button-primary">
+            <button className="ui button b-button-download">
               Descargar PDF
             </button>
           </a>

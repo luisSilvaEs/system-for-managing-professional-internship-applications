@@ -1,8 +1,7 @@
-"use client"; // Ensure the component is client-side
-
-import { useRouter } from "next/navigation"; // Directly import useRouter
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { CleanedItem } from "@/types/student";
+import { FaSortUp, FaSortDown } from "react-icons/fa"; // Import sort icons
 
 interface TableProps {
   list: CleanedItem[];
@@ -11,32 +10,84 @@ interface TableProps {
 
 const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
   const [currentPage, setCurrentPage] = useState(1);
-  const totalPages = Math.ceil(list.length / rowsPerPage);
+  const [sortColumn, setSortColumn] = useState<string | null>(null);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
 
+  const totalPages = Math.ceil(list.length / rowsPerPage);
   const indexOfLastRow = currentPage * rowsPerPage;
   const indexOfFirstRow = indexOfLastRow - rowsPerPage;
-  const currentData = list.slice(indexOfFirstRow, indexOfLastRow);
-
-  const paginate = (pageNumber: number) => setCurrentPage(pageNumber);
 
   const router = useRouter();
+
   const handleRowClick = (numeroControl: string, id: number) => {
-    router.push(`/private/queries/studentDetail/${numeroControl}?id=${id}`); // Navigate to the dynamic page
+    router.push(`/private/queries/studentDetail/${numeroControl}?id=${id}`);
   };
+
+  const sortData = (data: CleanedItem[]) => {
+    if (!sortColumn) return data;
+
+    const sortedData = [...data].sort((a, b) => {
+      const valueA = a[sortColumn as keyof CleanedItem]
+        ?.toString()
+        .toLowerCase();
+      const valueB = b[sortColumn as keyof CleanedItem]
+        ?.toString()
+        .toLowerCase();
+
+      if (sortDirection === "asc") {
+        return valueA > valueB ? 1 : -1;
+      } else {
+        return valueA < valueB ? 1 : -1;
+      }
+    });
+
+    return sortedData;
+  };
+
+  const toggleSortDirection = (column: string) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortDirection("asc");
+    }
+  };
+
+  const sortedData = sortData(list);
+  const currentData = sortedData.slice(indexOfFirstRow, indexOfLastRow);
 
   return (
     <div className="container mx-auto b-table-container">
       <table className="min-w-full bg-white">
         <thead>
           <tr className="w-full bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
-            <th className="py-3 px-6 text-left">Num. de Control</th>
-            <th className="py-3 px-6 text-left">Nombre(s)</th>
-            <th className="py-3 px-6 text-left">Apellido Paterno</th>
-            <th className="py-3 px-6 text-left">Apellido Materno</th>
-            <th className="py-3 px-6 text-left">Carrera</th>
-            <th className="py-3 px-6 text-left">Periodo</th>
-            <th className="py-3 px-6 text-left">Telefono</th>
-            <th className="py-3 px-6 text-left">Empresa</th>
+            {[
+              { label: "Num. de Control", key: "numeroControl" },
+              { label: "Nombre(s)", key: "nombre" },
+              { label: "Apellido Paterno", key: "apellidoPaterno" },
+              { label: "Apellido Materno", key: "apellidoMaterno" },
+              { label: "Carrera", key: "carreraResidente" },
+              { label: "Periodo", key: "periodo" },
+              { label: "Telefono", key: "telefono" },
+              { label: "Empresa", key: "nombreEmpresa" },
+            ].map(({ label, key }) => (
+              <th
+                key={key}
+                className="py-3 px-6 text-left cursor-pointer"
+                onClick={() => toggleSortDirection(key)}
+                title={`Presione aquí para ordenar por ${label}`}
+              >
+                <div className="flex items-center">
+                  {label}
+                  {sortColumn === key &&
+                    (sortDirection === "asc" ? (
+                      <FaSortUp className="ml-2" />
+                    ) : (
+                      <FaSortDown className="ml-2" />
+                    ))}
+                </div>
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody className="text-gray-600 text-sm font-light">
@@ -52,9 +103,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
                   )
                 }
               >
-                <td className="border-b border-gray-200 hover:bg-gray-100">
-                  {item.numeroControl}
-                </td>
+                <td className="py-3 px-6 text-left">{item.numeroControl}</td>
                 <td className="py-3 px-6 text-left">{item.nombre}</td>
                 <td className="py-3 px-6 text-left">{item.apellidoPaterno}</td>
                 <td className="py-3 px-6 text-left">{item.apellidoMaterno}</td>
@@ -65,10 +114,10 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
               </tr>
             ))
           ) : (
-            <tr className="w-full ">
+            <tr className="w-full">
               <td
                 className="w-full"
-                colSpan={10}
+                colSpan={8}
                 style={{ textAlign: "center", height: "100px" }}
               >
                 <div className="grid place-items-center">
@@ -85,7 +134,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
           className={`px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700 ${
             currentPage === 1 && "opacity-50 cursor-not-allowed"
           }`}
-          onClick={() => paginate(currentPage - 1)}
+          onClick={() => setCurrentPage(currentPage - 1)}
           disabled={currentPage === 1}
         >
           Pag. previa
@@ -98,7 +147,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
           className={`px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-700 ${
             currentPage === totalPages && "opacity-50 cursor-not-allowed"
           }`}
-          onClick={() => paginate(currentPage + 1)}
+          onClick={() => setCurrentPage(currentPage + 1)}
           disabled={currentPage === totalPages}
         >
           Siguiente

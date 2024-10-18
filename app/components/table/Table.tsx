@@ -40,26 +40,43 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
           </tr>
         </thead>
         <tbody className="text-gray-600 text-sm font-light">
-          {currentData.map((item: CleanedItem) => (
-            <tr
-              key={item.id}
-              className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
-              onClick={() =>
-                handleRowClick(item.numeroControl as string, item.id as number)
-              }
-            >
-              <td className="border-b border-gray-200 hover:bg-gray-100">
-                {item.numeroControl}
+          {currentData.length > 0 ? (
+            currentData.map((item: CleanedItem) => (
+              <tr
+                key={item.id}
+                className="border-b border-gray-200 hover:bg-gray-100 cursor-pointer"
+                onClick={() =>
+                  handleRowClick(
+                    item.numeroControl as string,
+                    item.id as number
+                  )
+                }
+              >
+                <td className="border-b border-gray-200 hover:bg-gray-100">
+                  {item.numeroControl}
+                </td>
+                <td className="py-3 px-6 text-left">{item.nombre}</td>
+                <td className="py-3 px-6 text-left">{item.apellidoPaterno}</td>
+                <td className="py-3 px-6 text-left">{item.apellidoMaterno}</td>
+                <td className="py-3 px-6 text-left">{item.carreraResidente}</td>
+                <td className="py-3 px-6 text-left">{item.periodo}</td>
+                <td className="py-3 px-6 text-left">{item.telefono}</td>
+                <td className="py-3 px-6 text-left">{item.nombreEmpresa}</td>
+              </tr>
+            ))
+          ) : (
+            <tr className="w-full ">
+              <td
+                className="w-full"
+                colSpan={10}
+                style={{ textAlign: "center", height: "100px" }}
+              >
+                <div className="grid place-items-center">
+                  No se encontraron solicitudes en la base de datos
+                </div>
               </td>
-              <td className="py-3 px-6 text-left">{item.nombre}</td>
-              <td className="py-3 px-6 text-left">{item.apellidoPaterno}</td>
-              <td className="py-3 px-6 text-left">{item.apellidoMaterno}</td>
-              <td className="py-3 px-6 text-left">{item.carreraResidente}</td>
-              <td className="py-3 px-6 text-left">{item.periodo}</td>
-              <td className="py-3 px-6 text-left">{item.telefono}</td>
-              <td className="py-3 px-6 text-left">{item.nombreEmpresa}</td>
             </tr>
-          ))}
+          )}
         </tbody>
       </table>
       <div className="flex justify-between items-center my-4">

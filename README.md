@@ -76,10 +76,33 @@ This application should have:
 /internship-applications
 ├── /app
 │   ├── /components
-│   │   ├── StudentForm.tsx            // Component for the student application form
-│   │   ├── LoginForm.tsx              // Component for the login form
-│   │   ├── DashboardButtons.tsx       // Component to display buttons on the dashboard
-│   │   └── PrivatePageLayout.tsx      // Layout component for private pages
+│   │   ├── /button
+│   │   │   └── Button.tsx
+│   │   ├── /card
+│   │   │   └── Card.tsx
+│   │   ├── /error
+│   │   │   └── Error.tsx
+│   │   ├── /filter
+│   │   │   ├── Filter.tsx
+│   │   │   └── utilities.ts
+│   │   ├── /footer
+│   │   │   └── Footer.tsx
+│   │   ├── /forms
+│   │   │   ├── /login
+│   │   │   │     ├── LoginForm.tsx
+│   │   │   │     └── loginScheme.ts
+│   │   │   ├── /register
+│   │   │   │     ├── RegisterForm.tsx
+│   │   │   │     └── registerScheme.ts
+│   │   │   └── /student
+│   │   │   │     ├── StudentForm.tsx
+│   │   │   │     └── studentScheme.ts
+│   │   ├── /header
+│   │   │   └── Header.tsx
+│   │   ├── /select
+│   │   │   └── Select.tsx
+│   │   ├── /table
+│   │   │   └── Table.tsx
 │   ├── /students
 │   │   ├── page.tsx                   // Public page with the form for student applications
 │   │   └── /success

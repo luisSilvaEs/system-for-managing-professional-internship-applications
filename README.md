@@ -75,47 +75,74 @@ This application should have:
 ```bash
 /internship-applications
 ├── /app
-│   ├── /components
-│   │   ├── StudentForm.tsx            // Component for the student application form
-│   │   ├── LoginForm.tsx              // Component for the login form
-│   │   ├── DashboardButtons.tsx       // Component to display buttons on the dashboard
-│   │   └── PrivatePageLayout.tsx      // Layout component for private pages
-│   ├── /students
-│   │   ├── page.tsx                   // Public page with the form for student applications
-│   │   └── /success
-│   │       └── page.tsx               // Public page for successful submission redirect
-│   ├── /private
-│   │   ├── /login
-│   │   │   └── page.tsx               // Login page for private user type
-│   │   ├── /dashboard
-│   │   │   └── page.tsx               // Dashboard page after login with buttons to other private pages
-│   │   ├── /page1
-│   │   │   └── page.tsx               // First private page
-│   │   └── /page2
-│   │       └── page.tsx               // Second private page
-│   ├── /api
+│   ├── /amplify         // Created when running `amplify init`. Serves as the central hub for managing AWS cloud resources.
+│   ├── /api             // Folder and its content are created manually by the developer and contain the application endpoints.
 │   │   ├── /email
-│   │   │   └── route.ts             // API route to handle form submission and store data in DynamoDB
-│   │   └── /auth
-│   │       └── login.ts              // API route for handling user login
-│   └── layout.ts                     // Custom layout component for all pages
+│   │   │   └── route.ts             // API route responsible for sending an email to the Director and saving data to DynamoDB.
+│   │   ├── /login
+│   │   │   └── route.ts             // API route for handling user login.
+│   │   ├── /logout
+│   │   │   └── route.ts             // API route for handling user logout.
+│   │   └── /register
+│   │       └── route.ts             // API route for registering a new user.
+│   ├── /components        // Folder and its content are created manually by the developer. Contains all UI components.
+│   │   ├── /button
+│   │   │   └── Button.tsx
+│   │   ├── /card
+│   │   │   └── Card.tsx
+│   │   ├── /error
+│   │   │   └── Error.tsx
+│   │   ├── /filter
+│   │   │   ├── Filter.tsx     // Filter UI, uses a StudentFilter instance to handle filtering. Calls Select and Table components.
+│   │   │   └── utilities.ts   // Filter controller, StudentFilter definition using a Facade pattern allowing multiple instances.
+│   │   ├── /footer
+│   │   │   └── Footer.tsx
+│   │   ├── /forms
+│   │   │   ├── /login
+│   │   │   │     ├── LoginForm.tsx
+│   │   │   │     └── loginSchema.ts
+│   │   │   ├── /register
+│   │   │   │     ├── RegisterForm.tsx
+│   │   │   │     └── registerSchema.ts
+│   │   │   └── /student
+│   │   │         ├── StudentForm.tsx
+│   │   │         └── studentSchema.ts
+│   │   ├── /header
+│   │   │   └── Header.tsx
+│   │   ├── /select
+│   │   │   └── Select.tsx
+│   │   ├── /table
+│   │   │   └── Table.tsx
+│   ├── /students
+│   │   ├── page.tsx                   // Public page with the form for student applications.
+│   │   └── /success
+│   │       └── page.tsx               // Public page for successful submission redirect.
+│   ├── /private                       // Private pages, only accessible after successful login.
+│   │   ├── /queries
+│   │   │     ├── page.tsx             // Page for the Director to search student applications stored in the system.
+│   │   │     └── /studentDetail
+│   │   │           └── /[numeroControl]  // This folder [syntax] is used to dynamically generate a number in the URL.
+│   │   │                 └── page.tsx
+│   ├── /register
+│   │     └── page.tsx                 // Public page containing the RegisterForm component. Its URL is: /register.
+│   ├── /page.tsx                      // HOME PAGE, main page.
+│   └── layout.ts                      // Custom layout component for all pages.
 ├── /lib
-│   ├── dynamodb.ts                   // Utility to interact with DynamoDB
-│   └── email.ts                      // Utility to send emails
-├── /utils
-│   ├── auth.ts                       // Utility functions for authentication
-│   └── validate.ts                   // Utility for form validation
-├── /styles
-│   ├── globals.css                   // Global styles
-│   └── StudentForm.module.css        // Styles specific to StudentForm component
-├── /public
-│   └── favicon.ico                   // Favicon and other static assets
+│   ├── dynamodb.ts                   // Utility to interact with DynamoDB.
+│   └── email.ts                      // Utility to send emails.
+├── /security
+│   ├── logout.ts                     // Function to fetch the logout route, clear localStorage, and redirect to the login page.
+│   └── password.ts                   // Utility to hash passwords before saving them in DynamoDB.
 ├── /types
-│   ├── student.ts                    // Type definitions related to students (e.g., StudentDynamoDB, CleanedItem)
-├── .env                              // Environment variables for sensitive data
-├── .gitignore                        // Git ignore file
-├── package.tson                      // Project dependencies and scripts
-└── README.md                         // Project documentation
+│   ├── login.ts                      // Type definitions related to login (e.g., LoginData, CleanedItem).
+│   └── student.ts                    // Type definitions related to students (e.g., StudentDynamoDB, StudentFormData).
+├── /public
+│   └── favicon.ico                   // Favicon and other static assets.
+├── .env.local                        // Environment variables for sensitive data.
+├── .gitignore                        // Git ignore file.
+├── middleware.ts                     // Middleware configuration file.
+├── package.json                      // Project dependencies and scripts, created by `npx create-next-app`.
+└── README.md                         // Project documentation.
 ```
 
 ## Deployment to AWS Amplify

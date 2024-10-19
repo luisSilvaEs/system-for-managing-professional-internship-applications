@@ -117,31 +117,36 @@ This application should have:
 │   │   └── /success
 │   │       └── page.tsx               // Public page for successful submission redirect
 │   ├── /private
-│   │   ├── /login
-│   │   │   └── page.tsx               // Login page for private user type
-│   │   ├── /dashboard
-│   │   │   └── page.tsx               // Dashboard page after login with buttons to other private pages
-│   │   ├── /page1
-│   │   │   └── page.tsx               // First private page
-│   │   └── /page2
-│   │       └── page.tsx               // Second private page
+│   │   ├── /queries
+│   │   │     ├── page.tsx
+│   │   │     └── /studentDetail
+│   │   │           └── /[numeroControl]               // Dashboard page after login with buttons to other private pages
+│   │   │                 └── page.tsx
+│   │   └── /studentDetail
+│   │          └── /[numeroControl]               // Dashboard page after login with buttons to other private pages
+│   │                └── page.tsx
+│   ├── /register
+│   │     └── page.tsx
+│   ├── /students
+│   │    ├── page.tsx
+│   │    └── /success               // Dashboard page after login with buttons to other private pages
+│   │         └── page.tsx
 │   └── layout.ts                     // Custom layout component for all pages
 ├── /lib
 │   ├── dynamodb.ts                   // Utility to interact with DynamoDB
 │   └── email.ts                      // Utility to send emails
-├── /utils
+├── /security
 │   ├── auth.ts                       // Utility functions for authentication
 │   └── validate.ts                   // Utility for form validation
-├── /styles
-│   ├── globals.css                   // Global styles
-│   └── StudentForm.module.css        // Styles specific to StudentForm component
+├── /types
+│   ├── login.ts                    // Type definitions related to students (e.g., StudentDynamoDB, CleanedItem)
+│   └── student.ts
 ├── /public
 │   └── favicon.ico                   // Favicon and other static assets
-├── /types
-│   ├── student.ts                    // Type definitions related to students (e.g., StudentDynamoDB, CleanedItem)
-├── .env                              // Environment variables for sensitive data
+├── .env.local                        // Environment variables for sensitive data
 ├── .gitignore                        // Git ignore file
-├── package.tson                      // Project dependencies and scripts
+├── middleware.ts                     // Git ignore file
+├── package.tson                      // Project dependencies and scripts, created by npx create-next-app
 └── README.md                         // Project documentation
 ```
 

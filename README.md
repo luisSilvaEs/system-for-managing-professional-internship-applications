@@ -331,6 +331,16 @@ _For development and QA environments, this is all that is needed to send and rec
 
 _IMPORTANT: to debug and see any error or logs, navigate to **Hosting > Monitoring > Hosting compute logs** and click on the link below **CloudWatch log streams**_
 
+#### Testing
+
+##### Unit testing: Jest
+
+To run all tests, use:
+
+```bash
+npm run test
+```
+
 ## References
 
 - [Crea Aplicacion en tiempo Record con Nextjs y AWS Amplify (Gen2)](https://www.youtube.com/watch?v=EJjiK16Lw_8&t=829s)
@@ -338,3 +348,4 @@ _IMPORTANT: to debug and see any error or logs, navigate to **Hosting > Monitori
 - [Why I love AWS Amplify - Deploy Next.js (T3 Stack) in 5 minutes](https://www.youtube.com/watch?v=0B-hMvMggm8)
 - [Uniforms - Basic uniforms usage](https://uniforms.tools/docs/tutorials-basic-uniforms-usage/)
 - [`NextRouter` was not mounted](https://nextjs.org/docs/messages/next-router-not-mounted)
+- [Next.js Jest test, extended-expect](https://nextjs.org/docs/app/building-your-application/testing/jest)

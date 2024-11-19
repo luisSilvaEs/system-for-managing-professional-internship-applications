@@ -7,4 +7,28 @@ describe("Card Component", () => {
     const headerElement = screen.getByText(/Header sample/i);
     expect(headerElement).toBeInTheDocument();
   });
+
+  it("renders data", () => {
+    const data = [
+      {
+        label: "Sample label",
+        paragraph: "Paragraph sample text lorem ipsum",
+      },
+      { label: "Label 2", paragraph: "Paragraph 2" },
+    ];
+    render(<Card header="Header sample" data={data} />);
+    const firstLabel = screen.getByText(/Sample label/i);
+    const firstParagraph = screen.getByText(
+      /Paragraph sample text lorem ipsum/i
+    );
+
+    expect(firstLabel).toBeInTheDocument();
+    expect(firstParagraph).toBeInTheDocument();
+  });
+
+  it("shows loading state when data is null", () => {
+    render(<Card header="Loading Card" data={null} />);
+    const loadingElements = screen.getAllByTestId("loading");
+    expect(loadingElements.length).toBeGreaterThan(0);
+  });
 });

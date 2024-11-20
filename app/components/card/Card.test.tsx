@@ -17,13 +17,18 @@ describe("Card Component", () => {
       { label: "Label 2", paragraph: "Paragraph 2" },
     ];
     render(<Card header="Header sample" data={data} />);
+
     const firstLabel = screen.getByText(/Sample label/i);
     const firstParagraph = screen.getByText(
       /Paragraph sample text lorem ipsum/i
     );
+    const secondLabel = screen.getByText(/Label 2/i);
+    const secondParagraph = screen.getByText(/Paragraph 2/i);
 
     expect(firstLabel).toBeInTheDocument();
     expect(firstParagraph).toBeInTheDocument();
+    expect(secondLabel).toBeInTheDocument();
+    expect(secondParagraph).toBeInTheDocument();
   });
 
   it("shows loading state when data is null", () => {

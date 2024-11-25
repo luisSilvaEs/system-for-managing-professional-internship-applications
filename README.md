@@ -335,6 +335,16 @@ _IMPORTANT: to debug and see any error or logs, navigate to **Hosting > Monitori
 
 ##### Unit testing: Jest
 
+###### Initial set up
+
+1. Install following dependencies:
+
+```bash
+jest jest-environment-jsdom @testing-library/react @testing-library/dom @testing-library/jest-dom
+```
+
+and babel
+
 To run all tests, use:
 
 ```bash

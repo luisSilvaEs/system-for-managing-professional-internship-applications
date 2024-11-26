@@ -351,6 +351,12 @@ To run all tests, use:
 npm run test
 ```
 
+To run a specific test by file name you can use regex
+
+```bash
+npm test -- Filename.test
+```
+
 ## References
 
 - [Crea Aplicacion en tiempo Record con Nextjs y AWS Amplify (Gen2)](https://www.youtube.com/watch?v=EJjiK16Lw_8&t=829s)

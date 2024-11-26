@@ -13,4 +13,5 @@ module.exports = {
       tsconfig: '<rootDir>/tsconfig.jest.json',
     },
   },
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
 };

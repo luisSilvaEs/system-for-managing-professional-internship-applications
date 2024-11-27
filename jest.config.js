@@ -7,10 +7,12 @@ module.exports = {
   },
   moduleNameMapper: {
     '\\.(css|less|scss|sass)$': 'identity-obj-proxy',
+    "^@/(.*)$": "<rootDir>/$1",
   },
   globals: {
     'ts-jest': {
       tsconfig: '<rootDir>/tsconfig.jest.json',
     },
   },
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"],
 };

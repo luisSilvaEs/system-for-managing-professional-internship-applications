@@ -82,7 +82,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
     const { error } = useForm(); //The useForm() hook from uniforms provides access to the current state of the form.
 
     const searchMissingFields = () => {
-      console.log("Hello world!!", error);
+      console.log("Running searchMissingFields function", error);
       if (!!error && (error as any).details) {
         const errorList = (error as any).details.map((err: any) => {
           return err.params.missingProperty;
@@ -180,7 +180,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
           </div>
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
             <AutoField name="carrera" />
-            <NumField name="numeroControl" className="w-1/6" />
+            <AutoField name="numeroControl" className="w-1/6" />
           </div>
           <hr />
           <h4 className="text-center uppercase">Domicilio</h4>
@@ -199,7 +199,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
           </div>
           <hr />
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <NumField name="telefonoOcelular" />
+            <AutoField name="telefonoOcelular" />
             <div className="b-form__error-wrapper">
               <AutoField name="email" />
               <ErrorField name="email" />
@@ -243,7 +243,7 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
             <NumField name="cpEmpresa" />
             <ErrorField name="cpEmpresa" />
             <AutoField name="ciudadEmpresa" />
-            <NumField name="telefonoEmpresa" />
+            <AutoField name="telefonoEmpresa" />
           </div>
           <hr />
           <div className="b-form-group b-form-group--horizontal b-form-group--borderless">

@@ -1,6 +1,7 @@
 "use client";
 
 import React, { Children, ReactElement, useState, useRef } from "react";
+import ConfirmationModal from "./ConfirmationModal";
 import {
   AutoField,
   AutoForm,
@@ -43,6 +44,8 @@ type FormData = {
 const StudentForm = ({ title, summary, instructions }: PropsForm) => {
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [formData, setFormData] = useState<any>(null);
   const formRef = useRef<any>(null);
 
   const handlerSubmit = async (data: any) => {
@@ -64,18 +67,31 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
         alert("Formulario enviado exitosamente!");
         router.push("/students/success"); // Redirect to success page
       } else {
-        console.error(
-          "Check Amplify Hosting compute logs, there was an error with the email recipient. Probably email recipient is not registered or verified in Amazon SES Sandbox"
-        );
+        console.error("Error: Check Amplify Hosting compute logs.");
         alert(
-          "Falla al intentar enviar el formulario, favor de intentar mas tarde."
+          "Falla al intentar enviar el formulario, favor de intentar más tarde."
         );
       }
     } catch (error) {
-      throw new Error("Failed to submit application. Please try again.");
+      console.error("Submission error:", error);
+      alert("Ocurrió un error al enviar el formulario. Intenta nuevamente.");
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSubmit = (data: any) => {
+    setFormData(data); // Store form data for confirmation
+    setIsModalOpen(true); // Open confirmation modal
+  };
+
+  const handleCancel = () => {
+    setIsModalOpen(false); // Close modal if user cancels
+  };
+
+  const handleConfirm = () => {
+    handlerSubmit(formData); // Submit the form data
+    setIsModalOpen(false); // Close modal after confirmation
   };
 
   const SubmitFieldCustom = () => {
@@ -131,142 +147,147 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
   };
 
   return (
-    <AutoForm
-      schema={schema}
-      onSubmit={(data) => handlerSubmit(data)}
-      ref={formRef}
-    >
-      {isLoading && (
-        <div className="loading-overlay">
-          <div className="spinner"></div>
-        </div>
-      )}
-      <div className={`b-form-wrapper ${isLoading ? "loading" : ""}`}>
-        <div className="b-form-group b-form-group--borderless flex flex-col items-center justify-center">
-          <h2 className="text-lg uppercase font-bold">{title}</h2>
-          {summary && <p>{summary}</p>}
-          {instructions && instructions}
-        </div>
-        <div className="b-form-group b-form-group--borderless b-form-group--horizontal">
-          <AutoField name="lugar" className="w-80" />
-          <AutoField
-            name="fecha"
-            value={currentFormattedDate(new Date())}
-            className="w-80"
-          />
-        </div>
-        <div className="b-form-group  b-form-group--borderless">
-          <AutoField name="jefeDivision" />
-        </div>
-        <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
-          <div className="b-form__error-wrapper">
-            <AutoField name="opcionElegida" />
-            <ErrorField name="opcionElegida" />
+    <>
+      <AutoForm schema={schema} onSubmit={handleSubmit} ref={formRef}>
+        {isLoading && (
+          <div className="loading-overlay">
+            <div className="spinner"></div>
           </div>
-        </div>
-        <div className="b-form-group b-form-group--horizontal">
-          <AutoField name="periodoProyectado" value={getCustomDateRange()} />
-          <NumField name="numeroResidentes" />
-        </div>
-        <h3>Datos del (a) residente</h3>
-        <div className="b-form-group b-form-group--vertical">
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <div className="b-form__error-wrapper">
-              <AutoField name="nombre" className="w-80" />
-              <ErrorField name="nombre" />
-            </div>
-            <AutoField name="apellidoPaterno" />
-            <AutoField name="apellidoMaterno" />
+        )}
+        <div className={`b-form-wrapper ${isLoading ? "loading" : ""}`}>
+          <div className="b-form-group b-form-group--borderless flex flex-col items-center justify-center">
+            <h2 className="text-lg uppercase font-bold">{title}</h2>
+            {summary && <p>{summary}</p>}
+            {instructions && instructions}
           </div>
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="carrera" />
-            <AutoField name="numeroControl" className="w-1/6" />
+          <div className="b-form-group b-form-group--borderless b-form-group--horizontal">
+            <AutoField name="lugar" className="w-80" />
+            <AutoField
+              name="fecha"
+              value={currentFormattedDate(new Date())}
+              className="w-80"
+            />
           </div>
-          <hr />
-          <h4 className="text-center uppercase">Domicilio</h4>
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="domicilioCalle" className="w-full" />
+          <div className="b-form-group  b-form-group--borderless">
+            <AutoField name="jefeDivision" />
           </div>
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="domicilioNumeroExterior" />
-            <AutoField name="domicilioNumeroInterior" />
-          </div>
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="domicilioColonia" />
-            <NumField name="domicilioCP" />
-            <ErrorField name="domicilioCP" />
-            <AutoField name="ciudad" />
-          </div>
-          <hr />
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="telefonoOcelular" />
-            <div className="b-form__error-wrapper">
-              <AutoField name="email" />
-              <ErrorField name="email" />
-            </div>
-          </div>
-        </div>
-        <h3>Datos de la empresa</h3>
-        <div className="b-form-group">
-          <AutoField name="nombreEmpresa" />
           <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
             <div className="b-form__error-wrapper">
-              <RadioField
-                name="giroRamoSector"
-                options={[
-                  { label: "Industrial", value: "Industrial" },
-                  { label: "Servicios", value: "Servicios" },
-                  { label: "Público", value: "Público" },
-                  { label: "Privado", value: "Privado" },
-                  { label: "Otro", value: "Otro" },
-                ]}
-              />
-              <ErrorField name="giroRamoSector" />
+              <AutoField name="opcionElegida" />
+              <ErrorField name="opcionElegida" />
             </div>
-            <DisplayIf<FormData>
-              condition={(context) => context.model.giroRamoSector === "Otro"}
-            >
-              <TextField name="otroRamoSector" />
-            </DisplayIf>
           </div>
-          <hr />
-          <h4 className="text-center uppercase">Domicilio</h4>
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="calleEmpresa" className="w-full" />
+          <div className="b-form-group b-form-group--horizontal">
+            <AutoField name="periodoProyectado" value={getCustomDateRange()} />
+            <NumField name="numeroResidentes" />
           </div>
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="numeroExteriorEmpresa" />
-            <AutoField name="numeroInteriorEmpresa" />
+          <h3>Datos del (a) residente</h3>
+          <div className="b-form-group b-form-group--vertical">
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <div className="b-form__error-wrapper">
+                <AutoField name="nombre" className="w-80" />
+                <ErrorField name="nombre" />
+              </div>
+              <AutoField name="apellidoPaterno" />
+              <AutoField name="apellidoMaterno" />
+            </div>
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="carrera" />
+              <AutoField name="numeroControl" className="w-1/6" />
+            </div>
+            <hr />
+            <h4 className="text-center uppercase">Domicilio</h4>
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="domicilioCalle" className="w-full" />
+            </div>
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="domicilioNumeroExterior" />
+              <AutoField name="domicilioNumeroInterior" />
+            </div>
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="domicilioColonia" />
+              <NumField name="domicilioCP" />
+              <ErrorField name="domicilioCP" />
+              <AutoField name="ciudad" />
+            </div>
+            <hr />
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="telefonoOcelular" />
+              <div className="b-form__error-wrapper">
+                <AutoField name="email" />
+                <ErrorField name="email" />
+              </div>
+            </div>
           </div>
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="coloniaEmpresa" />
-            <NumField name="cpEmpresa" />
-            <ErrorField name="cpEmpresa" />
-            <AutoField name="ciudadEmpresa" />
-            <AutoField name="telefonoEmpresa" />
+          <h3>Datos de la empresa</h3>
+          <div className="b-form-group">
+            <AutoField name="nombreEmpresa" />
+            <div className="b-form-group b-form-group--borderless b-form__radio-buttons b-form__radio-buttons--horizontal">
+              <div className="b-form__error-wrapper">
+                <RadioField
+                  name="giroRamoSector"
+                  options={[
+                    { label: "Industrial", value: "Industrial" },
+                    { label: "Servicios", value: "Servicios" },
+                    { label: "Público", value: "Público" },
+                    { label: "Privado", value: "Privado" },
+                    { label: "Otro", value: "Otro" },
+                  ]}
+                />
+                <ErrorField name="giroRamoSector" />
+              </div>
+              <DisplayIf<FormData>
+                condition={(context) => context.model.giroRamoSector === "Otro"}
+              >
+                <TextField name="otroRamoSector" />
+              </DisplayIf>
+            </div>
+            <hr />
+            <h4 className="text-center uppercase">Domicilio</h4>
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="calleEmpresa" className="w-full" />
+            </div>
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="numeroExteriorEmpresa" />
+              <AutoField name="numeroInteriorEmpresa" />
+            </div>
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="coloniaEmpresa" />
+              <NumField name="cpEmpresa" />
+              <ErrorField name="cpEmpresa" />
+              <AutoField name="ciudadEmpresa" />
+              <AutoField name="telefonoEmpresa" />
+            </div>
+            <hr />
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField name="nombreTitularEmpresa" className="w-1/2" />
+              <AutoField name="puestoTitularEmpresa" className="w-1/3" />
+            </div>
+            <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
+              <AutoField
+                name="nombrePersonaAQuienVaPresentacion"
+                className="w-1/2"
+              />
+              <AutoField
+                name="puestoPersonaAQuienVaPresentacion"
+                className="w-1/3"
+              />
+            </div>
           </div>
-          <hr />
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField name="nombreTitularEmpresa" className="w-1/2" />
-            <AutoField name="puestoTitularEmpresa" className="w-1/3" />
-          </div>
-          <div className="b-form-group b-form-group--horizontal b-form-group--borderless">
-            <AutoField
-              name="nombrePersonaAQuienVaPresentacion"
-              className="w-1/2"
-            />
-            <AutoField
-              name="puestoPersonaAQuienVaPresentacion"
-              className="w-1/3"
-            />
+          <div className="sm:mt-4 md:mt-10 b-form__buttons">
+            <ClearFieldsButton />
+            <SubmitFieldCustom />
           </div>
         </div>
-        <div className="sm:mt-4 md:mt-10 b-form__buttons">
-          <ClearFieldsButton />
-          <SubmitFieldCustom />
-        </div>
-      </div>
-    </AutoForm>
+      </AutoForm>
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onClose={handleCancel}
+        onConfirm={handleConfirm}
+        jsonData={formData}
+      />
+    </>
   );
 };
 

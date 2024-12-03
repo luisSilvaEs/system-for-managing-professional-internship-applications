@@ -152,7 +152,7 @@ const schema: JSONSchemaTypeWithUniforms<FormData> = {
     numeroControl: { 
       type: "string",
       label: "Num. de control",
-      pattern: "^[A-Za-z]\d{8}$",
+      pattern: "^[A-Za-z]\\d{8}$",
       uniforms: { placeholder: "ejemplo: G12345678" }
     },
     domicilioCalle: { type: "string", label: "Calle o fraccionamiento", uniforms: { placeholder: "ejemplo: Av. Tecnológico" } },

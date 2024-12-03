@@ -70,8 +70,8 @@ const ConfirmationModal: React.FC<ConfirmationModalProps> = ({
             Para hacer alguna corrección, da clic en <strong>Modificar</strong>.
             <br />
             Una vez confirmes la información, no habrá cambios ni
-            modificaciones, solo podrás hacerlo directamente con el encargado de
-            la oficina.
+            modificaciones, solo podrás hacerlo directamente con el personal de
+            la subdirección académica.
           </p>
         </div>
 

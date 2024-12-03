@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { CleanedItem } from "@/types/student";
 import { FaSortUp, FaSortDown } from "react-icons/fa"; // Import sort icons
+import { unparse } from "papaparse"; // Import PapaParse for CSV generation
 
 interface TableProps {
   list: CleanedItem[];
@@ -56,8 +57,44 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
   const sortedData = sortData(list);
   const currentData = sortedData.slice(indexOfFirstRow, indexOfLastRow);
 
+  const downloadCSV = () => {
+    // Prepare CSV data
+    const csvData = list.map((item) => ({
+      "Num. de Control": item.numeroControl,
+      "Nombre(s)": item.nombre,
+      "Apellido Paterno": item.apellidoPaterno,
+      "Apellido Materno": item.apellidoMaterno,
+      Carrera: item.carreraResidente,
+      Periodo: item.periodo,
+      Teléfono: item.telefono,
+      Empresa: item.nombreEmpresa,
+    }));
+
+    // Convert JSON to CSV using PapaParse
+    const csv = unparse(csvData);
+
+    // Create a downloadable blob and trigger download
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.setAttribute("download", "Residencias_informe.csv");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
   return (
     <div className="container mx-auto b-table-container">
+      {/* CSV Download Button */}
+      <div className="flex justify-end mb-4">
+        <button
+          onClick={downloadCSV}
+          className="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-700"
+        >
+          Descargar CSV
+        </button>
+      </div>
+
       <table className="min-w-full bg-white">
         <thead>
           <tr className="w-full bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
@@ -68,7 +105,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
               { label: "Apellido Materno", key: "apellidoMaterno" },
               { label: "Carrera", key: "carreraResidente" },
               { label: "Periodo", key: "periodo" },
-              { label: "Telefono", key: "telefono" },
+              { label: "Teléfono", key: "telefono" },
               { label: "Empresa", key: "nombreEmpresa" },
             ].map(({ label, key }) => (
               <th
@@ -128,6 +165,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
           )}
         </tbody>
       </table>
+
       <div className="flex justify-between items-center my-4">
         <button
           aria-label="Pagina previa"

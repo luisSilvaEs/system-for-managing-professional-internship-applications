@@ -1,5 +1,4 @@
 // /app/api/email/route.ts
-import { NextApiRequest, NextApiResponse } from 'next';
 import { NextResponse } from 'next/server';
 import { sendEmail, createAttachment } from '@/lib/email';
 import { saveToDynamoDB, isStudentUnique } from '@/lib/dynamodb';

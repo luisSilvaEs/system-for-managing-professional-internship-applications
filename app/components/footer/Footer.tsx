@@ -11,6 +11,7 @@ export default function Footer() {
             href="https://github.com/luisSilvaEs"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="GitHub"
             className="text-primary hover:underline"
           >
             <FaGithub />
@@ -19,6 +20,7 @@ export default function Footer() {
             href="https://www.linkedin.com/in/luis-silva-es/"
             target="_blank"
             rel="noopener noreferrer"
+            aria-label="LinkedIn"
             className="text-primary hover:underline"
           >
             <FaLinkedin />

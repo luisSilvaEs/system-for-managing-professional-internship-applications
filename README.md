@@ -1,74 +1,78 @@
-# README
+# System for Managing Professional Internship Applications
 
-## System for Managing Professional Internship Applications
+An application to manage **professional internship applications**. It provides a public page for students to fill out a form with their details and a private section for the department director to manage submissions. Submitted data can be sent via email and optionally stored in a database.
 
-An application to handle requests for **professional internship applications**. The app will have a page where students can fill out a form with their information. After submission, this data will be sent via email to the **department director**. Optionally, the data can also be stored in a database.
+---
 
-The app will help **students** to:
+## **Table of Contents**
 
-- Avoid sending incomplete data that could delay their application.
-- Verify the data they are submitting to reduce the chances of rejection by the department director.
+1. [Overview](#overview)
+2. [Features](#features)
+3. [User Stories](#user-stories)
+4. [Infrastructure Overview](#infrastructure-overview)
+5. [Folder Structure](#folder-structure)
+6. [Deployment to AWS Amplify](#deployment-to-aws-amplify)
+7. [Amazon SES Setup](#amazon-ses-setup)
+8. [Testing](#testing)
+9. [References](#references)
 
-The app will help the **department director** to:
+---
 
-- Reduce back-and-forth communication due to incomplete information.
-- Process only complete student information.
+## **Overview**
 
-## Requirements
+### **Features**
 
-This application should have:
+#### For Students
 
-- A public page for students with:
+- A public page with:
+  - A form to submit required information.
+  - Mandatory fields with dropdowns for specific data.
+  - Real-time validations for completeness and correctness.
+  - Email validation for common domains (e.g., Gmail, Hotmail).
 
-  - A form for students to fill out and submit their data. The form should have the following:
-    - Mandatory fields
-    - Fields with options displayed as dropdowns
-    - Validations to ensure fields are not submitted empty
-    - Validation before submission
-    - Email validation for common domains (e.g., Gmail, Hotmail)
+#### For Department Directors
 
-- A login page for the administrator to access the private pages of the app:
-  - A page for the administrator with links to the following subpages:
-    - View data from the database
-    - Update the email address where data is sent
-    - Update the form (desirable but not essential) by adding, removing, or updating fields
+- A private dashboard with:
+  - Options to view, edit, and download student data.
+  - An ability to update the destination email for submissions.
+  - (Optional) Modify the form fields as needed.
 
-### Nice to Have
+---
+
+#### Nice to Have
 
 - Limit the number of emails per day to avoid spam and attacks.
 - A modal displaying a message if a user attempts to submit data outside of service hours.
 
-#### Actors:
+## **User Stories**
 
-- **Department Director**
-- **Students**
+### **Student**
 
-#### User Stories
+1. Access the form via a shared URL.
+2. Complete and submit the form.
+3. Receive a confirmation page after successful submission.
 
-**Student**
+### **Department Director**
 
-1. Accesses the form through a URL sent manually via email or WhatsApp.
-2. Fills out their information in the form. If the data is incomplete or incorrect, the form will indicate that there is an issue and prompt the user to review their input.
-3. After reviewing the form, the student will click on "Submit."
-4. Once the server confirms that the data has been successfully sent, the user will be redirected to another page indicating that the process is complete.
+1. Log in using an email and password.
+2. Access a dashboard with the following options:
+   - View and filter submitted applications.
+   - Download data as a CSV file.
+   - Update the email recipient for submissions.
+   - (Optional) Modify form fields.
 
-**Department Director**
+---
 
-1. Accesses a public page with a form requesting their email and password.
-2. After logging in, they are redirected to a page with buttons for the following options:
-   - Download data as a CSV file
-   - Update the email address where the data is sent
-   - Update the form (desirable but not essential) by adding, removing, or updating fields
-   - View data from the database
+## **Infrastructure Overview**
 
-## Infrastructure Overview
+- **DynamoDB:** Stores student data securely.
+- **Next.js:** Full-stack framework for front-end and back-end.
+- **Node.js:** Server-side integration within Next.js.
+- **JWT:** Secures private pages and authenticates users.
+- **AWS Amplify:** Hosts the application and manages deployments.
+- **AWS SES:** Sends emails to department directors.
 
-- **DynamoDB**: As the database to store student data
-- **Next.js**: As the framework to build both the front-end and back-end
-- **Node.js**: Integrated within Next.js
-- **JWT**: To secure private pages
-- **AWS Amplify**: Amazon service to host interactive applications, perfect for our project
-- **AWS SES**: Amazon SES (Simple Email Service) is an Amazon service for sending emails
+---
 
 ## Folder structure
 
@@ -145,7 +149,7 @@ This application should have:
 └── README.md                         // Project documentation.
 ```
 
-## Deployment to AWS Amplify
+## **Deployment to AWS Amplify**
 
 AWS Amplify is an Amazon service that allows you to host interactive applications, unlike S3, which is mainly for static site hosting. Amplify handles interaction with other Amazon services with less effort, making it ideal for full-stack applications. Since our app is developed in Next.js, which is a "full stack framework," AWS Amplify is a perfect fit for hosting and managing our app's backend and frontend.
 
@@ -331,6 +335,78 @@ _For development and QA environments, this is all that is needed to send and rec
 
 _IMPORTANT: to debug and see any error or logs, navigate to **Hosting > Monitoring > Hosting compute logs** and click on the link below **CloudWatch log streams**_
 
+#### Testing
+
+##### Unit testing: Jest
+
+###### Initial set up
+
+1. Install following dependencies:
+
+```bash
+npm install --save-dev jest jest-environment-jsdom @testing-library/react @testing-library/jest-dom ts-jest @types/jest @types/react @types/react-dom
+```
+
+2. Configure Jest for Next.js. Create a `jest.config.js` file at the root of your project:
+
+```javascript
+module.exports = {
+  preset: "ts-jest", // Use ts-jest for transpilation
+  testEnvironment: "jsdom", // Use jsdom for DOM-related tests
+  setupFilesAfterEnv: ["<rootDir>/jest.setup.js"], // Include custom setup
+  transform: {
+    "^.+\\.tsx?$": "ts-jest", // Transpile TypeScript and JSX
+  },
+  moduleNameMapper: {
+    "\\.(css|less|scss|sass)$": "identity-obj-proxy", // Mock CSS imports
+  },
+  globals: {
+    "ts-jest": {
+      tsconfig: "<rootDir>/tsconfig.jest.json",
+    },
+  },
+};
+```
+
+3. Create a `jest.setup.js` file to include any additional setup for Jest, like importing `@testing-library/jest-dom`:
+
+```javascript
+require("@testing-library/jest-dom");
+class ResizeObserver {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+global.ResizeObserver = ResizeObserver;
+```
+
+4. Create a `tsconfig.jest.json` file which is a `tsconfig.json` file extension but only to be used by Jest and adding some settings exclusively to be used by Jest to use TS.
+
+```json
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "moduleResolution": "node"
+  }
+}
+```
+
+###### Run tests
+
+To run all tests, use:
+
+```bash
+npm run test
+```
+
+To run a specific test by file name you can use regex
+
+```bash
+npm test -- Filename.test
+```
+
 ## References
 
 - [Crea Aplicacion en tiempo Record con Nextjs y AWS Amplify (Gen2)](https://www.youtube.com/watch?v=EJjiK16Lw_8&t=829s)
@@ -338,3 +414,4 @@ _IMPORTANT: to debug and see any error or logs, navigate to **Hosting > Monitori
 - [Why I love AWS Amplify - Deploy Next.js (T3 Stack) in 5 minutes](https://www.youtube.com/watch?v=0B-hMvMggm8)
 - [Uniforms - Basic uniforms usage](https://uniforms.tools/docs/tutorials-basic-uniforms-usage/)
 - [`NextRouter` was not mounted](https://nextjs.org/docs/messages/next-router-not-mounted)
+- [Next.js Jest test, extended-expect](https://nextjs.org/docs/app/building-your-application/testing/jest)

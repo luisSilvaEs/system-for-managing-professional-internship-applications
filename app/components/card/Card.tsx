@@ -19,7 +19,11 @@ const Card = ({ header, data }: CardProp) => {
         <div className="p-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {isLoading
             ? Array.from({ length: 6 }).map((_, index) => (
-                <div key={index} className="animate-pulse">
+                <div
+                  key={index}
+                  className="animate-pulse"
+                  data-testid="loading"
+                >
                   <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
                   <div className="h-3 bg-gray-300 rounded w-full"></div>
                 </div>

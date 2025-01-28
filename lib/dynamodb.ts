@@ -1,4 +1,4 @@
-import { PutItemCommand, GetItemCommand } from "@aws-sdk/client-dynamodb";
+import { PutItemCommand, GetItemCommand, ScanCommand } from "@aws-sdk/client-dynamodb";
 import { marshall, unmarshall } from '@aws-sdk/util-dynamodb';
 import dynamoClient from "@/lib/dynamoClient";
 import { GetItemResponse, DynamoDBItem } from "@/types/student";
@@ -176,4 +176,34 @@ export const getUserByEmail = async ( email: string ): Promise<any> => {
     throw new Error('Error fetching item');
   }
 };
+
+
+/**
+ * Checks if a student with the given 'numeroControl' exists in the DynamoDB table.
+ * @param numeroControl - The unique identifier for the student.
+ * @returns {Promise<boolean>} - Returns false if the student exists, true otherwise.
+ */
+export const isStudentUnique = async (numeroControl: string): Promise<boolean> => {
+  try {
+    const params = {
+      TableName: process.env.DYNAMODB_TABLE_NAME || "",
+      FilterExpression: "numeroControl = :numeroControl",
+      ExpressionAttributeValues: {
+        ":numeroControl": { S: numeroControl },
+      },
+    };
+
+    const command = new ScanCommand(params);
+    const response = await dynamoClient.send(command);
+
+    // If any items are returned, the student exists.
+    return !(response.Items && response.Items.length > 0);
+  } catch (error) {
+    console.error("Error checking student uniqueness:", error);
+    throw new Error("Failed to check student uniqueness");
+  }
+};
+
+
+
 

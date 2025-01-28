@@ -23,7 +23,7 @@ export async function POST(request: Request) {
       await saveToDynamoDB(data);
       return NextResponse.json({ message: 'Data sent and stored successfully' }, { status: 200 });
     } 
-    return NextResponse.json({ message: 'Data no sent nor stored. There is already a student who submitted this request before' }, { status: 200 });
+    return NextResponse.json({ message: 'Data no sent nor stored. There is already a student who submitted this request before' }, { status: 409 });
 
   } catch (error) {
     console.error("Error sending email:", error);

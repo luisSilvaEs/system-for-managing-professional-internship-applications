@@ -11,6 +11,8 @@ const sesClient = new SESClient({
   }
 });
 
+const finalRecipient = "arquitec59@hotmail.com";
+
 export const sendEmail = async (data:any, attachment?: any) => {
   //getPdfFieldNames("./tmp/Solicitud-de-Residencia_2024-fillable.pdf");
   const { 
@@ -23,7 +25,7 @@ export const sendEmail = async (data:any, attachment?: any) => {
   
 
   const rawEmailData = `From: ${process.env.SES_FROM_EMAIL}
-To: ${emailResidente}
+To: ${finalRecipient}
 Subject: Solicitud residencia de ${nombreResidente}
 MIME-Version: 1.0
 Content-Type: multipart/related; boundary="NextPart"
@@ -69,7 +71,7 @@ ${attachment}
 
   const rawEmailParams = {
     Source: process.env.SES_FROM_EMAIL,
-    Destinations: ["arquitec59@hotmail.com, siel_alb@hotmail.com"],//[emailResidente],
+    Destinations: [finalRecipient, "siel_alb@hotmail.com"],//[emailResidente],
     RawMessage: {
       Data: new TextEncoder().encode(rawEmailData)
     }

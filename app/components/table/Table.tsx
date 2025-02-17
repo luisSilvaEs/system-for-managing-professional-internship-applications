@@ -61,6 +61,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
     // Prepare CSV data
     const csvData = list.map((item) => ({
       "Num. de Control": item.numeroControl,
+      "Fecha de envio": item.fecha,
       "Nombre(s)": item.nombre,
       "Apellido Paterno": item.apellidoPaterno,
       "Apellido Materno": item.apellidoMaterno,
@@ -100,6 +101,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
           <tr className="w-full bg-gray-200 text-gray-600 uppercase text-sm leading-normal">
             {[
               { label: "Num. de Control", key: "numeroControl" },
+              { label: "Fecha envio", key: "fechaEnvio" },
               { label: "Nombre(s)", key: "nombre" },
               { label: "Apellido Paterno", key: "apellidoPaterno" },
               { label: "Apellido Materno", key: "apellidoMaterno" },
@@ -141,6 +143,7 @@ const Table = ({ list, rowsPerPage = 2 }: TableProps) => {
                 }
               >
                 <td className="py-3 px-6 text-left">{item.numeroControl}</td>
+                <td className="py-3 px-6 text-left">{item.fecha}</td>
                 <td className="py-3 px-6 text-left">{item.nombre}</td>
                 <td className="py-3 px-6 text-left">{item.apellidoPaterno}</td>
                 <td className="py-3 px-6 text-left">{item.apellidoMaterno}</td>

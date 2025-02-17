@@ -11,7 +11,7 @@ const sesClient = new SESClient({
   }
 });
 
-const finalRecipient = "arquitec59@hotmail.com";
+const finalRecipient = process.env.SES_TO_EMAIL || "siel_alb@me.com";
 
 export const sendEmail = async (data:any, attachment?: any) => {
   //getPdfFieldNames("./tmp/Solicitud-de-Residencia_2024-fillable.pdf");

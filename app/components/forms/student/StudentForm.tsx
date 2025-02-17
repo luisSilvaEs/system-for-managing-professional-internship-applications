@@ -178,7 +178,12 @@ const StudentForm = ({ title, summary, instructions }: PropsForm) => {
             </div>
           </div>
           <div className="b-form-group b-form-group--horizontal">
-            <AutoField name="periodoProyectado" value={getCustomDateRange()} />
+            <AutoField
+              name="periodoProyectado"
+              value={getCustomDateRange()}
+              className="w-1/3"
+              readOnly
+            />
             <NumField name="numeroResidentes" />
           </div>
           <h3>Datos del (a) residente</h3>

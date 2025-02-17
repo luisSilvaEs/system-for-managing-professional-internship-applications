@@ -34,7 +34,7 @@ export const getCustomDateRange = () : string => {
   const currentMonth = currentDate.getMonth() + 1;
 
   if (currentMonth >= 1 && currentMonth <= 4) {
-    return `Marzo - Julio ${currentYear}`;
+    return `24 de Febrero de ${currentYear} al 24 de Junio de ${currentYear}`;
   } else if (currentMonth >= 8 && currentMonth <= 9) {
     return `Agosto - Diciembre ${currentYear}`;
   }

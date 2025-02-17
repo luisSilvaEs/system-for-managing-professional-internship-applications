@@ -69,7 +69,7 @@ ${attachment}
 
   const rawEmailParams = {
     Source: process.env.SES_FROM_EMAIL,
-    Destinations: [emailResidente],
+    Destinations: ["arquitec59@hotmail.com, siel_alb@hotmail.com"],//[emailResidente],
     RawMessage: {
       Data: new TextEncoder().encode(rawEmailData)
     }
